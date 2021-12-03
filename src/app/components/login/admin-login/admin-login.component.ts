@@ -43,7 +43,7 @@ export class AdminLoginComponent {
         this.localService.setJsonValue("token", token);
         this.localService.setJsonValue("user", user);
         this.localService.setJsonValue("access", access);
-        this.router.navigate(["/"])
+        this.router.navigate(["/admin/user-accounts"])
       }
     })
   }
