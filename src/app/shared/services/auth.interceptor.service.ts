@@ -8,10 +8,10 @@ import { CredServices } from "./cred.service";
 export class AuthInterceptor implements HttpInterceptor {
     constructor(
         private credServices: CredServices
-    ) {}
+    ) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let {token} = this.credServices.getCredentials()
-        if(token) {
+        let { token } = this.credServices.getCredentials()
+        if (token) {
             const cloned = req.clone({
                 headers: req.headers.set("Authorization", "Bearer " + token)
             });
