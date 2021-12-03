@@ -1,1 +1,28 @@
-admin works
+<div id="container">
+    <form class="form" [formGroup]="loginForm">
+        <div class="title">Administrator</div>
+        <div class="inputs">
+            <mat-form-field appearance="legacy">
+                <mat-label>User Name</mat-label>
+                <input autofocus formControlName="username" matInput autocomplete="off">
+                <mat-icon matSuffix>person</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Password</mat-label>
+                <input type="password" formControlName="password" matInput autocomplete="off">
+                <mat-icon matSuffix>password</mat-icon>
+            </mat-form-field>
+        </div>
+        <div class="actions">
+            <button 
+                mat-raised-button 
+                (click)="authenticate()"
+                [disabled]="isAuthenticating || !loginForm.valid"
+                [class.spinner]="isAuthenticating"
+                >
+                {{btnLogin}}
+            </button>
+        </div>
+    </form>
+</div>
