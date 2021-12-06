@@ -45,6 +45,10 @@ export class AdminLoginComponent {
         this.localService.setJsonValue("access", access);
         this.router.navigate(["/admin/user-accounts"])
       }
+    }, err => {
+      this.snackBar.open("Requested Timeout..", "", { duration: 3000 })
+      this.isAuthenticating = false;
+      this.btnLogin = "Login";
     })
   }
   

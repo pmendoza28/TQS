@@ -1,11 +1,12 @@
-<mat-toolbar color="primary">
+<mat-toolbar id="container">
   <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon"
     (click)="ToogleSideBar()">
-    <mat-icon>menu</mat-icon>
+    <mat-icon class="menu">menu</mat-icon>
   </button>
-  <span>My App</span>
+  <span class="title">Project K`C</span>
   <span class="example-spacer"></span>
-  <button mat-icon-button (click)="logout()">
-    <mat-icon>logout</mat-icon>
+  <button *ngIf="!loggingOut" mat-icon-button (click)="logout()">
+    <mat-icon class="menu">logout</mat-icon>
   </button>
+  <span class="logging-out" *ngIf="loggingOut">Logging Out...</span>
 </mat-toolbar>

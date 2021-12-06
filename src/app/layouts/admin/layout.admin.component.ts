@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { MediaChange, MediaObserver } from "@angular/flex-layout";
+import { ThemePalette } from "@angular/material/core";
+import { ProgressBarMode } from "@angular/material/progress-bar";
 import { Subscription } from "rxjs";
 import { LayoutAdminServices } from "./layout.admin.service";
 
@@ -21,9 +23,13 @@ export class LayoutAdminComponent {
   deviceXs: boolean = true;
   sidebarOpen: boolean = true;
 
+  color: ThemePalette = 'primary';
+  mode: ProgressBarMode = 'determinate';
+  value = 50;
+  bufferValue = 75;
+
   ngOnInit(): void {
     this.mediaQuery()
-    // this.checkIfLoggedIn()
   }
 
 
@@ -48,9 +54,4 @@ export class LayoutAdminComponent {
     })
   }
 
-  checkIfLoggedIn() {
-    this.layoutAdminServices.checkIfLoggedIn().subscribe(res => {
-      console.log(res)
-    })
-  }
 }

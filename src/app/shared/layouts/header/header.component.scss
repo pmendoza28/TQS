@@ -1,4 +1,16 @@
+@import "../../scss/theme";
 .example-spacer {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
+}
+#container {
+  background-color: $secondary;
+  .title {
+    color: #424242;
   }
-  
+  .menu {
+    color: black;
+  }
+  .logging-out {
+    font-weight: 400;
+  }
+}

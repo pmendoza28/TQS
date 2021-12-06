@@ -14,9 +14,8 @@ export class LayoutAdminServices {
         private credServices: CredServices
     ) {}
     
-    checkIfLoggedIn(): Observable<any> {
-        let { token, user: {id} } = this.credServices.getCredentials();
-        console.log({token,id})
-        return this.http.post(`${this.credServices.port}/admin/isLoggedIn`, {token, id})
+    checkIfLoggedIn(): Observable<{isLoggedIn: boolean}> {
+        let { token } = this.credServices.getCredentials();
+        return this.http.post<{isLoggedIn: boolean}>(`${this.credServices.port}/isLoggedIn`, { token })
     }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SidebarServices } from './sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,11 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public sideBarServices: SidebarServices
+  ) { }
 
   ngOnInit(): void {
   }
-
   
   isExpanded = true;
   showSubMenu: boolean = false;
@@ -29,5 +31,7 @@ export class SidebarComponent implements OnInit {
       this.isShowing = false;
     }
   }
+
+
 
 }

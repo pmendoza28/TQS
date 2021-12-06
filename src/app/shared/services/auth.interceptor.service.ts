@@ -1,13 +1,14 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
+import { catchError, finalize, retry } from "rxjs/operators";
 import { CredServices } from "./cred.service";
 
 @Injectable()
 
 export class AuthInterceptor implements HttpInterceptor {
     constructor(
-        private credServices: CredServices
+        private credServices: CredServices,
     ) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let { token } = this.credServices.getCredentials()
@@ -18,7 +19,14 @@ export class AuthInterceptor implements HttpInterceptor {
             return next.handle(cloned);
         }
         else {
-            return next.handle(req)
+            return next.handle(req).pipe(
+                catchError((error: HttpErrorResponse) => {
+                    return throwError(error)
+                }),
+                finalize(() => {
+                    const profilingMsg = `${req.method} ${req.urlWithParams}`
+                })
+            )
         }
     }
 

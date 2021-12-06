@@ -10,14 +10,14 @@
   
       img {
         width: 200px;
-        // height: 100px;
         object-fit:cover;
-        // border-radius: 50%;
       }
     }
-  }
-  
-  .mat-list-item-content {
-    background-color: black;
+    .selected-menu {
+      background-color:#5D5D5D;
+    }
+    .menu-container {
+      padding: 0px;
+    }
   }
   

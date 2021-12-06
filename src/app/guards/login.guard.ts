@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from "@angular/router";
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { Observable } from "rxjs";
 import { CredServices } from "../shared/services/cred.service";
 
@@ -10,17 +10,19 @@ import { CredServices } from "../shared/services/cred.service";
 export class LoginGuard implements CanActivate {
 
     constructor(
-        private credServices: CredServices
+        private credServices: CredServices,
+        private router: Router
     ) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-        let { token, user } = this.credServices.getCredentials();
-        if(!token) {
-            return true
+        let { user } = this.credServices.getCredentials();
+        if(user) {
+            const { role } = user;
+            if(role == "admin") {
+                this.router.navigate(["/admin/user-accounts"])
+            }
         }
-        else {
-            return false
-        }
+        return true;
     }
 
 }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalService } from '../../services/local.service';
+import { HeaderServices } from './header.service';
 
 @Component({
   selector: 'app-header',
@@ -11,14 +12,17 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private localService: LocalService,
-    private router: Router
+    private router: Router,
+    private headerServices: HeaderServices
   ) { }
 
   ngOnInit(): void {
   }
   @Output() toogleSidebar: EventEmitter<any> = new EventEmitter();
   @Input() deviceXs: boolean
+  loggingOut: boolean = false;
   
+
   ToogleSideBar() {
     this.toogleSidebar.emit();
     setTimeout(() => {
@@ -29,7 +33,11 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.localService.clearToken()
-    this.router.navigate([""])
+    this.loggingOut = true;
+    this.headerServices.logOut().subscribe(() => {
+      this.localService.clearToken()
+      this.router.navigate([""])
+    })
   }
+  
 }
