@@ -11,7 +11,7 @@ export class CredServices {
     ) {}
     port: string = "http://10.10.8.22:8000/api";
 
-    getCredentials() {
+    getCredentials(): {token: string, access: any, user: any} {
         return {
             token: this.localService.getJsonValue("token"),
             access: this.localService.getJsonValue("access"),
