@@ -26,7 +26,8 @@ export class AdminLoginComponent {
 
   isAuthenticating: boolean = false;
   btnLogin: "Login" | "Authenticating" = "Login";
-
+  hide = true;
+  troubleshoot: boolean = false;
   authenticate() {
     this.isAuthenticating = true;
     this.btnLogin = "Authenticating";
@@ -46,6 +47,7 @@ export class AdminLoginComponent {
         this.router.navigate(["/admin/user-accounts"])
       }
     }, err => {
+      this.troubleshoot = true;
       this.snackBar.open("Requested Timeout..", "", { duration: 3000 })
       this.isAuthenticating = false;
       this.btnLogin = "Login";

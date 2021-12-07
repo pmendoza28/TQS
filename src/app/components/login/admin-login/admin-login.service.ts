@@ -17,7 +17,7 @@ export class AdminLoginServices {
 
     authenticate(loginForm: {username: string, password: string}) {
         return this.http.post<any>(`${this.credServices.port}/login`, loginForm).pipe(
-            timeout(10000),
+            timeout(3000),
         )
     }
 }

@@ -10,9 +10,11 @@
 
             <mat-form-field appearance="legacy">
                 <mat-label>Password</mat-label>
-                <input type="password" formControlName="password" matInput autocomplete="off">
-                <mat-icon matSuffix>password</mat-icon>
-            </mat-form-field>
+                <input formControlName="password" matInput [type]="hide ? 'password' : 'text'">
+                <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
         </div>
         <div class="actions">
             <button 
@@ -24,5 +26,8 @@
                 {{btnLogin}}
             </button>
         </div>
+        <span class="lbl-troubleshoot" *ngIf="troubleshoot">
+            Troubleshoot Problem?
+        </span>
     </form>
 </div>
