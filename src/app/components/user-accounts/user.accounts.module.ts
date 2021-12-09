@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 const routes: Routes = [
   { path: '', component: UserAccountTableComponent },
 ]
@@ -32,7 +33,8 @@ const routes: Routes = [
     HttpClientModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    FormsModule
+    FormsModule,
+    MatIconModule
   ]
 })
 export class UserAccountsModule { }

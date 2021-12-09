@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
-import { catchError, finalize, retry } from "rxjs/operators";
+import { catchError, finalize, retry, timeout } from "rxjs/operators";
 import { CredServices } from "./cred.service";
 
 @Injectable()

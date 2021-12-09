@@ -1,7 +1,7 @@
 <app-admin-container [title]="title">
     <div actions class="actions">
-        <button class="btn-new" mat-raised-button>New</button>
-        <mat-form-field appearance="legacy">
+        <button class="btn-new btn-primary" mat-raised-button>New</button>
+        <mat-form-field appearance="legacy" color="accent">
             <mat-label>Search</mat-label>
             <input 
                 matInput 
@@ -9,6 +9,9 @@
                 [(ngModel)]="searchValue" 
                 autofocus
                 (keydown.enter)="searchUserAccount()">
+                <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+                    <mat-icon>close</mat-icon>
+                  </button>
         </mat-form-field>
     </div>
     <div table class="table">

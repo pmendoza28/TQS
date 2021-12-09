@@ -31,3 +31,7 @@
 mat-paginator {
     width: 100%;
 }
+
+mat-progress-spinner circle, .mat-spinner circle {
+    stroke: $secondary;
+}
