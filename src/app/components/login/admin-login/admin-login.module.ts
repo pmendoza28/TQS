@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 const routes: Routes = [
   { path: '', component: AdminLoginComponent}
 ]
@@ -29,7 +29,8 @@ const MaterialModules = [
     RouterModule.forChild(routes),
     MaterialModules,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxSkeletonLoaderModule
   ],
 })
 export class AdminLoginModule { }

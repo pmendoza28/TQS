@@ -1,4 +1,28 @@
 @import "../../../shared/scss/theme";
+@import "../../../shared/scss/table";
 button {
     background-color: $secondary;
+}
+.actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    .btn-new {
+        margin-left: 20px;
+    }
+    mat-form-field {
+        margin-left: auto;
+        margin-right: 20px;
+        width: 300px;
+    }
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 20px 20px;
 }

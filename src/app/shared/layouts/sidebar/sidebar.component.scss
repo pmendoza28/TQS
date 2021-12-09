@@ -1,3 +1,4 @@
+@import "../../scss/theme";
 :host {
     .mat-icon {
       vertical-align: middle;
@@ -13,11 +14,15 @@
         object-fit:cover;
       }
     }
-    .selected-menu {
-      background-color:#5D5D5D;
-    }
+   
     .menu-container {
       padding: 0px;
+      .selected-menu {
+        background-color:#5D5D5D;
+        .selected-icon {
+          color: $secondary;
+        }
+      }
     }
   }
   

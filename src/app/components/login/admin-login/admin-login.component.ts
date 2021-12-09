@@ -32,6 +32,7 @@ export class AdminLoginComponent {
     this.isAuthenticating = true;
     this.btnLogin = "Authenticating";
     this.adminLoginServices.authenticate(this.loginForm.value).subscribe(res => {
+      console.log(res)
       /*****************@SET_STATE_VALUES ******************** */
       this.isAuthenticating = false;
       this.btnLogin = "Login";
@@ -40,10 +41,12 @@ export class AdminLoginComponent {
       this.snackBar.open(message, "", { duration: 3000 })
 
       if (isAuthenticated) {
-        const { access, token, user } = data;
+        const { token, user } = data;
+        if(user) {
+          user.access_permission = user.access_permission.split(", ")
+        }
         this.localService.setJsonValue("token", token);
         this.localService.setJsonValue("user", user);
-        this.localService.setJsonValue("access", access);
         this.router.navigate(["/admin/user-accounts"])
       }
     }, err => {

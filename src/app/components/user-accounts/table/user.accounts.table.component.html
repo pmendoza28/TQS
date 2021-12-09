@@ -1,1 +1,63 @@
-user-accounts works!
+<app-admin-container [title]="title">
+    <div actions class="actions">
+        <button class="btn-new" mat-raised-button>New</button>
+        <mat-form-field appearance="legacy">
+            <mat-label>Search</mat-label>
+            <input 
+                matInput 
+                autocomplete="off" 
+                [(ngModel)]="searchValue" 
+                autofocus
+                (keydown.enter)="searchUserAccount()">
+        </mat-form-field>
+    </div>
+    <div table class="table">
+        <div class="table-container">
+            <div class="example-container">
+                <div class="example-loading-shade" *ngIf="isTableLoading">
+                    <mat-spinner *ngIf="isTableLoading"></mat-spinner>
+                </div>
+            </div>
+             <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> ID </th>
+                    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="first_name">
+                    <th mat-header-cell *matHeaderCellDef> First Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.first_name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="last_name">
+                    <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.last_name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="username">
+                    <th mat-header-cell *matHeaderCellDef> User Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="is_active">
+                    <th mat-header-cell *matHeaderCellDef> Is Active? </th>
+                    <td mat-cell *matCellDef="let element"> {{element.is_active}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td colspan="5">
+                        <div class="no-data">
+                            {{lblLoading}}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            
+            <mat-paginator #userAccountPaginator [length]="totalUserAccounts" [pageSizeOptions]="pageSizeOption"
+                [pageSize]="userAccountsPerPage" (page)="onChangePage($event)">
+            </mat-paginator>
+        </div>
+    </div>
+</app-admin-container>

@@ -1,23 +1,26 @@
 <mat-nav-list>
   <div class="profile-card">
     <!-- <img src="../../../../assets/sidebar-logo/q_system_logo.png" alt=""> -->
-    <img src="../../../../assets/sidebar-logo/q_system_logo2.png" alt="">
+    <!-- <img src="../../../../assets/sidebar-logo/q_system_logo2.png" alt=""> -->
     <!-- <img src="../../../../assets/sidebar-logo/q_system_logo3.png" alt=""> -->
+    <!-- <img src="../../../../assets/sidebar-logo/q_system_logo4.png" alt=""> -->
+    <!-- <img src="../../../../assets/sidebar-logo/q_system_logo5.png" alt=""> -->
+    <img src="../../../../assets/sidebar-logo/q_system_logo6.png" alt="">
   </div>
   <mat-divider></mat-divider>
 
   <mat-nav-list class="menu-container">
     <mat-list-item routerLink="/admin/user-accounts" [class.selected-menu]="sideBarServices.menu.userAccounts">
-      <mat-icon mat-list-icon>person</mat-icon> User-Accounts
+      <mat-icon class="selected-icon" mat-list-icon>person</mat-icon> User-Accounts
     </mat-list-item>
 
     <mat-list-item routerLink="/admin/stores" [class.selected-menu]="sideBarServices.menu.stores">
-      <mat-icon mat-list-icon>store</mat-icon> Store
+      <mat-icon class="selected-icon" mat-list-icon>store</mat-icon> Store
     </mat-list-item>
 
 
     <mat-list-item routerLink="/admin/members" [class.selected-menu]="sideBarServices.menu.members">
-      <mat-icon mat-list-icon>groups</mat-icon> Members
+      <mat-icon class="selected-icon" mat-list-icon>groups</mat-icon> Members
     </mat-list-item>
 
     <mat-list-item [class.selected-menu]="sideBarServices.menu.earnedRedeemedPoints">
