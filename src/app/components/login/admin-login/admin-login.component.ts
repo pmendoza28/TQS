@@ -32,7 +32,6 @@ export class AdminLoginComponent {
     this.isAuthenticating = true;
     this.btnLogin = "Authenticating";
     this.adminLoginServices.authenticate(this.loginForm.value).subscribe(res => {
-      console.log(res)
       /*****************@SET_STATE_VALUES ******************** */
       this.isAuthenticating = false;
       this.btnLogin = "Login";

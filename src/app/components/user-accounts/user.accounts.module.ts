@@ -10,16 +10,31 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { FormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { UserAccountsNewComponent } from './new/user.accounts.new.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { UserAccountsDialogComponent } from './dialog/user-accounts.dialog.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
+import { UserAccountEditComponent } from './edit/user.accounts.edit.component';
 const routes: Routes = [
   { path: '', component: UserAccountTableComponent },
+  { path: 'new', component: UserAccountsNewComponent },
+  { path: 'edit', component: UserAccountEditComponent },
+
 ]
 
 @NgModule({
   declarations: [
-    UserAccountTableComponent
+    UserAccountTableComponent,
+    UserAccountsNewComponent,
+    UserAccountsDialogComponent,
+    UserAccountEditComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +49,14 @@ const routes: Routes = [
     MatProgressBarModule,
     MatProgressSpinnerModule,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    PipesModule,
+    MatSnackBarModule,
+    MatMenuModule,
   ]
 })
 export class UserAccountsModule { }

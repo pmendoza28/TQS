@@ -1,6 +1,6 @@
 <app-admin-container [title]="title">
     <div new id="container">
-        <form [formGroup]="userAccountForm" (submit)="create()">
+        <form [formGroup]="userAccountForm" (submit)="update()">
             <div class="name">
                 <mat-form-field appearance="legacy" color="accent">
                     <mat-label>First Name</mat-label>
@@ -31,17 +31,6 @@
                         matInput 
                         autocomplete="off"
                         formControlName="username"
-                        >
-                </mat-form-field>
-
-                <mat-form-field appearance="legacy" color="accent">
-                    <mat-label>Password</mat-label>
-                    <input 
-                        (change)="convertAccessPermission()"
-                        matInput 
-                        type="password" 
-                        autocomplete="off"
-                        formControlName="password"
                         >
                 </mat-form-field>
             </div>
@@ -75,7 +64,7 @@
                     mat-raised-button 
                     class="btn-primary"
                     [disabled]="formValidation()"
-                    >Create</button>
+                    >Update</button>
                 <button type="reset" mat-raised-button color="warn">Reset</button>
                 <button type="button" mat-raised-button (click)="back()">Back</button>
             </div>
