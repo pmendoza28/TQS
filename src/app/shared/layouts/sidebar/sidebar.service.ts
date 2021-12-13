@@ -1,10 +1,14 @@
 import { Injectable } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 
 @Injectable({
     providedIn: "root"
 })
 
 export class SidebarServices {
+    constructor(
+        private titleServices: Title
+    ) {}
     menu: Imenu = {
         userAccounts: false,
         stores: false,
@@ -15,6 +19,7 @@ export class SidebarServices {
     }
 
     userAccountSelected(routeModule: string) {
+        this.titleServices.setTitle(`TQS | ${routeModule}`)
         switch (routeModule) {
             case "user-accounts":
                 this.menu = {

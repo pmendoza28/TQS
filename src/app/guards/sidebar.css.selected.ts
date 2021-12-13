@@ -9,7 +9,7 @@ import { SidebarServices } from "../shared/layouts/sidebar/sidebar.service";
 
 export class SidebarCssSelected implements CanActivate {
     constructor(
-        private sideBarServices: SidebarServices
+        private sideBarServices: SidebarServices,
     ) {}
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         const { url } = state

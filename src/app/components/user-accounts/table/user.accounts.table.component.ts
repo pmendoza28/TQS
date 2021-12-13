@@ -127,6 +127,8 @@ export class UserAccountTableComponent {
     searchUserAccount() {
         this.isTableLoading = true;
         if (this.searchValue == "") {
+            this.isSearched = false;
+            this.userAccountPaginator.pageIndex = 0;
             this.populateUserAccounts();
         }
         else {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarServices } from './sidebar.service';
-
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -9,7 +9,8 @@ import { SidebarServices } from './sidebar.service';
 export class SidebarComponent implements OnInit {
 
   constructor(
-    public sideBarServices: SidebarServices
+    public sideBarServices: SidebarServices,
+    private titleServices: Title
   ) { }
 
   ngOnInit(): void {
