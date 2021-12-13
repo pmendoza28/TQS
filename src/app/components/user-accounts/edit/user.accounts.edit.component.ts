@@ -70,7 +70,7 @@ export class UserAccountEditComponent {
 
     populatePermissionValue(access: string) {
         switch (access) {
-            case "user_accounts":
+            case "user-accounts":
                 this.userAccountForm.patchValue({
                     access_permission: {
                         user_accounts: true
@@ -92,7 +92,7 @@ export class UserAccountEditComponent {
                 })
                 break;
 
-            case "earned_redeemed":
+            case "earned-redeemed":
                 this.userAccountForm.patchValue({
                     access_permission: {
                         earned_redeemed: true
@@ -108,7 +108,7 @@ export class UserAccountEditComponent {
                 })
                 break;
 
-            case "generate_file":
+            case "generate-file":
                 this.userAccountForm.patchValue({
                     access_permission: {
                         generate_file: true
@@ -149,7 +149,7 @@ export class UserAccountEditComponent {
         this.permissions = [];
         let { access_permission: { user_accounts, stores, members, earned_redeemed, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value
         if (user_accounts) {
-            this.permissions.push("user_accounts")
+            this.permissions.push("user-accounts")
         }
         if (stores) {
             this.permissions.push("stores")
@@ -158,7 +158,7 @@ export class UserAccountEditComponent {
             this.permissions.push("members")
         }
         if (earned_redeemed) {
-            this.permissions.push("earned_redeemed")
+            this.permissions.push("earned-redeemed")
         }
         if (earning) {
             this.permissions.push("earning")
@@ -170,7 +170,7 @@ export class UserAccountEditComponent {
             this.permissions.push("transactions")
         }
         if (generate_file) {
-            this.permissions.push("generate_file")
+            this.permissions.push("generate-file")
         }
     }
 

@@ -47,7 +47,28 @@ export class UserAccountTableComponent {
     ngOnInit(): void {
         this.populateUserAccounts()
     }
-    ngAfterViewInit(): void {
+
+    
+    populateUserAccounts() {
+        this.isTableLoading = true;
+        this.lblLoading = "Loading...";
+        this.dataSource = new MatTableDataSource<IUserAccountTable>()
+        this.userAccountsServices.getUserAccountsWithPaginator(this.currentPage, this.userAccountsPerPage).subscribe(res => {
+            this.isTableLoading = false;
+            const { data, total } = res;
+            if (data.length == 0) { this.lblLoading = "No Data"; }
+            this.dataSource.data = data
+            this.totalUserAccounts = total;
+            this.userAccountPaginator.length = total;
+        }, err => {
+            const { message } = err;
+            switch (message) {
+                case "Timeout has occurred":
+                    this.lblLoading = "Server cannot be reach. Please Try Again Later";
+                    this.isTableLoading = false;
+            }
+
+        })
     }
 
     newUserAccount() {
@@ -99,28 +120,6 @@ export class UserAccountTableComponent {
             const { id, isReset } = dialogRes;
             let index = this.dataSource.data.findIndex((user: any) => user.id == id)
             this.dataSource.data[index].isReset = isReset
-        })
-    }
-
-    populateUserAccounts() {
-        this.isTableLoading = true;
-        this.lblLoading = "Loading...";
-        this.dataSource = new MatTableDataSource<IUserAccountTable>()
-        this.userAccountsServices.getUserAccountsWithPaginator(this.currentPage, this.userAccountsPerPage).subscribe(res => {
-            this.isTableLoading = false;
-            const { data, total } = res
-            if (data.length > 0) { this.lblLoading = "No Data"; }
-            this.dataSource.data = data
-            this.totalUserAccounts = total;
-            this.userAccountPaginator.length = total;
-        }, err => {
-            const { message } = err;
-            switch (message) {
-                case "Timeout has occurred":
-                    this.lblLoading = "Server cannot be reach. Please Try Again Later";
-                    this.isTableLoading = false;
-            }
-
         })
     }
 

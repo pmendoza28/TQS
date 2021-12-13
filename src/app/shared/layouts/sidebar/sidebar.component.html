@@ -10,16 +10,16 @@
   <mat-divider></mat-divider>
 
   <mat-nav-list class="menu-container">
-    <mat-list-item  routerLink="/admin/user-accounts" [class.selected-menu]="sideBarServices.menu.userAccounts">
+    <mat-list-item *ngIf="checkAccess('user-accounts')" routerLink="/admin/user-accounts" [class.selected-menu]="sideBarServices.menu.userAccounts">
       <mat-icon class="selected-icon" mat-list-icon>person</mat-icon> User-Accounts
     </mat-list-item>
 
-    <mat-list-item routerLink="/admin/stores" [class.selected-menu]="sideBarServices.menu.stores">
+    <mat-list-item *ngIf="checkAccess('stores')" routerLink="/admin/stores" [class.selected-menu]="sideBarServices.menu.stores">
       <mat-icon class="selected-icon" mat-list-icon>store</mat-icon> Store
     </mat-list-item>
 
 
-    <mat-list-item routerLink="/admin/members" [class.selected-menu]="sideBarServices.menu.members">
+    <mat-list-item *ngIf="checkAccess('members')" routerLink="/admin/members" [class.selected-menu]="sideBarServices.menu.members">
       <mat-icon class="selected-icon" mat-list-icon>groups</mat-icon> Members
     </mat-list-item>
 

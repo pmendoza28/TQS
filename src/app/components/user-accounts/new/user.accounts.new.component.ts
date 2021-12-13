@@ -48,7 +48,7 @@ export class UserAccountsNewComponent {
         this.permissions = [];
         let {access_permission: {user_accounts, stores, members, earned_redeemed, transactions, generate_file, earning, redeeming}} = this.userAccountForm.value
         if(user_accounts) {
-            this.permissions.push("user_accounts")
+            this.permissions.push("user-accounts")
         }
         if(stores) {
             this.permissions.push("stores")
@@ -57,7 +57,7 @@ export class UserAccountsNewComponent {
             this.permissions.push("members")
         }
         if(earned_redeemed) {
-            this.permissions.push("earned_redeemed")
+            this.permissions.push("earned-redeemed")
         }
         if(earning) {
             this.permissions.push("earning")
@@ -69,7 +69,7 @@ export class UserAccountsNewComponent {
             this.permissions.push("transactions")
         }
         if(generate_file) {
-            this.permissions.push("generate_file")
+            this.permissions.push("generate-file")
         }
         this.userAccountForm.value.access_permission = this.permissions
     }

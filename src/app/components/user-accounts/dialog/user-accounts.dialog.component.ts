@@ -2,6 +2,7 @@ import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { LocalService } from "src/app/shared/services/local.service";
 import { UserAccountsServices } from "../user-accounts.service";
 
 @Component({
@@ -16,17 +17,24 @@ export class UserAccountsDialogComponent {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private userAccountServices: UserAccountsServices,
         private router: Router,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private localServices: LocalService
     ) {}
 
     isButtonLoading: boolean = false;
 
-    
+    ngOnInit(): void {
+        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+        //Add 'implements OnInit' to the class.
+        console.log(this.data)
+    }
 
     create() {
         this.isButtonLoading = true;
         this.data.button_name = "Creating..";
         this.userAccountServices.createUserAccount(this.data.userAccountForm).subscribe(res => {
+            console.log(res)
+            console.log(this.data.userAccountForm)
             const { message, data: {is_created} } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             this.isButtonLoading = false;
@@ -47,7 +55,8 @@ export class UserAccountsDialogComponent {
             const { isUpdated, message } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             if(isUpdated) {
-                this.router.navigate(["/admin/user-accounts", { updatedUserId: userId }])
+                this.localServices.setJsonValue("user", updatedUserAccounts)
+                this.router.navigate(["/admin/user-accounts"])
                 this.dialogRef.close()
             }
         })

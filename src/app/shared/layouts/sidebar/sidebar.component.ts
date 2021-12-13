@@ -1,26 +1,28 @@
 import { Component, OnInit } from '@angular/core';
+import { CredServices } from '../../services/cred.service';
 import { SidebarServices } from './sidebar.service';
-import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
 
   constructor(
     public sideBarServices: SidebarServices,
-    private titleServices: Title
+    private credServices: CredServices
   ) { }
-
-  ngOnInit(): void {
-  }
   
   isExpanded = true;
   showSubMenu: boolean = false;
   isShowing = false;
 
-  //Functions
+  checkAccess(accessParam: string) {
+    let { user: { access_permission } } = this.credServices.getCredentials()
+    let hasAccess = access_permission.some((access: string) => access == accessParam)
+    return hasAccess
+  }
+
   MouseEnter() {
     if (!this.isExpanded) {
       this.isShowing = true;
@@ -32,7 +34,4 @@ export class SidebarComponent implements OnInit {
       this.isShowing = false;
     }
   }
-
-
-
 }
