@@ -1,6 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { StoresDialogComponent } from "../dialog/stores.dialog.component";
@@ -17,7 +18,8 @@ export class StoresTableComponent {
     constructor(
         private storesServices: StoresServices,
         private router: Router,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar
     ) { }
 
     title: string = "Stores";
@@ -27,7 +29,7 @@ export class StoresTableComponent {
     storesPerPage: number = 5;
     totalStores: number = 0;
     currentPage = 1;
-    dataSource: any;
+    dataSource = new MatTableDataSource<any>();
     isTableLoading: boolean = false;
     lblLoading: "Loading..." | "No Data" | "No Store Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
     @ViewChild("storePaginator") storePaginator: MatPaginator
@@ -44,15 +46,27 @@ export class StoresTableComponent {
         'actions',
     ];
 
+    checkSearchValue() {
+        if(this.searchValue == "") {
+            if(this.isSearched) {
+                this.clearSearch()
+            }
+        }
+    }
+
     ngOnInit(): void {
         this.populateStoresWithPaginator()
+    }
+
+    ngDoCheck(): void {
+        this.checkSearchValue()
     }
 
     populateStoresWithPaginator() {
         this.isTableLoading = true;
         this.lblLoading = "Loading...";
-        this.dataSource = new MatTableDataSource<IStoreDataSource>()
         this.storesServices.getStoresWithPaginator(this.currentPage, this.storesPerPage).subscribe(res => {
+            console.log(res)
             this.isTableLoading = false;
             const { data, total } = res;
             if (data.length == 0) { this.lblLoading = "No Data"; }
@@ -69,7 +83,7 @@ export class StoresTableComponent {
         })
     }
 
-    searchStore() {
+    searchStore(isOnPage: boolean) {
         this.isTableLoading = true;
         if (this.searchValue == "") {
             this.isSearched = false;
@@ -77,13 +91,17 @@ export class StoresTableComponent {
             this.populateStoresWithPaginator();
         }
         else {
-            this.storesServices.searchStore(this.searchValue).subscribe(res => {
-                console.log(res)
+            if(!isOnPage) {
+                this.currentPage = 1;
+                this.storePaginator.pageIndex = 0;
+             }
+            this.storesServices.searchStore(this.searchValue, this.currentPage, this.storesPerPage).subscribe(res => {
+                const { data, total } = res;
                 this.isSearched = true;
                 this.isTableLoading = false;
-                this.dataSource.data = res
-                this.dataSource.paginator = this.storePaginator;
-                if (res.length == 0) { this.lblLoading = "No Store Found" }
+                this.dataSource.data = data
+                this.storePaginator.length = total
+                if (data.length == 0) { this.lblLoading = "No Store Found" }
             })
         }
     }
@@ -93,6 +111,7 @@ export class StoresTableComponent {
         this.isSearched = false;
         this.populateStoresWithPaginator()
         this.storePaginator.pageIndex = 0;
+        this.currentPage = 1;
     }
 
     editStore(storeId: number) {
@@ -104,6 +123,11 @@ export class StoresTableComponent {
             this.currentPage = pageData.pageIndex + 1;
             this.storesPerPage = pageData.pageSize
             this.populateStoresWithPaginator()
+        }
+        else {
+            this.currentPage = pageData.pageIndex + 1;
+            this.storesPerPage = pageData.pageSize
+            this.searchStore(true)
         }
     }
 
@@ -131,6 +155,10 @@ export class StoresTableComponent {
             
         })
         
+    }
+
+    copyToken(code: number) {
+        this.snackBar.open(`Code # ${code}`, `Token Copied to Clipboard`, { duration: 3000 })
     }
 }
 

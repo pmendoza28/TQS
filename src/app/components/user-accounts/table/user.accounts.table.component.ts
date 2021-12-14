@@ -143,8 +143,20 @@ export class UserAccountTableComponent {
                 
                 this.isSearched = true;
                 this.isTableLoading = false;
-                if (res.length == 0) { this.lblLoading = "No User Account Found" }
+                if (data.length == 0) { this.lblLoading = "No User Account Found" }
             })
+        }
+    }
+
+    ngDoCheck(): void {
+        this.checkSearchValue()
+    }
+
+    checkSearchValue() {
+        if(this.searchValue == "") {
+            if(this.isSearched) {
+                this.clearSearch()
+            }
         }
     }
 

@@ -24,6 +24,7 @@ export class UserAccountEditComponent {
     title: string = "User-Account Edit";
     userIdParams: number = this.route.snapshot.params["userId"]
     roleQuery: "admin" | "cashier";
+    
     userAccountForm: FormGroup = this.fb.group({
         first_name: ["", Validators.required],
         last_name: ["", Validators.required],
@@ -43,11 +44,17 @@ export class UserAccountEditComponent {
 
     ngOnInit(): void {
         this.populateUserAccountByUserId()
+        this.checkFormValueChanges()
+        
     }
-
+    isGettingUserAccountById: boolean = false;
+    userAccountClone: any;
     populateUserAccountByUserId() {
+        this.isGettingUserAccountById = true;
         this.userAccountServices.getUserAccountById(this.userIdParams).subscribe(res => {
+            this.isGettingUserAccountById = false;
             const { isUserExist, data: { user } } = res;
+            this.userAccountClone = user;
             this.roleQuery = user.role
             
             const access_permission = user.access_permission.split(", ");
@@ -116,11 +123,49 @@ export class UserAccountEditComponent {
                 })
                 break;
         }
-        
+    }
+    btnAction: "Nothing to update" |"Update" = "Nothing to update";
+    checkFormValueChanges() {
+        this.userAccountForm.valueChanges.subscribe(() => {
+            this.ifSomethingToChangeValue()
+        })
     }
 
+    ifSomethingToChangeValue() {
+        this.convertAccessPermission()
+        if(this.userAccountClone["first_name"] != this.userAccountForm.value["first_name"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.userAccountClone["last_name"] != this.userAccountForm.value["last_name"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.userAccountClone["username"] != this.userAccountForm.value["username"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.userAccountClone["role"] != this.userAccountForm.value["role"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.userAccountClone["access_permission"] != this.permissions.toString()) {
+            this.btnAction = "Update";
+            return true
+        }
+        else {
+            this.btnAction = "Nothing to update";
+            return false
+        }
+
+    }
 
     update() {
+        console.log(this.userAccountClone)
         this.convertAccessPermission()
         const { first_name, last_name, username, role } = this.userAccountForm.value;
         let updatedUserAccounts = {

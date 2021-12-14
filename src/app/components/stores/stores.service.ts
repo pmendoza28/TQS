@@ -17,8 +17,8 @@ export class StoresServices {
         return this.http.get(`${this.credServices.port}/admin/stores/${storePerPage}/?page=${currentPage}`)
     }
 
-    searchStore(searchvalue: string):Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/store/search`, { searchvalue })
+    searchStore(searchvalue: string, currentPage: number, storePerPage: number):Observable<any> {
+        return this.http.post(`${this.credServices.port}/admin/store/search/${storePerPage}/?page=${currentPage}`, { searchvalue })
     }
 
     getAllRegions(): Observable<any> {
@@ -39,6 +39,10 @@ export class StoresServices {
 
     updateStoreStatus(userId: number, is_active: boolean): Observable<any> {
         return this.http.put(`${this.credServices.port}/admin/update-store-status/${userId}`, { is_active })
+    }
+
+    reGenerateToken(): Observable<any>{
+        return this.http.get(`${this.credServices.port}/admin/store/regenerate-token`)
     }
     
 

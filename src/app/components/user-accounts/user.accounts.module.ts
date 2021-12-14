@@ -22,6 +22,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { UserAccountEditComponent } from './edit/user.accounts.edit.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 const routes: Routes = [
   { path: '', component: UserAccountTableComponent },
   { path: 'new', component: UserAccountsNewComponent },
@@ -57,6 +58,7 @@ const routes: Routes = [
     PipesModule,
     MatSnackBarModule,
     MatMenuModule,
+    NgxSkeletonLoaderModule
   ]
 })
 export class UserAccountsModule { }

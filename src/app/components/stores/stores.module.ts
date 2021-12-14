@@ -21,6 +21,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StoresEditComponent } from './edit/stores.edit.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 const routes: Routes = [
   { path: '', component: StoresTableComponent },
   { path: 'new', component: StoresNewComponent },
@@ -53,7 +54,8 @@ const routes: Routes = [
     MatDialogModule,
     MatSnackBarModule,
     MatTooltipModule,
-    ClipboardModule
+    ClipboardModule,
+    NgxSkeletonLoaderModule
   ]
 })
 export class StoresModule { }

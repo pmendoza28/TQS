@@ -54,10 +54,15 @@ export class StoresEditComponent {
         this.snackbar.open("Token Copied to clipboard", "", { duration: 3000 });
     }
 
+    isGettingStoreById: boolean = false;
+    storeClone: any;
     getStoreById() {
+        this.isGettingStoreById = true;
         this.storesServices.getStoreById(this.storeIdParams).subscribe(res => {
-            console.log(res)
+            this.isGettingStoreById = false;
             const { data: { store: { code, name, area, region, cluster, business_model, token } }, isStoreExist } = res;
+            this.storeClone = { code, name, area, region, cluster, business_model, token };
+            
             if(isStoreExist) {
                 this.storeForm.patchValue({
                     code,
@@ -81,7 +86,57 @@ export class StoresEditComponent {
         }
     }
 
+    btnAction: "Nothing to update" |"Update" = "Nothing to update";
+    checkFormValueChanges() {
+        this.storeForm.valueChanges.subscribe(() => {
+            this.ifSomethingToChangeValue()
+        })
+    }
+    ifSomethingToChangeValue() {
+        if(this.storeClone["code"] != this.storeForm.value["code"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.storeClone["name"] != this.storeForm.value["name"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.storeClone["area"] != this.storeForm.value["area"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.storeClone["region"] != this.storeForm.value["region"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.storeClone["cluster"] != this.storeForm.value["cluster"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.storeClone["business_model"] != this.storeForm.value["business_model"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        if(this.storeClone["token"] != this.storeForm.value["token"]) {
+            this.btnAction = "Update";
+            return true
+        }
+
+        else {
+            this.btnAction = "Nothing to update";
+            return false
+        }
+    }
+
+
     update() {
+        console.log(this.storeForm.value)
         this.dialog.open(StoresDialogComponent, {
             disableClose: true,
             data: {
@@ -92,6 +147,17 @@ export class StoresEditComponent {
                 storeId: this.storeIdParams,
                 storeForm: this.storeForm.value
             }
+        })
+    }
+    isGenerateTokenLoading: boolean;
+
+    generateToken() {
+        this.isGenerateTokenLoading = true;
+        this.storesServices.reGenerateToken().subscribe(res => {
+            this.isGenerateTokenLoading = false;
+            console.log(res)
+            const { data: { newtoken } } = res;
+            this.storeForm.patchValue({token: newtoken})
         })
     }
 

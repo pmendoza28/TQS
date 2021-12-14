@@ -1,5 +1,11 @@
 <app-admin-container [title]="title">
     <div new id="container">
+       <ng-container *ngIf="isGettingUserAccountById; else elseTemplate">
+        <div class="loader">
+            <ngx-skeleton-loader count="5" appearance="circle" animation="pulse" ></ngx-skeleton-loader>
+        </div>
+       </ng-container>
+       <ng-template #elseTemplate>
         <form [formGroup]="userAccountForm" (submit)="update()">
             <div class="name">
                 <mat-form-field appearance="legacy" color="accent">
@@ -63,11 +69,13 @@
                 <button 
                     mat-raised-button 
                     class="btn-primary"
-                    [disabled]="formValidation()"
-                    >Update</button>
+                    [disabled]="formValidation() || !ifSomethingToChangeValue()"
+                    >{{btnAction}}</button>
                 <button type="reset" mat-raised-button color="warn">Reset</button>
                 <button type="button" mat-raised-button (click)="back()">Back</button>
             </div>
         </form>
+       </ng-template>
+       
     </div>
 </app-admin-container>

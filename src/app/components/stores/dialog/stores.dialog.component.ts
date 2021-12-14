@@ -46,6 +46,8 @@ export class StoresDialogComponent {
         const { storeId, storeForm } = this.data;
         this.data.button_name = "Updating...";
         this.storesServices.updateStoreById(storeId, storeForm).subscribe(res => {
+            this.isButtonLoading = false;
+            console.log(res)
             this.data.button_name = "Update";
             const { isUpdated, message } = res;
             this.snackBar.open(message, "", { duration: 3000 })
@@ -54,9 +56,6 @@ export class StoresDialogComponent {
                 this.dialogRef.close()
             }
         })
-        setTimeout(() => {
-            this.isButtonLoading = false;
-        }, 2000);
     }
 
     ActivateInActive() {
