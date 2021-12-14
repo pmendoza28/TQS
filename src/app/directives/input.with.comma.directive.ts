@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Directive({
-  selector: '[WithComma]',
+  selector: '[[WithComma]]',
   providers: [DecimalPipe]
 })
 export class NumberCommaDirective implements OnInit, OnDestroy {

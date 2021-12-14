@@ -1,10 +1,6 @@
 <app-admin-container [title]="title">
     <div actions class="actions">
-        <button 
-            mat-raised-button 
-            class="btn-new btn-primary"
-            (click)="newStore()"
-            >
+        <button mat-raised-button class="btn-new btn-primary" (click)="newStore()">
             New
         </button>
 
@@ -59,8 +55,10 @@
                 </ng-container>
 
                 <ng-container matColumnDef="is_active">
-                    <th mat-header-cell *matHeaderCellDef> status </th>
-                    <td mat-cell *matCellDef="let store"> {{store.is_active}} </td>
+                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                    <td mat-cell *matCellDef="let store"> 
+                        <label [class.status-changed]="store.hasChanged">{{store.status}}</label>
+                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="created_at">
@@ -68,19 +66,30 @@
                     <td mat-cell *matCellDef="let store"> {{store.created_at | date}} </td>
                 </ng-container>
 
-               
+
 
 
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef> Actions </th>
-                    <td mat-cell *matCellDef="let user">
+                    <td mat-cell *matCellDef="let store">
                         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="editStore(user.id)">
+                            <button mat-menu-item (click)="editStore(store.id)">
                                 <span>Edit</span>
                             </button>
+                            <ng-container *ngIf="store.status == 'Active'; else elseTemplate">
+                                <button mat-menu-item (click)="activateInactivate('Deactivate', store.id)">
+                                    <span>Deactivate</span>
+                                </button>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                                <button mat-menu-item (click)="activateInactivate('Activate', store.id)">
+                                    <span>Activate</span>
+                                </button>
+                            </ng-template>
+                            
                         </mat-menu>
                     </td>
                 </ng-container>
@@ -96,7 +105,7 @@
                 </tr>
             </table>
         </div>
-        <mat-paginator #storePaginator [length]="totalStores" [pageSizeOptions]="pageSizeOption"
+        <mat-paginator #storePaginator showFirstLastButtons [length]="totalStores" [pageSizeOptions]="pageSizeOption"
             [pageSize]="storesPerPage" (page)="onChangePage($event)">
         </mat-paginator>
     </div>

@@ -2,13 +2,13 @@
     <form class="form" [formGroup]="loginForm">
         <div class="title">Administrator</div>
         <div class="inputs">
-            <mat-form-field appearance="legacy">
+            <mat-form-field appearance="legacy" color="accent">
                 <mat-label>User Name</mat-label>
                 <input autofocus formControlName="username" matInput autocomplete="off">
                 <mat-icon matSuffix>person</mat-icon>
             </mat-form-field>
 
-            <mat-form-field appearance="legacy">
+            <mat-form-field appearance="legacy" color="accent">
                 <mat-label>Password</mat-label>
                 <input formControlName="password" matInput [type]="hide ? 'password' : 'text'">
                 <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">

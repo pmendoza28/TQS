@@ -32,8 +32,8 @@ export class UserAccountsServices {
         )
     }
 
-    searchUserAccount(searchvalue: string): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/accounts/search`, { searchvalue })
+    searchUserAccount(searchvalue: string, currentPage: number, userAccountPerPage: number): Observable<any> {
+        return this.http.post(`${this.credServices.port}/admin/accounts/search/${userAccountPerPage}/?page=${currentPage}`, { searchvalue })
     }
 
     createUserAccount(userAccountObject: any): Observable<any> {

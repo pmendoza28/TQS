@@ -35,7 +35,7 @@ export class UserAccountTableComponent {
         'actions',
     ];
 
-    dataSource: any;
+    dataSource = new MatTableDataSource<any>();
     pageSizeOption: number[] = [5, 10, 15, 20];
     userAccountsPerPage: number = 5;
     totalUserAccounts: number = 0;
@@ -123,7 +123,7 @@ export class UserAccountTableComponent {
         })
     }
 
-    searchUserAccount() {
+    searchUserAccount(isOnPage: boolean) {
         this.isTableLoading = true;
         if (this.searchValue == "") {
             this.isSearched = false;
@@ -131,11 +131,18 @@ export class UserAccountTableComponent {
             this.populateUserAccounts();
         }
         else {
-            this.userAccountsServices.searchUserAccount(this.searchValue).subscribe(res => {
+            if(!isOnPage) {
+                this.currentPage = 1;
+                this.userAccountPaginator.pageIndex = 0;
+             }
+            this.userAccountsServices.searchUserAccount(this.searchValue, this.currentPage, this.userAccountsPerPage).subscribe(res => {
+                console.log(res)
+                const { data, total } = res;
+                this.dataSource.data = data;
+                this.userAccountPaginator.length = total;
+                
                 this.isSearched = true;
                 this.isTableLoading = false;
-                this.dataSource.data = res
-                this.dataSource.paginator = this.userAccountPaginator;
                 if (res.length == 0) { this.lblLoading = "No User Account Found" }
             })
         }
@@ -155,7 +162,11 @@ export class UserAccountTableComponent {
             this.userAccountsPerPage = pageData.pageSize
             this.populateUserAccounts()
         }
-
+        else {
+            this.currentPage = pageData.pageIndex + 1;
+            this.userAccountsPerPage = pageData.pageSize
+            this.searchUserAccount(true)
+        }
     }
 }
 

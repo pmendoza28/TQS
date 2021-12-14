@@ -1,7 +1,9 @@
 import { Component, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
+import { StoresDialogComponent } from "../dialog/stores.dialog.component";
 import { StoresServices } from "../stores.service";
 
 @Component({
@@ -14,7 +16,8 @@ export class StoresTableComponent {
 
     constructor(
         private storesServices: StoresServices,
-        private router: Router
+        private router: Router,
+        private dialog: MatDialog
     ) { }
 
     title: string = "Stores";
@@ -106,6 +109,28 @@ export class StoresTableComponent {
 
     newStore() {
         this.router.navigate(["/admin/stores/new"])
+    }
+
+    activateInactivate(action: string, storeId: number) {
+        this.dialog.open(StoresDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Confirmation",
+                question: `Are you sure want to ${action} this store?`,
+                action: "activeInActive",
+                button_name: action,
+                storeId
+            }
+        }).afterClosed().subscribe(dialogResponse => {
+            const { storeId, status } = dialogResponse;
+            if(status) {
+                let index = this.dataSource.data.findIndex((store: any) => store.id == storeId)
+                this.dataSource.data[index].status = status;
+                this.dataSource.data[index].hasChanged = true;
+            }
+            
+        })
+        
     }
 }
 

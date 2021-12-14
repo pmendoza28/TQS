@@ -6,7 +6,7 @@
         <mat-form-field appearance="legacy" color="accent">
             <mat-label>Search</mat-label>
             <input matInput autocomplete="off" [(ngModel)]="searchValue" autofocus
-                (keydown.enter)="searchUserAccount()">
+                (keydown.enter)="searchUserAccount(false)">
             <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
                 <mat-icon>close</mat-icon>
             </button>
@@ -91,7 +91,7 @@
                 </tr>
             </table>
         </div>
-        <mat-paginator #userAccountPaginator [length]="totalUserAccounts" [pageSizeOptions]="pageSizeOption"
+        <mat-paginator #userAccountPaginator showFirstLastButtons  [length]="totalUserAccounts" [pageSizeOptions]="pageSizeOption"
             [pageSize]="userAccountsPerPage" (page)="onChangePage($event)">
         </mat-paginator>
     </div>
