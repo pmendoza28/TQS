@@ -66,7 +66,6 @@ export class StoresTableComponent {
         this.isTableLoading = true;
         this.lblLoading = "Loading...";
         this.storesServices.getStoresWithPaginator(this.currentPage, this.storesPerPage).subscribe(res => {
-            console.log(res)
             this.isTableLoading = false;
             const { data, total } = res;
             if (data.length == 0) { this.lblLoading = "No Data"; }

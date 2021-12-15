@@ -23,13 +23,10 @@ export class UserAccountsDialogComponent {
 
     isButtonLoading: boolean = false;
 
-
     create() {
         this.isButtonLoading = true;
         this.data.button_name = "Creating..";
         this.userAccountServices.createUserAccount(this.data.userAccountForm).subscribe(res => {
-            console.log(res)
-            console.log(this.data.userAccountForm)
             const { message, data: {is_created} } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             this.isButtonLoading = false;
@@ -98,13 +95,6 @@ export class UserAccountsDialogComponent {
         const { user: { id } } = this.data;
         this.isButtonLoading = true;
         this.data.button_name = "Password Resetting";
-        // setTimeout(() => {
-        //     this.isButtonLoading = false;
-        //     this.dialogRef.close({
-        //         id,
-        //         isReset: true
-        //     })
-        // }, 2000);
         this.userAccountServices.resetPassword(id).subscribe(res => {
             this.isButtonLoading = false;
             const { message, isReset } = res;
@@ -118,4 +108,8 @@ export class UserAccountsDialogComponent {
         })
     }
 
+    discard() {
+        this.router.navigate(["/admin/user-accounts"])
+        this.dialogRef.close();
+    }
 }

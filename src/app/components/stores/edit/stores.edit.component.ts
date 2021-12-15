@@ -136,7 +136,6 @@ export class StoresEditComponent {
 
 
     update() {
-        console.log(this.storeForm.value)
         this.dialog.open(StoresDialogComponent, {
             disableClose: true,
             data: {
@@ -155,14 +154,26 @@ export class StoresEditComponent {
         this.isGenerateTokenLoading = true;
         this.storesServices.reGenerateToken().subscribe(res => {
             this.isGenerateTokenLoading = false;
-            console.log(res)
             const { data: { newtoken } } = res;
             this.storeForm.patchValue({token: newtoken})
         })
     }
 
     back() {
-        this.router.navigate(["/admin/stores"])
+        if(this.ifSomethingToChangeValue()) {
+            this.dialog.open(StoresDialogComponent, {
+                disableClose: true,
+                data: {
+                    title: "Confirmation",
+                    question: "Discard changes?",
+                    action: "discardChanges",
+                    button_name: "Discard"
+                }
+            })
+        }
+        else {
+            this.router.navigate(["/admin/stores"])
+        }
     }
 
     reset() {

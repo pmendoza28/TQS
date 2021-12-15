@@ -136,7 +136,6 @@ export class UserAccountTableComponent {
                 this.userAccountPaginator.pageIndex = 0;
              }
             this.userAccountsServices.searchUserAccount(this.searchValue, this.currentPage, this.userAccountsPerPage).subscribe(res => {
-                console.log(res)
                 const { data, total } = res;
                 this.dataSource.data = data;
                 this.userAccountPaginator.length = total;

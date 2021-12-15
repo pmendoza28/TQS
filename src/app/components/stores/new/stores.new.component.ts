@@ -40,7 +40,6 @@ export class StoresNewComponent {
     }
 
     create() {
-        console.log(this.storeForm.value)
         this.dialog.open(StoresDialogComponent, {
             disableClose: true,
             data: {

@@ -1,4 +1,4 @@
-<div *ngIf="data.action == 'createUserAccount'">
+<div *ngIf="data.action == 'createUserAccount'" class="dialog-container-size">
   <h2 mat-dialog-title>{{data.title}}</h2>
   <mat-dialog-content class="mat-typography">
     {{data.question}}
@@ -15,7 +15,7 @@
   </mat-dialog-actions>
 </div>
 
-<div *ngIf="data.action == 'updateUserAccount'">
+<div *ngIf="data.action == 'updateUserAccount'" class="dialog-container-size">
   <h2 mat-dialog-title>{{data.title}}</h2>
   <mat-dialog-content class="mat-typography">
     {{data.question}}
@@ -32,7 +32,7 @@
   </mat-dialog-actions>
 </div>
 
-<div *ngIf="data.action == 'deactivateAccount'">
+<div *ngIf="data.action == 'deactivateAccount'" class="dialog-container-size">
   <h2 mat-dialog-title>{{data.title}}</h2>
   <mat-dialog-content class="mat-typography">
     {{data.question}}
@@ -73,7 +73,7 @@
 </div>
 
 
-<div *ngIf="data.action == 'resetPassword'">
+<div *ngIf="data.action == 'resetPassword'" class="dialog-container-size">
   <h2 mat-dialog-title>{{data.title}}</h2>
   <mat-dialog-content class="mat-typography">
     {{data.question}}
@@ -104,6 +104,23 @@
   <mat-dialog-actions align="end">
     <button 
       (click)="resetPassword()" 
+      mat-raised-button 
+      class="btn-primary"
+      [disabled]="isButtonLoading"
+      [class.spinner]="isButtonLoading"
+      >{{data.button_name}}</button>
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="data.action == 'discardChanges'" class="dialog-container-size">
+  <h2 mat-dialog-title>{{data.title}}</h2>
+  <mat-dialog-content class="mat-typography">
+    {{data.question}}
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button 
+      (click)="discard()" 
       mat-raised-button 
       class="btn-primary"
       [disabled]="isButtonLoading"

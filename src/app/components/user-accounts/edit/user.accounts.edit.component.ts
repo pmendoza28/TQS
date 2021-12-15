@@ -165,7 +165,6 @@ export class UserAccountEditComponent {
     }
 
     update() {
-        console.log(this.userAccountClone)
         this.convertAccessPermission()
         const { first_name, last_name, username, role } = this.userAccountForm.value;
         let updatedUserAccounts = {
@@ -258,6 +257,20 @@ export class UserAccountEditComponent {
     }
 
     back() {
-        this.router.navigate(["/admin/user-accounts"])
+       
+        if(this.ifSomethingToChangeValue()) {
+            this.dialog.open(UserAccountsDialogComponent, {
+                disableClose: true,
+                data: {
+                    title: "Confirmation",
+                    question: "Discard changes?",
+                    action: "discardChanges",
+                    button_name: "Discard"
+                }
+            })
+        }
+        else {
+            this.router.navigate(["/admin/user-accounts"])
+        }
     }
 }
