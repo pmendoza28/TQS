@@ -7,19 +7,39 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
+import { MembersNewComponent } from './new/members.new.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DirectivesModule } from 'src/app/directives/directives.module';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { MembersDialogComponent } from './dialog/members.dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MembersEditComponent } from './edit/members.edit.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+};
 
 const routes: Routes = [
-  { path: '', component: MembersTableComponent}
+  { path: '', component: MembersTableComponent },
+  { path: 'new', component: MembersNewComponent },
+  { path: 'edit', component: MembersEditComponent },
 ]
 
 @NgModule({
   declarations: [
-    MembersTableComponent
+    MembersTableComponent,
+    MembersNewComponent,
+    MembersDialogComponent,
+    MembersEditComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +53,16 @@ const routes: Routes = [
     MatTableModule,
     MatMenuModule,
     MatPaginatorModule,
-    MatButtonModule
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    DirectivesModule,
+    NgxMaskModule.forRoot(maskConfig),
+    MatDialogModule,
+    NgxSkeletonLoaderModule,
+    MatSnackBarModule
   ]
 })
 export class MembersModule { }

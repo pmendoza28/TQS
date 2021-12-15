@@ -4,7 +4,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
   selector: '[[OnlyNumber]]'
 })
 
-export class OnlyNumber {
+export class OnlyNumberDirective {
   constructor(private el: ElementRef) {}
 
   @Input() OnlyNumber:any;

@@ -1,6 +1,9 @@
 import { Component, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
+import { Router } from "@angular/router";
+import { MembersDialogComponent } from "../dialog/members.dialog.component";
 import { MembersServices } from "../members.service";
 
 @Component({
@@ -11,7 +14,9 @@ import { MembersServices } from "../members.service";
 
 export class MembersTableComponent {
     constructor(
-        private membersServices: MembersServices
+        private membersServices: MembersServices,
+        private router: Router,
+        private dialog: MatDialog
     ) { }
     title: string = "Members";
     searchValue: string = "";
@@ -32,7 +37,7 @@ export class MembersTableComponent {
         "created_at",
         "actions",
     ]
-    lblLoading: "Loading..." | "No Data" | "No Store Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
+    lblLoading: "Loading..." | "No Data" | "No Member Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
     isSearched: boolean = false;
     pageSizeOption: number[] = [5, 10, 15, 20];
     memberPerPage: number = 5;
@@ -61,7 +66,6 @@ export class MembersTableComponent {
         this.membersServices.getMembersWithPaginator(this.currentPage, this.memberPerPage).subscribe(res => {
             this.isTableLoading = false;
             const { data, total } = res;
-            console.log(data)
             if (data.length == 0) { this.lblLoading = "No Data"; }
             this.dataSource.data = data;
             this.totalMembers = total;
@@ -77,7 +81,7 @@ export class MembersTableComponent {
     }
 
     newMember() {
-
+        this.router.navigate(["/admin/members/new"])
     }
 
     searchMember(isOnPage: boolean) {
@@ -98,7 +102,7 @@ export class MembersTableComponent {
                 this.isTableLoading = false;
                 this.dataSource.data = data
                 this.memberPaginator.length = total
-                if (data.length == 0) { this.lblLoading = "No Store Found" }
+                if (data.length == 0) { this.lblLoading = "No Member Found" }
             })
         }
     }
@@ -112,11 +116,28 @@ export class MembersTableComponent {
     }
 
     editMember(memberId: number) {
-
+        this.router.navigate(["/admin/members/edit", { memberId}])
     }
 
     activateInactivate(action: string, memberId: number) {
-
+        this.dialog.open(MembersDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Confirmation",
+                question: `Are you sure want to ${action} this store?`,
+                action: "activeInActive",
+                button_name: action,
+                memberId
+            }
+        }).afterClosed().subscribe(dialogResponse => {
+            const { memberId, status } = dialogResponse;
+            if(status) {
+                let index = this.dataSource.data.findIndex((member: any) => member.id == memberId)
+                this.dataSource.data[index].status = status;
+                this.dataSource.data[index].hasChanged = true;
+            }
+            
+        })
     }
 
     onChangePage(pageData: PageEvent) {
@@ -146,4 +167,5 @@ interface IMemberDataSource {
     mobile_number: string;
     status: string;
     created_at: string;
+    hasChanged?: boolean
 }

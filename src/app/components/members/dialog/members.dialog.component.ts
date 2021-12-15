@@ -2,53 +2,59 @@ import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { StoresServices } from "../stores.service";
+import { MembersServices } from "../members.service";
 
 @Component({
-    selector: 'app-stores-dialog',
-    templateUrl: './stores.dialog.component.html',
-    styleUrls: ['./stores.dialog.component.scss']
+    selector: 'app-members-dialog',
+    templateUrl: './members.dialog.component.html',
+    styleUrls: ['./members.dialog.component.scss']
 })
 
-export class StoresDialogComponent {
+export class MembersDialogComponent {
+
     constructor(
-        private dialogRef: MatDialogRef<StoresDialogComponent>,
+        private dialogRef: MatDialogRef<MembersDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private storesServices: StoresServices,
-        private snackBar: MatSnackBar,
-        private router: Router
-    ) { }
+        private membersServices: MembersServices,
+        private router: Router,
+        private snackBar: MatSnackBar
+    ) {}
 
     isButtonLoading: boolean = false;
-
-    create() {
-        const { storeForm } = this.data;
-        this.isButtonLoading = true;
-        this.data.button_name = "Creating"
-        this.storesServices.createStore(storeForm).subscribe(res => {
-            this.isButtonLoading = false;
-            const { isCreated, message } = res;
-            this.snackBar.open(message, "", { duration: 3000 })
-            this.data.button_name = "Create";
-            if(isCreated) {
-                this.router.navigate(["/admin/stores"])
-                this.dialogRef.close()
-            }
-        })
+    ngOnInit(): void {
+        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+        //Add 'implements OnInit' to the class.
+        console.log(this.data)
     }
 
+    create() {
+        this.isButtonLoading = true;
+        this.data.button_name = "Creating";
+        const { memberForm } = this.data;
+        this.membersServices.createMember(memberForm).subscribe(res => {
+            this.isButtonLoading = false;
+            this.data.button_name = "Create";
+            console.log(res)
+            const { isCreated, message } = res;
+            this.snackBar.open(message, "", { duration: 3000 })
+            if(isCreated) {
+                this.dialogRef.close();
+                this.router.navigate(["/admin/members"])
+            }    
+        })
+    }
+    
     update() {
         this.isButtonLoading = true;
-        const { storeId, storeForm } = this.data;
-        this.data.button_name = "Updating...";
-        this.storesServices.updateStoreById(storeId, storeForm).subscribe(res => {
-            this.isButtonLoading = false;
-            this.data.button_name = "Update";
+        this.data.button_name = "Updating";
+        const { memberId, memberForm } = this.data;
+        this.membersServices.updateMemberbyId(memberId, memberForm).subscribe(res => {
+            console.log(res)
             const { isUpdated, message } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             if(isUpdated) {
-                this.router.navigate(["/admin/stores"])
                 this.dialogRef.close()
+                this.router.navigate(["/admin/members"])
             }
         })
     }
@@ -57,15 +63,15 @@ export class StoresDialogComponent {
         this.isButtonLoading = true;
         if(this.data.button_name == "Deactivate") {
             this.data.button_name = "Deactivating";
-            const { storeId } = this.data;
+            const { memberId } = this.data;
             if(this.data.button_name == "Deactivating") {
-                this.storesServices.updateStoreStatus(storeId, false).subscribe(res => {
+                this.membersServices.updateStatusById(memberId, false).subscribe(res => {
                     this.data.button_name = "Deactivate";
                     const { isDeactivated, message } = res;
                     this.snackBar.open(message, "", { duration: 3000 })
                     if(isDeactivated) {
                         this.dialogRef.close({
-                            storeId,
+                            memberId,
                             status: "Inactive",
                         })
                     }
@@ -74,14 +80,14 @@ export class StoresDialogComponent {
         }
         if(this.data.button_name == "Activate") {
             this.data.button_name = "Activating";
-            const { storeId } = this.data;
-            this.storesServices.updateStoreStatus(storeId, true).subscribe(res => {
+            const { memberId } = this.data;
+            this.membersServices.updateStatusById(memberId, true).subscribe(res => {
                 this.data.button_name = "Activate";
                 const { isActivated, message } = res;
                 this.snackBar.open(message, "", { duration: 3000 })
                 if(isActivated) {
                     this.dialogRef.close({
-                        storeId,
+                        memberId,
                         status: "Active",
                     })
                 }
@@ -90,8 +96,7 @@ export class StoresDialogComponent {
     }
 
     discard() {
-        this.router.navigate(["/admin/stores"])
+        this.router.navigate(["/admin/members"])
         this.dialogRef.close()
     }
-
 }
