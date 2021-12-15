@@ -18,11 +18,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserAccountsDialogComponent } from './dialog/user-accounts.dialog.component';
-import { PipesModule } from 'src/app/pipes/pipes.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { UserAccountEditComponent } from './edit/user.accounts.edit.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+
 const routes: Routes = [
   { path: '', component: UserAccountTableComponent },
   { path: 'new', component: UserAccountsNewComponent },
@@ -55,7 +55,6 @@ const routes: Routes = [
     MatCheckboxModule,
     ReactiveFormsModule,
     MatDialogModule,
-    PipesModule,
     MatSnackBarModule,
     MatMenuModule,
     NgxSkeletonLoaderModule

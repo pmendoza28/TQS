@@ -29,7 +29,7 @@ export class StoresTableComponent {
     storesPerPage: number = 5;
     totalStores: number = 0;
     currentPage = 1;
-    dataSource = new MatTableDataSource<any>();
+    dataSource = new MatTableDataSource<IStoreDataSource>();
     isTableLoading: boolean = false;
     lblLoading: "Loading..." | "No Data" | "No Store Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
     @ViewChild("storePaginator") storePaginator: MatPaginator
@@ -169,6 +169,7 @@ interface IStoreDataSource {
     region: string;
     cluster: string;
     business_model: string;
-    is_active: boolean;
     created_at: string;
+    status: string;
+    hasChanged?: boolean
 }
