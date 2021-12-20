@@ -34,7 +34,6 @@ export class MembersNewComponent {
     })
 
     create() {
-        console.log(this.memberForm.value)
         var options = {
             year: "numeric",
             weekday: "short",

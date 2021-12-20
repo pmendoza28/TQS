@@ -119,7 +119,7 @@ export class MembersTableComponent {
         this.router.navigate(["/admin/members/edit", { memberId}])
     }
 
-    activateInactivate(action: string, memberId: number) {
+    activateInactivate(action: string, member: any) {
         this.dialog.open(MembersDialogComponent, {
             disableClose: true,
             data: {
@@ -127,7 +127,7 @@ export class MembersTableComponent {
                 question: `Are you sure want to ${action} this store?`,
                 action: "activeInActive",
                 button_name: action,
-                memberId
+                member
             }
         }).afterClosed().subscribe(dialogResponse => {
             const { memberId, status } = dialogResponse;
@@ -151,6 +151,16 @@ export class MembersTableComponent {
             this.memberPerPage = pageData.pageSize
             this.searchMember(true)
         }
+    }
+
+    upload() {
+        this.dialog.open(MembersDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Import Members",
+                action: "import-members"
+            }
+        })
     }
 }
 

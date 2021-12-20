@@ -78,12 +78,12 @@
                                 <span>Edit</span>
                             </button>
                             <ng-container *ngIf="store.status == 'Active'; else elseTemplate">
-                                <button mat-menu-item (click)="activateInactivate('Deactivate', store.id)">
+                                <button mat-menu-item (click)="activateInactivate('Deactivate', store)">
                                     <span>Deactivate</span>
                                 </button>
                             </ng-container>
                             <ng-template #elseTemplate>
-                                <button mat-menu-item (click)="activateInactivate('Activate', store.id)">
+                                <button mat-menu-item (click)="activateInactivate('Activate', store)">
                                     <span>Activate</span>
                                 </button>
                             </ng-template>

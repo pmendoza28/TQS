@@ -10,7 +10,11 @@
                         matInput 
                         autocomplete="off"
                         formControlName="first_name"
+                        class="capitalize"
                         >
+                        <mat-error *ngIf="inputControl('first_name').errors?.['required']">
+                            First Name is required
+                        </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="legacy" color="accent">
@@ -20,7 +24,11 @@
                         matInput 
                         autocomplete="off"
                         formControlName="last_name"
+                        class="capitalize"
                         >
+                        <mat-error *ngIf="inputControl('last_name').errors?.['required']">
+                            Last Name is required
+                        </mat-error>
                 </mat-form-field>
             </div>
             <div class="cred">
@@ -32,6 +40,9 @@
                         autocomplete="off"
                         formControlName="username"
                         >
+                        <mat-error *ngIf="inputControl('username').errors?.['required']">
+                            User Name is required
+                        </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="legacy" color="accent">
@@ -43,12 +54,15 @@
                         autocomplete="off"
                         formControlName="password"
                         >
+                        <mat-error *ngIf="inputControl('password').errors?.['required']">
+                            Password is required
+                        </mat-error>
                 </mat-form-field>
             </div>
             <div class="role-permission">
                 <label for="">Role</label>
                 <mat-radio-group formControlName="role" (change)="resetPermissions()">
-                    <mat-radio-button value="admin">Admin</mat-radio-button>
+                    <mat-radio-button value="admin" [checked]=true>Admin</mat-radio-button>
                     <mat-radio-button value="cashier">Cashier</mat-radio-button>
                 </mat-radio-group>
                 <label *ngIf="getRole() == 'admin' || getRole() == 'cashier'"  for="">Permissions</label>
@@ -61,6 +75,7 @@
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="transactions" value="transactions">Transactions</mat-checkbox>
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="generate_file" value="generate-file">Generate File</mat-checkbox>
                 </div>
+               
 
                 <div *ngIf="getRole() == 'cashier'" class="permissions" formGroupName="access_permission">
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="members" value="members">Members</mat-checkbox>
@@ -68,6 +83,11 @@
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="redeeming" value="redeeming">Redeeming</mat-checkbox>
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="transactions" value="transactions">Transactions</mat-checkbox>
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="generate_file" value="generate-file">Generate File</mat-checkbox>
+                </div>
+                <div>
+                    <mat-error *ngIf="permissions.length == 0">
+                        Select Permissions
+                    </mat-error>
                 </div>
             </div>
             <div class="actions">

@@ -36,4 +36,8 @@ export class MembersServices {
     updateStatusById(memberId: number, is_active: boolean): Observable<any> {
         return this.http.put(`${this.credServices.port}/admin/update-member-status/${memberId}`, { is_active })
     }
+
+    importMembers(importMemberForm: any, headers: any): Observable<any> {
+        return this.http.post(`${this.credServices.port}/admin/import`, importMemberForm, { headers })
+    }
 }

@@ -153,7 +153,7 @@ export class UserAccountEditComponent {
             return true
         }
 
-        if(this.userAccountClone["access_permission"] != this.permissions.toString()) {
+        if(JSON.stringify(this.userAccountClone["access_permission"].split(", ")) != JSON.stringify(this.permissions.toString().split(","))) {
             this.btnAction = "Update";
             return true
         }
@@ -256,8 +256,11 @@ export class UserAccountEditComponent {
         else { return false }
     }
 
+    inputControl(property: string) {
+        return this.userAccountForm.controls[property]
+    }
+    
     back() {
-       
         if(this.ifSomethingToChangeValue()) {
             this.dialog.open(UserAccountsDialogComponent, {
                 disableClose: true,
@@ -272,5 +275,6 @@ export class UserAccountEditComponent {
         else {
             this.router.navigate(["/admin/user-accounts"])
         }
+       
     }
 }

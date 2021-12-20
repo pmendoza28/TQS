@@ -37,6 +37,28 @@
     <mat-dialog-content class="mat-typography">
       {{data.question}}
     </mat-dialog-content>
+    <div class="user-info">
+      <ul>
+        <li>ID</li>
+        <li>Code</li>
+        <li>Store Name</li>
+        <li>Area</li>
+      </ul>
+  
+      <ul class="separator">
+        <li> : </li>
+        <li> : </li>
+        <li> : </li>
+        <li> : </li>
+      </ul>
+  
+      <ul class="separator">
+        <li>{{data.store.id}}</li>
+        <li>{{data.store.code}}</li>
+        <li>{{data.store.name}}</li>
+        <li>{{data.store.area}}</li>
+      </ul>
+    </div>
     <mat-dialog-actions align="end">
       <button 
         (click)="ActivateInActive()" 

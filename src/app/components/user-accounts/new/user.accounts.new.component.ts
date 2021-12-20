@@ -25,18 +25,23 @@ export class UserAccountsNewComponent {
         last_name: ["", Validators.required],
         username: ["", Validators.required],
         password: ["", Validators.required],
-        role: ["", Validators.required],
+        role: ["admin", Validators.required],
         access_permission: this.fb.group({
-            user_accounts: [],
-            stores: [],
-            members: [],
-            earned_redeemed: [],
-            transactions: [],
-            generate_file: [],
+            user_accounts: [true],
+            stores: [true],
+            members: [true],
+            earned_redeemed: [true],
+            transactions: [true],
+            generate_file: [true],
             earning: [],
             redeeming: [],
         }),
     })
+
+    ngOnInit(): void {
+        console.log(this.userAccountForm)
+        this.convertAccessPermission()
+    }
 
     permissions: string[] = []
 
@@ -113,6 +118,10 @@ export class UserAccountsNewComponent {
             return true
         }
         else { return false}
+    }
+
+    inputControl(property: string) {
+        return this.userAccountForm.controls[property]
     }
     
     back() {

@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-material-components/file-input": "^7.0.1",
     "@angular/animations": "~13.0.3",
     "@angular/cdk": "^13.0.3",
     "@angular/common": "~13.0.3",
@@ -28,6 +29,7 @@
     "rxjs": "~6.6.0",
     "secure-web-storage": "^1.0.2",
     "tslib": "^2.3.0",
+    "xlsx": "^0.17.4",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

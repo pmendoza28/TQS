@@ -23,7 +23,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MembersEditComponent } from './edit/members.edit.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 const maskConfig: Partial<IConfig> = {
   validation: false,
 };
@@ -62,7 +63,9 @@ const routes: Routes = [
     NgxMaskModule.forRoot(maskConfig),
     MatDialogModule,
     NgxSkeletonLoaderModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxMatFileInputModule,
+    MatTooltipModule
   ]
 })
 export class MembersModule { }

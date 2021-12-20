@@ -134,7 +134,7 @@ export class StoresTableComponent {
         this.router.navigate(["/admin/stores/new"])
     }
 
-    activateInactivate(action: string, storeId: number) {
+    activateInactivate(action: string, store: any) {
         this.dialog.open(StoresDialogComponent, {
             disableClose: true,
             data: {
@@ -142,7 +142,7 @@ export class StoresTableComponent {
                 question: `Are you sure want to ${action} this store?`,
                 action: "activeInActive",
                 button_name: action,
-                storeId
+                store
             }
         }).afterClosed().subscribe(dialogResponse => {
             const { storeId, status } = dialogResponse;

@@ -3,6 +3,13 @@
         <button mat-raised-button class="btn-new btn-primary" (click)="newMember()">
             New
         </button>
+        <button 
+            mat-raised-button 
+            color="accent"
+            (click)="upload()"
+            >
+            Upload
+        </button>
 
         <mat-form-field appearance="legacy" color="accent">
             <mat-label>Search</mat-label>
@@ -94,12 +101,12 @@
                                 <span>Edit</span>
                             </button>
                             <ng-container *ngIf="member.status == 'Active'; else elseTemplate">
-                                <button mat-menu-item (click)="activateInactivate('Deactivate', member.id)">
+                                <button mat-menu-item (click)="activateInactivate('Deactivate', member)">
                                     <span>Deactivate</span>
                                 </button>
                             </ng-container>
                             <ng-template #elseTemplate>
-                                <button mat-menu-item (click)="activateInactivate('Activate', member.id)">
+                                <button mat-menu-item (click)="activateInactivate('Activate', member)">
                                     <span>Activate</span>
                                 </button>
                             </ng-template>

@@ -57,15 +57,15 @@ export class StoresDialogComponent {
         this.isButtonLoading = true;
         if(this.data.button_name == "Deactivate") {
             this.data.button_name = "Deactivating";
-            const { storeId } = this.data;
+            const { store: { id } } = this.data;
             if(this.data.button_name == "Deactivating") {
-                this.storesServices.updateStoreStatus(storeId, false).subscribe(res => {
+                this.storesServices.updateStoreStatus(id, false).subscribe(res => {
                     this.data.button_name = "Deactivate";
                     const { isDeactivated, message } = res;
                     this.snackBar.open(message, "", { duration: 3000 })
                     if(isDeactivated) {
                         this.dialogRef.close({
-                            storeId,
+                            storeId : id,
                             status: "Inactive",
                         })
                     }
@@ -74,14 +74,14 @@ export class StoresDialogComponent {
         }
         if(this.data.button_name == "Activate") {
             this.data.button_name = "Activating";
-            const { storeId } = this.data;
-            this.storesServices.updateStoreStatus(storeId, true).subscribe(res => {
+            const { store: { id } } = this.data;
+            this.storesServices.updateStoreStatus(id, true).subscribe(res => {
                 this.data.button_name = "Activate";
                 const { isActivated, message } = res;
                 this.snackBar.open(message, "", { duration: 3000 })
                 if(isActivated) {
                     this.dialogRef.close({
-                        storeId,
+                        storeId: id,
                         status: "Active",
                     })
                 }
