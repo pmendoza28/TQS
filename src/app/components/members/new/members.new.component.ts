@@ -30,16 +30,15 @@ export class MembersNewComponent {
         municipality: ["", Validators.required],
         province: ["", Validators.required],
         email: ["", [Validators.required, Validators.email]],
-        mobile_number: ["", [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+        mobile_number: ["", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     })
 
     create() {
-        var options = {
-            year: "numeric",
-            weekday: "short",
-            month: "2-digit",
-            day: "numeric"
-        };
+        console.log({
+            ...this.memberForm.value, 
+            mobile_number: this.memberForm.value.mobile_number,
+            birthday: moment(this.memberForm.value.birthday).format("yyyy-MM-DD")
+        })
         this.dialog.open(MembersDialogComponent, {
             disableClose: true,
             data: {
@@ -49,7 +48,7 @@ export class MembersNewComponent {
                 button_name: "Create",
                 memberForm: {
                     ...this.memberForm.value, 
-                    mobile_number: `63${this.memberForm.value.mobile_number}`,
+                    mobile_number: this.memberForm.value.mobile_number,
                     birthday: moment(this.memberForm.value.birthday).format("yyyy-MM-DD")
                 }
             }

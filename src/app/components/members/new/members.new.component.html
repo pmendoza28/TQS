@@ -81,16 +81,15 @@
                 
                 <mat-form-field appearance="legacy" color="accent">
                     <mat-label>Mobile Number</mat-label>
-                    <span matPrefix>+63 &nbsp;</span>
                     <input matInput 
-                    [specialCharacters]="[ '[' ,']' , '-' ]" mask="000-000-0000"
+                    [specialCharacters]="[ '[' ,']' , '-' ]" mask="0000-000-0000"
                     [OnlyNumber] autocomplete="off" min="11" max="11" formControlName="mobile_number">
                     <mat-error *ngIf="inputControl('mobile_number').status == 'INVALID'">
                         <ng-container *ngIf="inputControl('mobile_number').errors?.['required']; else elseTemplate">
                             Mobile is required
                         </ng-container>
                         <ng-template #elseTemplate>
-                            Mobile Number must be 10 digits
+                            Mobile Number must be 11 digits
                         </ng-template>
                     </mat-error>
                 </mat-form-field>

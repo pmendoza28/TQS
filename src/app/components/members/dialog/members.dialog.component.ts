@@ -1,12 +1,12 @@
 import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { HelperServices } from "src/app/shared/services/helpers.service";
 import { MembersServices } from "../members.service";
 import * as XLSX from 'xlsx';
-import { MatTableDataSource } from "@angular/material/table";
+import { MatTable, MatTableDataSource } from "@angular/material/table";
 @Component({
     selector: 'app-members-dialog',
     templateUrl: './members.dialog.component.html',
@@ -22,7 +22,8 @@ export class MembersDialogComponent {
         private router: Router,
         private snackBar: MatSnackBar,
         private fb: FormBuilder,
-        private helpersServices: HelperServices
+        private helpersServices: HelperServices,
+        private dialog: MatDialog
     ) { }
 
     isButtonLoading: boolean = false;
@@ -30,6 +31,7 @@ export class MembersDialogComponent {
         memberExcelFile: [null]
     })
     excelData: any[] = []
+    @ViewChild("tblMembers") tblMembers: MatTable<any>
 
     ngOnInit(): void {
         console.log(this.data)
@@ -43,9 +45,9 @@ export class MembersDialogComponent {
             this.isButtonLoading = false;
             this.data.button_name = "Create";
             console.log(res)
-            const { isCreated, message } = res;
+            const { data, message } = res;
             this.snackBar.open(message, "", { duration: 3000 })
-            if (isCreated) {
+            if (data) {
                 this.dialogRef.close();
                 this.router.navigate(["/admin/members"])
             }
@@ -134,6 +136,7 @@ export class MembersDialogComponent {
         this.excelData = []
         this.allErrors = [];
         this.dataSource.data = [];
+        this.readyToUpload = false;
         const { memberExcelFile } = this.fileUploadForm.value
         const fileReader = new FileReader()
         fileReader.readAsBinaryString(memberExcelFile)
@@ -220,7 +223,7 @@ export class MembersDialogComponent {
             })
 
             let { duplicateMobileNumbers } = this.checkDuplicateMobileNumbers();
-            if(duplicateMobileNumbers.length > 0) {
+            if (duplicateMobileNumbers.length > 0) {
                 duplicateMobileNumbers.map(duplicateMobileNumber => this.allErrors.push(`Duplicate Mobile Numbers at row ${duplicateMobileNumber.row}`))
             }
         }
@@ -236,10 +239,17 @@ export class MembersDialogComponent {
         console.log(this.dataSource.data)
     }
 
+    allFieldAreFillUp() {
+        let yeah =  this.dataSource.data.some((member: IMemberDataSource) => member.first_name.trim() == "" || member.last_name.trim() == "" || member.gender.trim() == "" || member.birthday == "" || member.barangay.trim() == "" || member.municipality.trim() == "" || member.province.trim() == "" || member.email.trim() == ""|| member.mobile_number.trim() == "") 
+        return yeah
+    }
+
     ok(rowNumber: number) {
         let index = this.dataSource.data.findIndex((member: IMemberDataSource) => member.row == rowNumber)
         this.dataSource.data[index].isEdit = false;
         this.allErrors = [];
+        
+        
         this.dataSource.data.map((member: IMemberDataSource, index: number) => {
             let errors: string[] = [];
 
@@ -296,9 +306,49 @@ export class MembersDialogComponent {
             this.dataSource.data[index].error = errors;
         })
         let { duplicateMobileNumbers } = this.checkDuplicateMobileNumbers();
-            if(duplicateMobileNumbers.length > 0) {
-                duplicateMobileNumbers.map(duplicateMobileNumber => this.allErrors.push(`Duplicate Mobile Numbers at row ${duplicateMobileNumber.row}`))
-            }
+        if (duplicateMobileNumbers.length > 0) {
+            duplicateMobileNumbers.map(duplicateMobileNumber => this.allErrors.push(`Duplicate Mobile Numbers at row ${duplicateMobileNumber.row}`))
+        }
+
+        if(this.validateQuery) {
+            this.membersServices.validateMembers(this.dataSource.data).subscribe(res => {
+                const { memberExists } = res;
+                if(memberExists.length == 0) {
+                    this.readyToUpload = true
+                    this.snackBar.open("All Mobile Numbers are not yet registered. Upload Members to proceed", "", { duration: 3000})
+                }
+                if(memberExists.length > 0) {
+                    this.readyToUpload = false;
+                    memberExists.map((mobileNumber: any) => {
+                        this.dataSource.data.map((member: IMemberDataSource) => {
+                            if(member.mobile_number == mobileNumber.mobile_number) {
+                                this.allErrors.push(`Mobile Number at row ${member.row} is already exists`)
+                                member.error?.push(`Mobile number is already exists`)
+                            }
+                        })
+                    })
+                }
+            })
+        }
+      
+      
+    }
+
+    isEditAll: boolean = false;
+    editAll() {
+        this.isEditAll = !this.isEditAll;
+        if(this.isEditAll) {
+            this.dataSource.data.map((member: IMemberDataSource) => member.isEdit = true)
+        }
+        if(!this.isEditAll) {
+            this.dataSource.data.map((member: IMemberDataSource) => member.isEdit = false)
+        }
+        
+    }
+
+    remove(rowNumber: number) {
+        this.dataSource.data.splice(this.dataSource.data.findIndex((member: IMemberDataSource ) => member.row == rowNumber), 1)
+        this.tblMembers.renderRows()
     }
 
     validateMember(member: IMemberDataSource) {
@@ -321,7 +371,7 @@ export class MembersDialogComponent {
             return false;
         }
     }
-    
+
     checkDuplicateMobileNumbers() {
         let duplicateMobileNumbers: any[] = [];
         this.dataSource.data.forEach((member: IMemberDataSource) => {
@@ -333,11 +383,82 @@ export class MembersDialogComponent {
                 })
             }
         })
-        return {duplicateMobileNumbers}
+        return { duplicateMobileNumbers }
     }
-    
+
     uploadMembers() {
-        console.log(this.checkDuplicateMobileNumbers())
+        this.dialog.open(MembersDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Confirmation",
+                question: "Are you sure you want to Import this members?",
+                button_name: "Import",
+                action: "import-members",
+                members: this.dataSource.data
+            }
+        }).afterClosed().subscribe(res => {
+            if(res) {
+                this.dialogRef.close(res)
+            }
+        })
+    }
+
+    checkIfEditingTable() {
+        let ifEditing = this.dataSource.data.some((member: IMemberDataSource) => member.isEdit == true)
+        return ifEditing
+    }
+
+    btnImport: string = "Import";
+    readyToUpload: boolean = false;
+    isValidating: boolean = false;
+    btnValidate: "Validate Mobile Numbers" | "Validating Mobile Numbers" = "Validate Mobile Numbers";
+    validateQuery: boolean  = false;
+    validateMembers() {
+        this.validateQuery = true
+        this.isValidating = true;
+        this.btnValidate = "Validating Mobile Numbers";
+        this.allErrors = []
+        this.membersServices.validateMembers(this.dataSource.data).subscribe(res => {
+            const { memberExists } = res;
+            if(memberExists.length == 0) {
+                this.readyToUpload = true
+                this.snackBar.open("All Mobile Numbers are not yet registered. Upload Members to proceed", "", { duration: 3000})
+            }
+            if (memberExists.length > 0) {
+                this.readyToUpload = false;
+                memberExists.map((mobileNumber: any) => {
+                    this.dataSource.data.map((member: IMemberDataSource) => {
+                        if (member.mobile_number == mobileNumber.mobile_number) {
+                            this.allErrors.push(`Mobile Number at row ${member.row} is already exists`)
+                            member.error?.push(`Mobile number is already exists`)
+                        }
+                    })
+                })
+            }
+            this.btnValidate = "Validate Mobile Numbers";
+            this.isValidating = false;
+        })
+
+    }
+
+    importMembers() {
+        this.isButtonLoading = true;
+        this.btnImport = "Importing";
+        this.membersServices.importMembers(this.data.members).subscribe(res => {
+            console.log(res)
+            let { message, memberExists,imported_members } = res;
+            if (memberExists.length > 0) {
+                message = "Selected Members are already exists"
+            }
+            this.snackBar.open(message, "", { duration: 3000 })
+            this.isButtonLoading = false;
+            this.btnImport = "Import";
+            this.dialogRef.close({
+                isImported: true,
+                imported_members
+            })
+        })
+
     }
 }
 

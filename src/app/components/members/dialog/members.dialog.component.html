@@ -68,7 +68,7 @@
   </mat-dialog-actions>
 </div>
 
-<div *ngIf="data.action == 'import-members'" class="import-members" [class.dialog-large-size]="excelData.length > 0">
+<div *ngIf="data.action == 'import-members-validation'" class="import-members" [class.dialog-large-size]="excelData.length > 0">
   <h2 mat-dialog-title>{{data.title}}</h2>
   <mat-dialog-content class="mat-typography">
     <div class="container">
@@ -78,9 +78,12 @@
           <ngx-mat-file-input color="accent" accept=".xlsx, .csv" formControlName="memberExcelFile">
           </ngx-mat-file-input>
         </mat-form-field>
+       <div class="select-file-actions">
         <button mat-raised-button class="btn-primary" [disabled]="fileUploadForm.value.memberExcelFile == null">
           Preview Excel
         </button>
+        <button mat-raised-button mat-dialog-close>Cancel</button>
+       </div>
       </form>
 
       <div class="member-table-container" *ngIf="excelData.length > 0">
@@ -90,7 +93,7 @@
             <mat-label>Search</mat-label>
             <input matInput (keyup)="applyFilter($event)" #input autocomplete="off">
           </mat-form-field>
-          <table mat-table [dataSource]="dataSource">
+          <table #tblMembers mat-table [dataSource]="dataSource">
 
             <ng-container matColumnDef="errors">
               <th mat-header-cell *matHeaderCellDef>
@@ -163,9 +166,9 @@
               <th mat-header-cell *matHeaderCellDef> Birthday </th>
               <td mat-cell *matCellDef="let member"> 
                 <ng-container *ngIf="member.isEdit; else elseTemplate">
-                  <mat-form-field appearance="legacy" class="table-field">
+                  <mat-form-field appearance="legacy" class="table-field" color="accent">
                     <mat-label>Birthday</mat-label>
-                    <input matInput [matDatepicker]="picker" readonly [(ngModel)]="member.birthday">
+                    <input matInput [matDatepicker]="picker"  [(ngModel)]=member.birthday>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
@@ -252,7 +255,11 @@
             </ng-container>
 
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef></th>
+              <th mat-header-cell *matHeaderCellDef>
+                <!-- <button mat-icon-button (click)="editAll()">
+                  <mat-icon>edit</mat-icon>
+                </button> -->
+              </th>
               <td mat-cell *matCellDef="let member">
                 <ng-container *ngIf="member.isEdit; else elseTemplate">
                   <button 
@@ -268,6 +275,9 @@
                     <mat-icon>edit</mat-icon>
                   </button>
                 </ng-template>
+                <button mat-icon-button (click)="remove(member.row)">
+                  <mat-icon>delete</mat-icon>
+                </button>
 
               </td>
             </ng-container>
@@ -278,7 +288,15 @@
           </table>
         </div>
         <div class="actions">
-          <button [disabled]="validateUploadMembers()" mat-raised-button class="btn-primary" (click)="uploadMembers()">Upload Members</button>
+          <button 
+            mat-raised-button 
+            color="accent" 
+            *ngIf="!allFieldAreFillUp() && checkDuplicateMobileNumbers().duplicateMobileNumbers.length == 0"
+            (click)="validateMembers()"
+            [disabled]="isValidating || checkIfEditingTable()"
+            [class.spinner]= "isValidating"
+            >{{btnValidate}}</button>
+          <button *ngIf="readyToUpload" [disabled]="validateUploadMembers() || checkIfEditingTable()" mat-raised-button class="btn-primary" (click)="uploadMembers()">Upload Members</button>
           <button mat-raised-button mat-dialog-close>Cancel</button>
         </div>
       </div>
@@ -286,7 +304,17 @@
 
 
   </mat-dialog-content>
-  <!-- <mat-dialog-actions align="end">
+  
+</div>
 
-  </mat-dialog-actions> -->
+<div *ngIf="data.action == 'import-members'" class="dialog-container-size">
+  <h2 mat-dialog-title>{{data.title}}</h2>
+  <mat-dialog-content class="mat-typography">
+    {{data.question}}
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button (click)="importMembers()" mat-raised-button class="btn-primary" [disabled]="isButtonLoading"
+      [class.spinner]="isButtonLoading">{{btnImport}}</button>
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
 </div>

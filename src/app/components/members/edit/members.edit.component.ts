@@ -36,7 +36,7 @@ export class MembersEditComponent {
         municipality: ["", Validators.required],
         province: ["", Validators.required],
         email: ["", [Validators.required, Validators.email]],
-        mobile_number: ["", [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+        mobile_number: ["", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     })
 
     ngOnInit(): void {
@@ -47,9 +47,11 @@ export class MembersEditComponent {
     populateMemberById() {
         this.isGettingStoreById = true;
         this.membersServices.getMemberbyID(this.memberIdParams).subscribe(res => {
+            console.log(res)
             this.isGettingStoreById = false;
             const { isMemberExist, data: { member } } = res;
             const { first_name, last_name, gender, birthday, barangay, municipality, province, email, mobile_number } = member;
+            console.log(moment(Date.parse(birthday)).format("yyyy-m-d"))
             if(isMemberExist) {
                 this.memberClone = { 
                     first_name, 
@@ -60,7 +62,7 @@ export class MembersEditComponent {
                     municipality, 
                     province, 
                     email, 
-                    mobile_number: mobile_number.substring(2)
+                    mobile_number: mobile_number
                 };
                 this.memberForm.patchValue({
                     first_name, 
@@ -71,7 +73,7 @@ export class MembersEditComponent {
                     municipality, 
                     province, 
                     email, 
-                    mobile_number: mobile_number.substring(2)
+                    mobile_number: mobile_number
                 })
             }
         })
@@ -87,7 +89,7 @@ export class MembersEditComponent {
                 button_name: "Update",
                 memberForm: {
                     ...this.memberForm.value, 
-                    mobile_number: `63${this.memberForm.value.mobile_number}`,
+                    mobile_number: this.memberForm.value.mobile_number,
                     birthday: moment(this.memberForm.value.birthday).format("yyyy-MM-DD")
                 },
                 memberId: this.memberIdParams
@@ -97,7 +99,6 @@ export class MembersEditComponent {
 
     checkFormValueChanges() {
         this.memberForm.valueChanges.subscribe(() => {
-            console.log(this.memberForm)
             this.ifSomethingToChangeValue()
         })
     }

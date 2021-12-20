@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { timeout } from "rxjs/operators";
 import { CredServices } from "src/app/shared/services/cred.service";
 
 @Injectable({
@@ -14,7 +15,9 @@ export class MembersServices {
     ) { }
 
     getMembersWithPaginator(currentPage: number, memberPerPage: number): Observable<any> {
-        return this.http.get(`${this.credServices.port}/admin/members/${memberPerPage}/?page=${currentPage}`)
+        return this.http.get(`${this.credServices.port}/admin/members/${memberPerPage}/?page=${currentPage}`).pipe(
+            timeout(10000)
+        )
     }
 
     searchMember(searchvalue: string, currentPage: number, memberPerPage: number): Observable<any> {
@@ -37,7 +40,11 @@ export class MembersServices {
         return this.http.put(`${this.credServices.port}/admin/update-member-status/${memberId}`, { is_active })
     }
 
-    importMembers(importMemberForm: any, headers: any): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/import`, importMemberForm, { headers })
+    importMembers(importMemberForm: any): Observable<any> {
+        return this.http.post(`${this.credServices.port}/admin/member/import-members`, importMemberForm)
+    }
+
+    validateMembers(importMemberForm: any): Observable<any> {
+        return this.http.post(`${this.credServices.port}/admin/member/check-members`, importMemberForm)
     }
 }

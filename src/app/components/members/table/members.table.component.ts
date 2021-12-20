@@ -21,7 +21,7 @@ export class MembersTableComponent {
     title: string = "Members";
     searchValue: string = "";
     isTableLoading: boolean = false;
-    dataSource = new MatTableDataSource<IMemberDataSource>()
+    dataSource = new MatTableDataSource<any>()
     displayedColumns: string[] = [
         "id",
         "first_name",
@@ -64,6 +64,7 @@ export class MembersTableComponent {
     populateMembersWithPaginator() {
         this.isTableLoading = true;
         this.membersServices.getMembersWithPaginator(this.currentPage, this.memberPerPage).subscribe(res => {
+            console.log(res)
             this.isTableLoading = false;
             const { data, total } = res;
             if (data.length == 0) { this.lblLoading = "No Data"; }
@@ -158,7 +159,18 @@ export class MembersTableComponent {
             disableClose: true,
             data: {
                 title: "Import Members",
-                action: "import-members"
+                action: "import-members-validation"
+            }
+        }).afterClosed().subscribe(dialogResponse => {
+            if(dialogResponse) {
+                console.log(dialogResponse)
+                const { imported_members } = dialogResponse;
+                if(imported_members) {
+                    if(imported_members.length > 0) {
+                        this.populateMembersWithPaginator()
+                        
+                    }
+                }
             }
         })
     }
@@ -176,6 +188,6 @@ interface IMemberDataSource {
     email: string;
     mobile_number: string;
     status: string;
-    created_at: string;
+    created_at?: string;
     hasChanged?: boolean
 }

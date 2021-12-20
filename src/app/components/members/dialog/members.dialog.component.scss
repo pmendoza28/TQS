@@ -18,6 +18,14 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: stretch;
+            .select-file-actions {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
         }
         .member-table-container {
             margin-top: 20px;
