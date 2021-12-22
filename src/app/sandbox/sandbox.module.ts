@@ -1,17 +1,25 @@
+import { NgxMatFileInputModule } from "@angular-material-components/file-input";
 import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { ExcelViewerComponent } from "./excel-viewer/excel.viewer.component";
+import { ExcelWithPasswordComponent } from "./excel-with-password/excel-with-password.component";
 
 const routes: Routes = [
-    { path: 'excel-viewer', component: ExcelViewerComponent }
+    { path: 'excel-viewer', component: ExcelViewerComponent },
+    { path: 'excel-viewer-with-password', component: ExcelWithPasswordComponent },
 ]
 
 @NgModule({
     declarations: [
-        ExcelViewerComponent
+        ExcelViewerComponent,
+        ExcelWithPasswordComponent
     ],
     imports: [
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        FormsModule,
+        ReactiveFormsModule,
+        NgxMatFileInputModule,
     ]
 })
 

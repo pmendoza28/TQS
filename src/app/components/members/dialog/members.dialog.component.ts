@@ -7,6 +7,7 @@ import { HelperServices } from "src/app/shared/services/helpers.service";
 import { MembersServices } from "../members.service";
 import * as XLSX from 'xlsx';
 import { MatTable, MatTableDataSource } from "@angular/material/table";
+
 @Component({
     selector: 'app-members-dialog',
     templateUrl: './members.dialog.component.html',
@@ -142,7 +143,7 @@ export class MembersDialogComponent {
         fileReader.readAsBinaryString(memberExcelFile)
         fileReader.onload = (event) => {
             let binaryData = event.target?.result;
-            let workbook = XLSX.read(binaryData, { type: "binary" })
+            let workbook = XLSX.read(binaryData, { type: "binary", password: "1234" })
             workbook.SheetNames.forEach(sheet => {
                 this.excelData.push({
                     sheetName: sheet,
