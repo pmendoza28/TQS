@@ -17,6 +17,7 @@ const routes: Routes = [
             { path: 'user-accounts', canActivate: [SidebarCssSelected, AdminAccessGuard], loadChildren: () => import("../../components/user-accounts/user.accounts.module").then(m => m.UserAccountsModule) },
             { path: 'stores', canActivate: [SidebarCssSelected, AdminAccessGuard], loadChildren: () => import("../../components/stores/stores.module").then(m => m.StoresModule) },
             { path: 'members', canActivate: [SidebarCssSelected, AdminAccessGuard], loadChildren: () => import("../../components/members/members.module").then(m => m.MembersModule) },
+            { path: 'earned-points', canActivate: [SidebarCssSelected, AdminAccessGuard], loadChildren: () => import("../../components/earned-points/earned.points.module").then(m => m.EarnedPointsModule) },
             { path: 'unauthorized', component: UnauthorizedComponent},
             { path: '**', component: NotFoundComponent },
         ]

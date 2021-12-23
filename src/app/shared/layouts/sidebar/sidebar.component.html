@@ -23,7 +23,7 @@
       <mat-icon class="selected-icon" mat-list-icon>groups</mat-icon> Members
     </mat-list-item>
 
-    <mat-list-item [class.selected-menu]="sideBarServices.menu.earnedRedeemedPoints">
+    <mat-list-item *ngIf="checkAccess('earned-points')" routerLink="/admin/earned-points"  [class.selected-menu]="sideBarServices.menu.earned_points">
       <mat-icon mat-list-icon>savings</mat-icon> Earned Points
     </mat-list-item>
 

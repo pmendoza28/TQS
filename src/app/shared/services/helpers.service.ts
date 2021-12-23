@@ -27,34 +27,33 @@ export class HelperServices {
     
     
         //Add Row and formatting
-        worksheet.mergeCells('C1', 'L4');
-        let titleRow = worksheet.getCell('C1');
-        titleRow.value = title
-        titleRow.font = {
-          name: 'Calibri',
-          size: 16,
-          underline: 'single',
-          bold: true,
-          color: { argb: '0085A3' }
-        }
-        titleRow.alignment = { vertical: 'middle', horizontal: 'center' }
+        // worksheet.mergeCells('C1', 'L4');
+        // let titleRow = worksheet.getCell('C1');
+        // titleRow.value = title
+        // titleRow.font = {
+        //   name: 'Calibri',
+        //   size: 16,
+        //   underline: 'single',
+        //   bold: true,
+        //   color: { argb: '0085A3' }
+        // }
+        // titleRow.alignment = { vertical: 'middle', horizontal: 'center' }
     
         // Date
         // worksheet.mergeCells('G1:H4');
         let d = new Date();
         let date = d.toLocaleDateString()
-    
-    
+
         // Add Image
         // let myLogoImage = workbook.addImage({
-        //   base64: logo.imgBase64,
+        //   base64: logoUrl.imgBase64,
         //   extension: 'png',
         // });
-        worksheet.mergeCells('A1:B4');
+        // worksheet.mergeCells('A1:B4');
         // worksheet.addImage(myLogoImage, 'A1:B4');
     
         //Blank Row 
-        worksheet.addRow([]);
+        // worksheet.addRow([]);
     
         //Adding Header Row
         let headerRow = worksheet.addRow(header);
@@ -94,15 +93,15 @@ export class HelperServices {
         worksheet.addRow([]);
     
         //Footer Row
-        let footerRow = worksheet.addRow(['Generated date: ' + date]);
-        footerRow.getCell(1).fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: 'FFB050' }
-        };
+        // let footerRow = worksheet.addRow(['Generated date: ' + date]);
+        // footerRow.getCell(1).fill = {
+        //   type: 'pattern',
+        //   pattern: 'solid',
+        //   fgColor: { argb: 'FFB050' }
+        // };
     
         //Merge Cells
-        worksheet.mergeCells(`A${footerRow.number}:F${footerRow.number}`);
+        // worksheet.mergeCells(`A${footerRow.number}:F${footerRow.number}`);
     
         //Generate & Save Excel File
         workbook.xlsx.writeBuffer().then((data) => {

@@ -30,7 +30,7 @@ export class UserAccountsNewComponent {
             user_accounts: [true],
             stores: [true],
             members: [true],
-            earned_redeemed: [true],
+            earned_points: [true],
             transactions: [true],
             generate_file: [true],
             earning: [],
@@ -51,7 +51,7 @@ export class UserAccountsNewComponent {
 
     convertAccessPermission() {
         this.permissions = [];
-        let {access_permission: {user_accounts, stores, members, earned_redeemed, transactions, generate_file, earning, redeeming}} = this.userAccountForm.value
+        let {access_permission: {user_accounts, stores, members, earned_points, transactions, generate_file, earning, redeeming}} = this.userAccountForm.value
         if(user_accounts) {
             this.permissions.push("user-accounts")
         }
@@ -61,8 +61,8 @@ export class UserAccountsNewComponent {
         if(members) {
             this.permissions.push("members")
         }
-        if(earned_redeemed) {
-            this.permissions.push("earned-redeemed")
+        if(earned_points) {
+            this.permissions.push("earned-points")
         }
         if(earning) {
             this.permissions.push("earning")

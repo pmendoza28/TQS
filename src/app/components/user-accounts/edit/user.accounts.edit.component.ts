@@ -34,7 +34,7 @@ export class UserAccountEditComponent {
             user_accounts: [],
             stores: [],
             members: [],
-            earned_redeemed: [],
+            earned_points: [],
             transactions: [],
             generate_file: [],
             earning: [],
@@ -99,10 +99,10 @@ export class UserAccountEditComponent {
                 })
                 break;
 
-            case "earned-redeemed":
+            case "earned-points":
                 this.userAccountForm.patchValue({
                     access_permission: {
-                        earned_redeemed: true
+                        earned_points: true
                     }
                 })
                 break;
@@ -191,7 +191,7 @@ export class UserAccountEditComponent {
     permissions: string[] = [];
     convertAccessPermission() {
         this.permissions = [];
-        let { access_permission: { user_accounts, stores, members, earned_redeemed, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value
+        let { access_permission: { user_accounts, stores, members, earned_points, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value
         if (user_accounts) {
             this.permissions.push("user-accounts")
         }
@@ -201,8 +201,8 @@ export class UserAccountEditComponent {
         if (members) {
             this.permissions.push("members")
         }
-        if (earned_redeemed) {
-            this.permissions.push("earned-redeemed")
+        if (earned_points) {
+            this.permissions.push("earned-points")
         }
         if (earning) {
             this.permissions.push("earning")
