@@ -34,11 +34,6 @@ export class MembersNewComponent {
     })
 
     create() {
-        console.log({
-            ...this.memberForm.value, 
-            mobile_number: this.memberForm.value.mobile_number,
-            birthday: moment(this.memberForm.value.birthday).format("yyyy-MM-DD")
-        })
         this.dialog.open(MembersDialogComponent, {
             disableClose: true,
             data: {

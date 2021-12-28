@@ -49,7 +49,6 @@ export class EarnedPointsTableComponent {
         this.earnedPointsServices.getEarnedPointsWithPaginator(this.currentPage, this.earnedPointsPerPage).subscribe(res => {
             this.isTableLoading = false;
             const { data, total } = res;
-            console.log(data)
             if (data.length == 0) { this.lblLoading = "No Data"; }
             this.dataSource.data = data;
             this.totalMembers = total;
@@ -129,7 +128,6 @@ export class EarnedPointsTableComponent {
                 action: "import-earned-points-validation"
             }
         }).afterClosed().subscribe(dialogRes => {
-            console.log(dialogRes)
             const { isImported } = dialogRes;
             if(isImported) {
                 this.populateEarnedPointsWithPaginator()

@@ -36,10 +36,6 @@ export class MembersDialogComponent {
     @ViewChild("tblMembers") tblMembers: MatTable<any>
     @ViewChild(MatPaginator) tblMembersPaginator : MatPaginator
 
-    ngOnInit(): void {
-        console.log(this.data)
-    }
-
     create() {
         this.isButtonLoading = true;
         this.data.button_name = "Creating";
@@ -47,7 +43,6 @@ export class MembersDialogComponent {
         this.membersServices.createMember(memberForm).subscribe(res => {
             this.isButtonLoading = false;
             this.data.button_name = "Create";
-            console.log(res)
             const { data, message } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             if (data) {
@@ -62,7 +57,6 @@ export class MembersDialogComponent {
         this.data.button_name = "Updating";
         const { memberId, memberForm } = this.data;
         this.membersServices.updateMemberbyId(memberId, memberForm).subscribe(res => {
-            console.log(res)
             const { isUpdated, message } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             if (isUpdated) {
@@ -239,7 +233,6 @@ export class MembersDialogComponent {
     edit(rowNumber: number) {
         let index = this.dataSource.data.findIndex((member: IMemberDataSource) => member.row == rowNumber)
         this.dataSource.data[index].isEdit = true;
-        console.log(this.dataSource.data)
     }
 
     allFieldAreFillUp() {
@@ -533,7 +526,6 @@ export class MembersDialogComponent {
         this.isButtonLoading = true;
         this.btnImport = "Importing";
         this.membersServices.importMembers(this.data.members).subscribe(res => {
-            console.log(res)
             let { message, memberExists,imported_members } = res;
             if (memberExists.length > 0) {
                 message = "Selected Members are already exists"

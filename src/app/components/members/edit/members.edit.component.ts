@@ -47,11 +47,9 @@ export class MembersEditComponent {
     populateMemberById() {
         this.isGettingStoreById = true;
         this.membersServices.getMemberbyID(this.memberIdParams).subscribe(res => {
-            console.log(res)
             this.isGettingStoreById = false;
             const { isMemberExist, data: { member } } = res;
             const { first_name, last_name, gender, birthday, barangay, municipality, province, email, mobile_number } = member;
-            console.log(moment(Date.parse(birthday)).format("yyyy-m-d"))
             if(isMemberExist) {
                 this.memberClone = { 
                     first_name, 

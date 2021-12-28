@@ -64,7 +64,6 @@ export class MembersTableComponent {
     populateMembersWithPaginator() {
         this.isTableLoading = true;
         this.membersServices.getMembersWithPaginator(this.currentPage, this.memberPerPage).subscribe(res => {
-            console.log(res)
             this.isTableLoading = false;
             const { data, total } = res;
             if (data.length == 0) { this.lblLoading = "No Data"; }
@@ -163,7 +162,6 @@ export class MembersTableComponent {
             }
         }).afterClosed().subscribe(dialogResponse => {
             if(dialogResponse) {
-                console.log(dialogResponse)
                 const { imported_members } = dialogResponse;
                 if(imported_members) {
                     if(imported_members.length > 0) {

@@ -40,7 +40,6 @@ export class UserAccountsNewComponent {
     })
 
     ngOnInit(): void {
-        console.log(this.userAccountForm)
         this.convertAccessPermission()
     }
 

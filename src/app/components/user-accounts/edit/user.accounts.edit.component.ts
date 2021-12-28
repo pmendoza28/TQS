@@ -199,7 +199,6 @@ export class UserAccountEditComponent {
             role,
             access_permission: this.permissions
         }
-        console.log(updatedUserAccounts)
         this.dialog.open(UserAccountsDialogComponent, {
             disableClose: true,
             data: {
