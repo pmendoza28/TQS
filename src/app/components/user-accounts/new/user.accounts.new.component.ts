@@ -16,7 +16,7 @@ export class UserAccountsNewComponent {
         private router: Router,
         private fb: FormBuilder,
         private dialog: MatDialog
-    ) {}
+    ) { }
     title: string = "User-Account New"
     adminPermissions = ["user-accounts", "members", "stores", "earned_redeemed", "transactions", "generate_file"]
     cashierPermissions = [""]
@@ -31,7 +31,8 @@ export class UserAccountsNewComponent {
             stores: [true],
             members: [true],
             earned_points: [true],
-            transactions: [true],
+            redeemed_points: [true],
+            transactions: [],
             generate_file: [true],
             earning: [],
             redeeming: [],
@@ -51,29 +52,32 @@ export class UserAccountsNewComponent {
 
     convertAccessPermission() {
         this.permissions = [];
-        let {access_permission: {user_accounts, stores, members, earned_points, transactions, generate_file, earning, redeeming}} = this.userAccountForm.value
-        if(user_accounts) {
+        let { access_permission: { user_accounts, stores, members, earned_points, redeemed_points, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value
+        if (user_accounts) {
             this.permissions.push("user-accounts")
         }
-        if(stores) {
+        if (stores) {
             this.permissions.push("stores")
         }
-        if(members) {
+        if (members) {
             this.permissions.push("members")
         }
-        if(earned_points) {
+        if (earned_points) {
             this.permissions.push("earned-points")
         }
-        if(earning) {
+        if (redeemed_points) {
+            this.permissions.push("redeemed-points")
+        }
+        if (earning) {
             this.permissions.push("earning")
         }
-        if(redeeming) {
+        if (redeeming) {
             this.permissions.push("redeeming")
         }
-        if(transactions) {
+        if (transactions) {
             this.permissions.push("transactions")
         }
-        if(generate_file) {
+        if (generate_file) {
             this.permissions.push("generate-file")
         }
         this.userAccountForm.value.access_permission = this.permissions
@@ -103,7 +107,8 @@ export class UserAccountsNewComponent {
                 user_accounts: false,
                 stores: false,
                 members: false,
-                earned_redeemed: false,
+                earned_points: false,
+                redeemed_points: false,
                 transactions: false,
                 generate_file: false,
                 earning: false,
@@ -114,16 +119,16 @@ export class UserAccountsNewComponent {
     }
 
     formValidation() {
-        if(!this.userAccountForm.valid || this.permissions.length == 0) {
+        if (!this.userAccountForm.valid || this.permissions.length == 0) {
             return true
         }
-        else { return false}
+        else { return false }
     }
 
     inputControl(property: string) {
         return this.userAccountForm.controls[property]
     }
-    
+
     back() {
         this.router.navigate(["/admin/user-accounts"])
     }

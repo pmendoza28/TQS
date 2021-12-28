@@ -24,7 +24,7 @@ export class UserAccountEditComponent {
     title: string = "User-Account Edit";
     userIdParams: number = this.route.snapshot.params["userId"]
     roleQuery: "admin" | "cashier";
-    
+
     userAccountForm: FormGroup = this.fb.group({
         first_name: ["", Validators.required],
         last_name: ["", Validators.required],
@@ -35,6 +35,7 @@ export class UserAccountEditComponent {
             stores: [],
             members: [],
             earned_points: [],
+            redeemed_points: [],
             transactions: [],
             generate_file: [],
             earning: [],
@@ -45,7 +46,7 @@ export class UserAccountEditComponent {
     ngOnInit(): void {
         this.populateUserAccountByUserId()
         this.checkFormValueChanges()
-        
+
     }
     isGettingUserAccountById: boolean = false;
     userAccountClone: any;
@@ -56,7 +57,7 @@ export class UserAccountEditComponent {
             const { isUserExist, data: { user } } = res;
             this.userAccountClone = user;
             this.roleQuery = user.role
-            
+
             const access_permission = user.access_permission.split(", ");
             if (isUserExist) {
                 this.userAccountForm.patchValue({
@@ -107,6 +108,14 @@ export class UserAccountEditComponent {
                 })
                 break;
 
+            case "redeemed-points":
+                this.userAccountForm.patchValue({
+                    access_permission: {
+                        redeemed_points: true
+                    }
+                })
+                break;
+
             case "transactions":
                 this.userAccountForm.patchValue({
                     access_permission: {
@@ -122,9 +131,25 @@ export class UserAccountEditComponent {
                     }
                 })
                 break;
+
+            case "earning":
+                this.userAccountForm.patchValue({
+                    access_permission: {
+                        earning: true
+                    }
+                })
+                break;
+
+            case "redeeming":
+                this.userAccountForm.patchValue({
+                    access_permission: {
+                        redeeming: true
+                    }
+                })
+                break;
         }
     }
-    btnAction: "Nothing to update" |"Update" = "Nothing to update";
+    btnAction: "Nothing to update" | "Update" = "Nothing to update";
     checkFormValueChanges() {
         this.userAccountForm.valueChanges.subscribe(() => {
             this.ifSomethingToChangeValue()
@@ -133,27 +158,27 @@ export class UserAccountEditComponent {
 
     ifSomethingToChangeValue() {
         this.convertAccessPermission()
-        if(this.userAccountClone["first_name"] != this.userAccountForm.value["first_name"]) {
+        if (this.userAccountClone["first_name"] != this.userAccountForm.value["first_name"]) {
             this.btnAction = "Update";
             return true
         }
 
-        if(this.userAccountClone["last_name"] != this.userAccountForm.value["last_name"]) {
+        if (this.userAccountClone["last_name"] != this.userAccountForm.value["last_name"]) {
             this.btnAction = "Update";
             return true
         }
 
-        if(this.userAccountClone["username"] != this.userAccountForm.value["username"]) {
+        if (this.userAccountClone["username"] != this.userAccountForm.value["username"]) {
             this.btnAction = "Update";
             return true
         }
 
-        if(this.userAccountClone["role"] != this.userAccountForm.value["role"]) {
+        if (this.userAccountClone["role"] != this.userAccountForm.value["role"]) {
             this.btnAction = "Update";
             return true
         }
 
-        if(JSON.stringify(this.userAccountClone["access_permission"].split(", ")) != JSON.stringify(this.permissions.toString().split(","))) {
+        if (JSON.stringify(this.userAccountClone["access_permission"].split(", ")) != JSON.stringify(this.permissions.toString().split(","))) {
             this.btnAction = "Update";
             return true
         }
@@ -169,11 +194,12 @@ export class UserAccountEditComponent {
         const { first_name, last_name, username, role } = this.userAccountForm.value;
         let updatedUserAccounts = {
             first_name,
-            last_name, 
-            username, 
+            last_name,
+            username,
             role,
             access_permission: this.permissions
         }
+        console.log(updatedUserAccounts)
         this.dialog.open(UserAccountsDialogComponent, {
             disableClose: true,
             data: {
@@ -185,13 +211,13 @@ export class UserAccountEditComponent {
                 userId: this.userIdParams
             }
         })
-        
+
     }
 
     permissions: string[] = [];
     convertAccessPermission() {
         this.permissions = [];
-        let { access_permission: { user_accounts, stores, members, earned_points, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value
+        let { access_permission: { user_accounts, stores, members, earned_points, redeemed_points, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value
         if (user_accounts) {
             this.permissions.push("user-accounts")
         }
@@ -203,6 +229,9 @@ export class UserAccountEditComponent {
         }
         if (earned_points) {
             this.permissions.push("earned-points")
+        }
+        if (redeemed_points) {
+            this.permissions.push("redeemed-points")
         }
         if (earning) {
             this.permissions.push("earning")
@@ -224,7 +253,8 @@ export class UserAccountEditComponent {
                 user_accounts: false,
                 stores: false,
                 members: false,
-                earned_redeemed: false,
+                earned_points: false,
+                redeemed_points: false,
                 transactions: false,
                 generate_file: false,
                 earning: false,
@@ -232,7 +262,7 @@ export class UserAccountEditComponent {
             }
         })
         this.permissions = []
-        if(this.getRole() == this.roleQuery) {
+        if (this.getRole() == this.roleQuery) {
             this.userAccountServices.getUserAccountById(this.userIdParams).subscribe(res => {
                 const { data: { user } } = res;
                 const access_permission = user.access_permission.split(", ");
@@ -259,9 +289,9 @@ export class UserAccountEditComponent {
     inputControl(property: string) {
         return this.userAccountForm.controls[property]
     }
-    
+
     back() {
-        if(this.ifSomethingToChangeValue()) {
+        if (this.ifSomethingToChangeValue()) {
             this.dialog.open(UserAccountsDialogComponent, {
                 disableClose: true,
                 data: {
@@ -275,6 +305,6 @@ export class UserAccountEditComponent {
         else {
             this.router.navigate(["/admin/user-accounts"])
         }
-       
+
     }
 }

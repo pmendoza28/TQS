@@ -2,6 +2,7 @@ import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { CredServices } from "src/app/shared/services/cred.service";
 import { LocalService } from "src/app/shared/services/local.service";
 import { UserAccountsServices } from "../user-accounts.service";
 
@@ -18,7 +19,8 @@ export class UserAccountsDialogComponent {
         private userAccountServices: UserAccountsServices,
         private router: Router,
         private snackBar: MatSnackBar,
-        private localServices: LocalService
+        private localServices: LocalService,
+        private credServices: CredServices
     ) {}
 
     isButtonLoading: boolean = false;
@@ -27,7 +29,7 @@ export class UserAccountsDialogComponent {
         this.isButtonLoading = true;
         this.data.button_name = "Creating..";
         this.userAccountServices.createUserAccount(this.data.userAccountForm).subscribe(res => {
-            const { message, data: {is_created} } = res;
+            const { message, data: { is_created} } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             this.isButtonLoading = false;
             this.data.button_name = "Create";
@@ -47,7 +49,7 @@ export class UserAccountsDialogComponent {
             const { isUpdated, message } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             if(isUpdated) {
-                this.localServices.setJsonValue("user", updatedUserAccounts)
+                if(this.credServices.getCredentials().user.id == userId) this.localServices.setJsonValue("user", { id: userId,...updatedUserAccounts})
                 this.router.navigate(["/admin/user-accounts"])
                 this.dialogRef.close()
             }

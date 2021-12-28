@@ -10,12 +10,14 @@ export class SidebarComponent {
 
   constructor(
     public sideBarServices: SidebarServices,
-    private credServices: CredServices
+    public credServices: CredServices,
   ) { }
-  
+
   isExpanded = true;
   showSubMenu: boolean = false;
   isShowing = false;
+
+  
 
   checkAccess(accessParam: string) {
     let { user: { access_permission } } = this.credServices.getCredentials()
@@ -34,4 +36,5 @@ export class SidebarComponent {
       this.isShowing = false;
     }
   }
+
 }

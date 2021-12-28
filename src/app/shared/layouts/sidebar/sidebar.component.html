@@ -1,14 +1,12 @@
 <mat-nav-list>
   <div class="profile-card">
-    <!-- <img src="../../../../assets/sidebar-logo/q_system_logo.png" alt=""> -->
-    <!-- <img src="../../../../assets/sidebar-logo/q_system_logo2.png" alt=""> -->
-    <!-- <img src="../../../../assets/sidebar-logo/q_system_logo3.png" alt=""> -->
-    <!-- <img src="../../../../assets/sidebar-logo/q_system_logo4.png" alt=""> -->
-    <!-- <img src="../../../../assets/sidebar-logo/q_system_logo5.png" alt=""> -->
     <img src="../../../../assets/sidebar-logo/q_system_logo6.png" alt="">
   </div>
   <mat-divider></mat-divider>
-
+  <!-- <div class="profile">
+    <div class="name ">H! {{credServices.getCredentials().user.first_name}} {{credServices.getCredentials().user.last_name}}</div>
+    <div class="role ">{{credServices.getCredentials().user.role }}</div>
+  </div> -->
   <mat-nav-list class="menu-container">
     <mat-list-item *ngIf="checkAccess('user-accounts')" routerLink="/admin/user-accounts" [class.selected-menu]="sideBarServices.menu.userAccounts">
       <mat-icon class="selected-icon" mat-list-icon>person</mat-icon> User-Accounts
@@ -34,7 +32,6 @@
     <mat-list-item [class.selected-menu]="sideBarServices.menu.generateFile">
       <mat-icon mat-list-icon>history</mat-icon> Generate File
     </mat-list-item>
-
 
   </mat-nav-list>
 </mat-nav-list>
