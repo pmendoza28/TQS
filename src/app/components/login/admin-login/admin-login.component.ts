@@ -11,6 +11,7 @@ import { AdminLoginServices } from './admin-login.service';
   styleUrls: ['./admin-login.component.scss'],
 })
 export class AdminLoginComponent {
+
   constructor(
     private fb: FormBuilder,
     private adminLoginServices: AdminLoginServices,
@@ -19,15 +20,17 @@ export class AdminLoginComponent {
     private localService: LocalService
   ) { }
 
+  /** @States ============================================================ */
   loginForm: FormGroup = this.fb.group({
     username: ["", Validators.required],
     password: ["", Validators.required]
   })
-
   isAuthenticating: boolean = false;
   btnLogin: "Login" | "Authenticating" = "Login";
   hide = true;
   troubleshoot: boolean = false;
+
+  /** @Methods ============================================================ */
   authenticate() {
     this.isAuthenticating = true;
     this.btnLogin = "Authenticating";

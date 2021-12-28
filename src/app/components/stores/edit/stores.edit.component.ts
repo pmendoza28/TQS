@@ -13,6 +13,7 @@ import { StoresServices } from "../stores.service";
 })
 
 export class StoresEditComponent {
+
     constructor(
         private fb: FormBuilder,
         private router: Router,
@@ -21,6 +22,14 @@ export class StoresEditComponent {
         private dialog: MatDialog,
         private snackbar: MatSnackBar
     ) {}
+
+    /** @LifeCycles ========================================================= */
+    ngOnInit(): void {
+        this.populateRegions()
+        this.getStoreById()
+    }
+
+    /** @States ========================================================= */
     title: string = "Store Edit";
     regions: string[] = [];
     storeIdParams: number = this.route.snapshot.params["storeId"]
@@ -33,12 +42,12 @@ export class StoresEditComponent {
         business_model: ["", Validators.required],
         token: [""]
     })
+    isGettingStoreById: boolean = false;
+    storeClone: any;
+    btnAction: "Nothing to update" |"Update" = "Nothing to update";
+    isGenerateTokenLoading: boolean;
 
-    ngOnInit(): void {
-        this.populateRegions()
-        this.getStoreById()
-    }
-
+    /** @Methods ========================================================= */
     populateRegions() {
         this.storesServices.getAllRegions().subscribe(res => {
             this.regions = res;
@@ -54,8 +63,6 @@ export class StoresEditComponent {
         this.snackbar.open("Token Copied to clipboard", "", { duration: 3000 });
     }
 
-    isGettingStoreById: boolean = false;
-    storeClone: any;
     getStoreById() {
         this.isGettingStoreById = true;
         this.storesServices.getStoreById(this.storeIdParams).subscribe(res => {
@@ -86,12 +93,12 @@ export class StoresEditComponent {
         }
     }
 
-    btnAction: "Nothing to update" |"Update" = "Nothing to update";
     checkFormValueChanges() {
         this.storeForm.valueChanges.subscribe(() => {
             this.ifSomethingToChangeValue()
         })
     }
+
     ifSomethingToChangeValue() {
         if(this.storeClone["code"] != this.storeForm.value["code"]) {
             this.btnAction = "Update";
@@ -134,7 +141,6 @@ export class StoresEditComponent {
         }
     }
 
-
     update() {
         this.dialog.open(StoresDialogComponent, {
             disableClose: true,
@@ -148,8 +154,7 @@ export class StoresEditComponent {
             }
         })
     }
-    isGenerateTokenLoading: boolean;
-
+    
     generateToken() {
         this.isGenerateTokenLoading = true;
         this.storesServices.reGenerateToken().subscribe(res => {

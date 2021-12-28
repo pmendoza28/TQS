@@ -21,10 +21,16 @@ export class UserAccountEditComponent {
         private dialog: MatDialog
     ) { }
 
+    /** @LifeCycles ========================================================= */
+    ngOnInit(): void {
+        this.populateUserAccountByUserId()
+        this.checkFormValueChanges()
+    }
+
+    /** @States ========================================================= */
     title: string = "User-Account Edit";
     userIdParams: number = this.route.snapshot.params["userId"]
     roleQuery: "admin" | "cashier";
-
     userAccountForm: FormGroup = this.fb.group({
         first_name: ["", Validators.required],
         last_name: ["", Validators.required],
@@ -42,14 +48,12 @@ export class UserAccountEditComponent {
             redeeming: [],
         }),
     })
-
-    ngOnInit(): void {
-        this.populateUserAccountByUserId()
-        this.checkFormValueChanges()
-
-    }
     isGettingUserAccountById: boolean = false;
     userAccountClone: any;
+    permissions: string[] = [];
+    btnAction: "Nothing to update" | "Update" = "Nothing to update";
+
+    /** @Methods ============================================================== */
     populateUserAccountByUserId() {
         this.isGettingUserAccountById = true;
         this.userAccountServices.getUserAccountById(this.userIdParams).subscribe(res => {
@@ -74,7 +78,6 @@ export class UserAccountEditComponent {
             }
         })
     }
-
 
     populatePermissionValue(access: string) {
         switch (access) {
@@ -149,7 +152,7 @@ export class UserAccountEditComponent {
                 break;
         }
     }
-    btnAction: "Nothing to update" | "Update" = "Nothing to update";
+    
     checkFormValueChanges() {
         this.userAccountForm.valueChanges.subscribe(() => {
             this.ifSomethingToChangeValue()
@@ -213,7 +216,6 @@ export class UserAccountEditComponent {
 
     }
 
-    permissions: string[] = [];
     convertAccessPermission() {
         this.permissions = [];
         let { access_permission: { user_accounts, stores, members, earned_points, redeemed_points, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value

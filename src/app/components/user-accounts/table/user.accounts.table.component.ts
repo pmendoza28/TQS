@@ -21,7 +21,17 @@ export class UserAccountTableComponent {
         private route: ActivatedRoute,
         private dialog: MatDialog
     ) { }
-    
+
+    /** @LifeCycles ============================================================== */
+    ngOnInit(): void {
+        this.populateUserAccounts()
+    }
+    ngDoCheck(): void {
+        this.checkSearchValue()
+    }
+
+
+    /** @States ============================================================== */
     title: string = "User-Accounts";
     isTableLoading: boolean = false;
     lblLoading: "Loading..." | "No Data" | "No User Account Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
@@ -34,7 +44,6 @@ export class UserAccountTableComponent {
         'created_at',
         'actions',
     ];
-
     dataSource = new MatTableDataSource<any>();
     pageSizeOption: number[] = [5, 10, 15, 20];
     userAccountsPerPage: number = 5;
@@ -44,11 +53,7 @@ export class UserAccountTableComponent {
     isSearched: boolean = false;
     @ViewChild("userAccountPaginator") userAccountPaginator: MatPaginator
 
-    ngOnInit(): void {
-        this.populateUserAccounts()
-    }
-
-    
+    /** @Methods  ============================================================== */
     populateUserAccounts() {
         this.isTableLoading = true;
         this.lblLoading = "Loading...";
@@ -146,11 +151,7 @@ export class UserAccountTableComponent {
             })
         }
     }
-
-    ngDoCheck(): void {
-        this.checkSearchValue()
-    }
-
+  
     checkSearchValue() {
         if(this.searchValue == "") {
             if(this.isSearched) {

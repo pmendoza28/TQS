@@ -13,6 +13,7 @@ const CryptoJS = require("crypto-js");
 })
 
 export class EarnedPointsDialogComponent {
+
     constructor(
         private dialogRef: MatDialogRef<EarnedPointsDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -20,7 +21,9 @@ export class EarnedPointsDialogComponent {
         private helperServices: HelperServices,
         private earnedPointsServices: EarnedPointsServices,
         private dialog: MatDialog
-    ) {}
+    ) { }
+
+    /** @States ===============================================================*/
     earnedPoints: any[] = []
     dataSource = new MatTableDataSource<IEarnedPointsDataSource>()
     readyToUpload: boolean = false;
@@ -38,12 +41,20 @@ export class EarnedPointsDialogComponent {
         'transaction_datetime',
         'actions',
     ]
-   
+    isValidatingEarnedPoints: boolean = false;
+    btnValidate: "Validate Earned Points" | "Validating Earned Points" = "Validate Earned Points"
+    earnedPointsExists: any[] = [];
+    @ViewChild(MatPaginator) tblEarnedPointsPaginator: MatPaginator
+    isValidated: boolean = false;
+    isRemoving: boolean = false;
+    btnUpload: "Upload Earned Points" | "Uploading Earned Points" = "Upload Earned Points";
+    isUploadingEarnedPoints: boolean = false;
+
+    /** @Methods ===============================================================*/
     fetchErrors() {
         return `${this.allErrors.join(", ")}, TOTAL ERRORS: ${this.allErrors.length}`
     }
 
-    
     applyFilter(event: Event) {
         this.helperServices.filterTable(event, this.dataSource)
     }
@@ -59,8 +70,8 @@ export class EarnedPointsDialogComponent {
         fileReader.onload = (event) => {
             const result: any = event.target?.result
             const resultObj = JSON.parse(result)
-            var earnedPoints  = CryptoJS.AES.decrypt(resultObj[0], 'secret key 123');
-            var details  = CryptoJS.AES.decrypt(resultObj[1], 'secret key 123');
+            var earnedPoints = CryptoJS.AES.decrypt(resultObj[0], 'secret key 123');
+            var details = CryptoJS.AES.decrypt(resultObj[1], 'secret key 123');
             var originalEarnedPoints = JSON.parse(earnedPoints.toString(CryptoJS.enc.Utf8))
             var originalDetails = JSON.parse(details.toString(CryptoJS.enc.Utf8))
             originalEarnedPoints.forEach((earnPoint: IEarnedPointsDataSource, index: number) => {
@@ -74,35 +85,31 @@ export class EarnedPointsDialogComponent {
                     error: []
                 })
             })
-            
+
         }
     }
 
-    isValidatingEarnedPoints: boolean = false;
-    btnValidate: "Validate Earned Points" | "Validating Earned Points" = "Validate Earned Points"
-    earnedPointsExists: any[] = [];
     validateEarnedPoints() {
         this.btnValidate = "Validating Earned Points";
         this.isValidatingEarnedPoints = true;
         this.earnedPointsServices.validateEarnedPoints(this.dataSource.data).subscribe(res => {
             let earned_points_exist: any = [];
             this.isValidated = true;
-            if(res.errors) {
+            if (res.errors) {
                 earned_points_exist = res.errors.earned_points_exist
                 this.earnedPointsExists = earned_points_exist;
             }
-            
             this.btnValidate = "Validate Earned Points";
             this.isValidatingEarnedPoints = false;
-            if(earned_points_exist.length == 0) {
+            if (earned_points_exist.length == 0) {
                 this.readyToUpload = true;
             }
             this.allErrors = []
-            if(earned_points_exist.length > 0) {
+            if (earned_points_exist.length > 0) {
                 this.dataSource.data.map(dt => dt.error = [])
                 earned_points_exist.map((earnedPointsExist: IEarnedPointsExist) => {
                     this.dataSource.data.map((earnedPoints: IEarnedPointsDataSource) => {
-                        if(earnedPointsExist.member_id == earnedPoints.member_id) {
+                        if (earnedPointsExist.member_id == earnedPoints.member_id) {
                             this.allErrors.push(`# ${earnedPoints.row} was already imported`)
                             earnedPoints.error?.push("This earned points transaction was already imported")
                         }
@@ -112,9 +119,6 @@ export class EarnedPointsDialogComponent {
         })
     }
 
-    @ViewChild(MatPaginator) tblEarnedPointsPaginator : MatPaginator
-    isValidated: boolean = false;
-    isRemoving: boolean = false;
     remove(row: number) {
         this.isRemoving = true;
         this.dataSource.data.splice(this.dataSource.data.findIndex((dt: IEarnedPointsDataSource) => dt.row == row), 1)
@@ -122,22 +126,21 @@ export class EarnedPointsDialogComponent {
         this.earnedPointsServices.validateEarnedPoints(this.dataSource.data).subscribe(res => {
             this.isRemoving = false;
             let earned_points_exist: any[] = []
-            if(res.errors) {
+            if (res.errors) {
                 earned_points_exist = res.errors.earned_points_exist
                 this.earnedPointsExists = earned_points_exist;
             }
-         
             this.btnValidate = "Validate Earned Points";
             this.isValidatingEarnedPoints = false;
-            if(earned_points_exist.length == 0) {
+            if (earned_points_exist.length == 0) {
                 this.readyToUpload = true;
             }
             this.allErrors = []
-            if(earned_points_exist.length > 0) {
+            if (earned_points_exist.length > 0) {
                 this.dataSource.data.map(dt => dt.error = [])
                 earned_points_exist.map((earnedPointsExist: IEarnedPointsExist) => {
                     this.dataSource.data.map((earnedPoints: IEarnedPointsDataSource) => {
-                        if(earnedPointsExist.member_id == earnedPoints.member_id) {
+                        if (earnedPointsExist.member_id == earnedPoints.member_id) {
                             this.allErrors.push(`# ${earnedPoints.row} was already imported`)
                             earnedPoints.error?.push("This earned points transaction was already imported")
                         }
@@ -158,15 +161,10 @@ export class EarnedPointsDialogComponent {
             }
         }).afterClosed().subscribe(dialogRes => {
             const { isImported } = dialogRes
-            if(isImported) {
-                this.dialogRef.close(dialogRes);
-            }
+            if (isImported) this.dialogRef.close(dialogRes);
         })
     }
 
-
-    btnUpload: "Upload Earned Points" | "Uploading Earned Points" = "Upload Earned Points";
-    isUploadingEarnedPoints: boolean = false;
     uploadEarnedPoints() {
         this.btnUpload = "Uploading Earned Points";
         this.isUploadingEarnedPoints = true;

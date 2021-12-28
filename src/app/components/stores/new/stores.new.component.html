@@ -32,7 +32,8 @@
             <div class="category">
                 <mat-form-field appearance="legacy" color="accent">
                     <mat-label>Cluster</mat-label>
-                    <input Capitalize formControlName="cluster"  class="capitalize" autofocus matInput autocomplete="off">
+                    <input Capitalize formControlName="cluster" class="capitalize" autofocus matInput
+                        autocomplete="off">
                 </mat-form-field>
 
                 <mat-form-field appearance="legacy" color="accent">
@@ -44,11 +45,7 @@
                 </mat-form-field>
             </div>
             <div class="actions">
-                <button 
-                    mat-raised-button 
-                    class="btn-primary"
-                    [disabled]="formValidation()"
-                    >Create</button>
+                <button mat-raised-button class="btn-primary" [disabled]="formValidation()">Create</button>
                 <button type="reset" mat-raised-button class="btn-danger">Reset</button>
                 <button mat-raised-button (click)="back()">Back</button>
             </div>

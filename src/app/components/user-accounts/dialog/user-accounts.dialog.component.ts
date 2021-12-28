@@ -13,6 +13,7 @@ import { UserAccountsServices } from "../user-accounts.service";
 })
 
 export class UserAccountsDialogComponent {
+
     constructor(
         private dialogRef: MatDialogRef<UserAccountsDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -23,8 +24,10 @@ export class UserAccountsDialogComponent {
         private credServices: CredServices
     ) {}
 
+    /** @States ==================================================== */
     isButtonLoading: boolean = false;
 
+    /** @Methods ==================================================== */
     create() {
         this.isButtonLoading = true;
         this.data.button_name = "Creating..";

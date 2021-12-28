@@ -11,6 +11,7 @@ import { StoresServices } from "../stores.service";
 })
 
 export class StoresDialogComponent {
+
     constructor(
         private dialogRef: MatDialogRef<StoresDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -19,8 +20,10 @@ export class StoresDialogComponent {
         private router: Router
     ) { }
 
+    /** @States ====================================================== */
     isButtonLoading: boolean = false;
 
+    /** @Methods ===================================================== */
     create() {
         const { storeForm } = this.data;
         this.isButtonLoading = true;

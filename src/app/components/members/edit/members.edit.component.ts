@@ -22,6 +22,13 @@ export class MembersEditComponent {
         private dialog: MatDialog
     ) {}
 
+    /** @LifeCycles ======================================================= */
+    ngOnInit(): void {
+        this.populateMemberById()
+        this.checkFormValueChanges()
+    }
+
+    /** @States =========================================================== */
     title: string = "Members Edit";
     memberIdParams: number = this.route.snapshot.params["memberId"];
     isGettingStoreById: boolean = false;
@@ -39,11 +46,7 @@ export class MembersEditComponent {
         mobile_number: ["", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     })
 
-    ngOnInit(): void {
-        this.populateMemberById()
-        this.checkFormValueChanges()
-    }
-
+    /** @Methods =========================================================== */
     populateMemberById() {
         this.isGettingStoreById = true;
         this.membersServices.getMemberbyID(this.memberIdParams).subscribe(res => {

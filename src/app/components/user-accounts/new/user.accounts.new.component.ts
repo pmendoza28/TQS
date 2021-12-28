@@ -12,11 +12,19 @@ import { UserAccountsDialogComponent } from "../dialog/user-accounts.dialog.comp
 })
 
 export class UserAccountsNewComponent {
+
     constructor(
         private router: Router,
         private fb: FormBuilder,
         private dialog: MatDialog
     ) { }
+
+    /** @LifeCycles  ==============================================================*/
+    ngOnInit(): void {
+        this.convertAccessPermission()
+    }
+
+    /** @States ============================================================== */
     title: string = "User-Account New"
     adminPermissions = ["user-accounts", "members", "stores", "earned_redeemed", "transactions", "generate_file"]
     cashierPermissions = [""]
@@ -38,13 +46,9 @@ export class UserAccountsNewComponent {
             redeeming: [],
         }),
     })
-
-    ngOnInit(): void {
-        this.convertAccessPermission()
-    }
-
     permissions: string[] = []
 
+    /** @Methods =============================================================== */
     addPermission(permission: string) {
         this.permissions.push(permission)
     }

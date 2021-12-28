@@ -18,6 +18,17 @@ export class MembersTableComponent {
         private router: Router,
         private dialog: MatDialog
     ) { }
+
+    /** @LifeCycles ================================================= */
+    ngOnInit(): void {
+        this.populateMembersWithPaginator()
+    }
+
+    ngDoCheck(): void {
+        this.checkSearchValue()
+    }
+
+    /** @States ====================================================== */
     title: string = "Members";
     searchValue: string = "";
     isTableLoading: boolean = false;
@@ -45,20 +56,10 @@ export class MembersTableComponent {
     @ViewChild("memberPaginator") memberPaginator: MatPaginator
     currentPage = 1;
 
-    ngOnInit(): void {
-        this.populateMembersWithPaginator()
-    }
-
-    ngDoCheck(): void {
-        this.checkSearchValue()
-    }
-
+    /** @Methods ====================================================== */
     checkSearchValue() {
-        if (this.searchValue == "") {
-            if (this.isSearched) {
-                this.clearSearch()
-            }
-        }
+        if (this.searchValue == "")  if (this.isSearched)  this.clearSearch()
+            
     }
 
     populateMembersWithPaginator() {
@@ -166,7 +167,6 @@ export class MembersTableComponent {
                 if(imported_members) {
                     if(imported_members.length > 0) {
                         this.populateMembersWithPaginator()
-                        
                     }
                 }
             }

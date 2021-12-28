@@ -12,15 +12,22 @@ import { EarnedPointsServices } from "../earned.points.service";
 })
 
 export class EarnedPointsTableComponent {
+
     constructor(
         private earnedPointsServices: EarnedPointsServices,
         private dialog: MatDialog
     ) {}
 
+    /** @LifeCycles =============================================================== */
     ngOnInit(): void {
         this.populateEarnedPointsWithPaginator()
     }
 
+    ngDoCheck(): void {
+        this.checkSearchValue()
+    }
+
+    /** @States =============================================================== */
     title: string = "Earned Points Transactions";
     searchValue: string = "";
     isTableLoading: boolean = false;
@@ -36,20 +43,20 @@ export class EarnedPointsTableComponent {
         "mobile_number",
         "amount",
         "points_earn",
-        "transaction_datetime",
-        // "actions",
+        "transaction_datetime"
     ]
     lblLoading: "Loading..." | "No Data" | "No Earned Points Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
     pageSizeOption: number[] = [5, 10, 15, 20];
     earnedPointsPerPage: number = 5;
     totalMembers: number = 0;
 
+    /** @Methods =============================================================== */
     populateEarnedPointsWithPaginator() {
         this.isTableLoading = true;
         this.earnedPointsServices.getEarnedPointsWithPaginator(this.currentPage, this.earnedPointsPerPage).subscribe(res => {
             this.isTableLoading = false;
             const { data, total } = res;
-            if (data.length == 0) { this.lblLoading = "No Data"; }
+            if (data.length == 0) this.lblLoading = "No Data";
             this.dataSource.data = data;
             this.totalMembers = total;
             this.memberPaginator.length = total;
@@ -62,17 +69,9 @@ export class EarnedPointsTableComponent {
             }
         })
     }
-
-    ngDoCheck(): void {
-        this.checkSearchValue()
-    }
-
+    
     checkSearchValue() {
-        if (this.searchValue == "") {
-            if (this.isSearched) {
-                this.clearSearch()
-            }
-        }
+        if (this.searchValue == "") if (this.isSearched) this.clearSearch()
     }
 
     searchEarnedPoints(isOnPage: boolean) {
@@ -97,7 +96,6 @@ export class EarnedPointsTableComponent {
             })
         }
     }
-
     
     onChangePage(pageData: PageEvent) {
         if (!this.isSearched) {

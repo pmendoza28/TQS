@@ -28,6 +28,7 @@ export class MembersDialogComponent {
         private dialog: MatDialog
     ) { }
 
+    /** @States ========================================================== */
     isButtonLoading: boolean = false;
     fileUploadForm: FormGroup | any = this.fb.group({
         memberExcelFile: [null]
@@ -35,7 +36,31 @@ export class MembersDialogComponent {
     excelData: any[] = []
     @ViewChild("tblMembers") tblMembers: MatTable<any>
     @ViewChild(MatPaginator) tblMembersPaginator : MatPaginator
+    displayedColumns = [
+        'errors',
+        'row',
+        'first_name',
+        'last_name',
+        'gender',
+        'birthday',
+        'barangay',
+        'municipality',
+        'province',
+        'email',
+        'mobile_number',
+        'actions',
+    ];
+    dataSource = new MatTableDataSource<IMemberDataSource>();
+    allErrors: any[] = [];
+    isEditAll: boolean = false;
+    btnImport: string = "Import";
+    readyToUpload: boolean = false;
+    isValidating: boolean = false;
+    btnValidate: "Validate Mobile Numbers" | "Validating Mobile Numbers" = "Validate Mobile Numbers";
+    validateQuery: boolean  = false;
 
+
+    /** @Methods ============================================================ */
     create() {
         this.isButtonLoading = true;
         this.data.button_name = "Creating";
@@ -106,24 +131,6 @@ export class MembersDialogComponent {
         this.router.navigate(["/admin/members"])
         this.dialogRef.close()
     }
-
-    displayedColumns = [
-        'errors',
-        'row',
-        'first_name',
-        'last_name',
-        'gender',
-        'birthday',
-        'barangay',
-        'municipality',
-        'province',
-        'email',
-        'mobile_number',
-        'actions',
-    ];
-
-    dataSource = new MatTableDataSource<IMemberDataSource>();
-    allErrors: any[] = [];
 
     fetchErrors() {
         return `${this.allErrors.join(", ")}, TOTAL ERRORS: ${this.allErrors.length}`
@@ -330,7 +337,6 @@ export class MembersDialogComponent {
       
     }
 
-    isEditAll: boolean = false;
     editAll() {
         this.isEditAll = !this.isEditAll;
         if(this.isEditAll) {
@@ -489,11 +495,6 @@ export class MembersDialogComponent {
         return ifEditing
     }
 
-    btnImport: string = "Import";
-    readyToUpload: boolean = false;
-    isValidating: boolean = false;
-    btnValidate: "Validate Mobile Numbers" | "Validating Mobile Numbers" = "Validate Mobile Numbers";
-    validateQuery: boolean  = false;
     validateMembers() {
         this.validateQuery = true
         this.isValidating = true;

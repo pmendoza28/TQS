@@ -12,12 +12,20 @@ import { StoresServices } from "../stores.service";
 })
 
 export class StoresNewComponent {
+
     constructor(
         private router: Router,
         private storesServices: StoresServices,
         private fb: FormBuilder,
         private dialog: MatDialog
     ) {}
+
+    /** @LifeCycles ========================================================= */
+    ngOnInit(): void {
+        this.populateRegions()
+    }
+
+    /** @States ========================================================= */
     title: string = "Store New";
     regions: string[] = [];
     storeForm: FormGroup = this.fb.group({
@@ -29,10 +37,7 @@ export class StoresNewComponent {
         business_model: ["", Validators.required],
     })
 
-    ngOnInit(): void {
-        this.populateRegions()
-    }
-
+    /** @Methods ========================================================= */
     populateRegions() {
         this.storesServices.getAllRegions().subscribe(res => {
             this.regions = res;

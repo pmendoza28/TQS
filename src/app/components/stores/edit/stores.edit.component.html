@@ -2,32 +2,32 @@
     <div new id="container">
         <ng-container *ngIf="isGettingStoreById; else elseTemplate">
             <div class="loader">
-                <ngx-skeleton-loader count="5" appearance="circle" animation="pulse" ></ngx-skeleton-loader>
+                <ngx-skeleton-loader count="5" appearance="circle" animation="pulse"></ngx-skeleton-loader>
             </div>
         </ng-container>
         <ng-template #elseTemplate>
-            <form [formGroup]="storeForm" (submit)="update()" >
+            <form [formGroup]="storeForm" (submit)="update()">
                 <div class="code">
                     <mat-form-field appearance="legacy" color="accent">
                         <mat-label>Code</mat-label>
                         <input UpperCase formControlName="code" class="upper-case" autofocus matInput
                             autocomplete="off">
                     </mat-form-field>
-    
+
                     <mat-form-field appearance="legacy" color="accent">
                         <mat-label>Store Name</mat-label>
                         <input Capitalize formControlName="name" class="capitalize" autofocus matInput
                             autocomplete="off">
                     </mat-form-field>
                 </div>
-    
+
                 <div class="location">
                     <mat-form-field appearance="legacy" color="accent">
                         <mat-label>Area</mat-label>
                         <input Capitalize formControlName="area" class="capitalize" autofocus matInput
                             autocomplete="off">
                     </mat-form-field>
-    
+
                     <mat-form-field appearance="fill" color="accent">
                         <mat-label>Region</mat-label>
                         <mat-select formControlName="region">
@@ -37,14 +37,14 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-    
+
                 <div class="category">
                     <mat-form-field appearance="legacy" color="accent">
                         <mat-label>Cluster</mat-label>
                         <input Capitalize formControlName="cluster" class="capitalize" autofocus matInput
                             autocomplete="off">
                     </mat-form-field>
-    
+
                     <mat-form-field appearance="legacy" color="accent">
                         <mat-label>Business Model</mat-label>
                         <mat-select formControlName="business_model">
@@ -53,13 +53,15 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-    
+
                 <div class="token">
                     <div class="btn-actions">
-                        <button mat-icon-button type="button" matTooltip="Regenerate Token" (click)="generateToken()" [disabled]="isGenerateTokenLoading">
+                        <button mat-icon-button type="button" matTooltip="Regenerate Token" (click)="generateToken()"
+                            [disabled]="isGenerateTokenLoading">
                             <mat-icon>autorenew</mat-icon>
                         </button>
-                        <button mat-icon-button type="button" matTooltip="Copy Token" [cdkCopyToClipboard]="getToken()" (click)="copyToken()">
+                        <button mat-icon-button type="button" matTooltip="Copy Token" [cdkCopyToClipboard]="getToken()"
+                            (click)="copyToken()">
                             <mat-icon>content_copy</mat-icon>
                         </button>
                     </div>
@@ -67,16 +69,17 @@
                         <mat-label>Token</mat-label>
                         <textarea formControlName="token" matInput readonly></textarea>
                     </mat-form-field>
-                    </div>
+                </div>
                 <div class="actions">
-                    <button mat-raised-button class="btn-primary" [disabled]="formValidation() || !ifSomethingToChangeValue()">{{btnAction}}</button>
+                    <button mat-raised-button class="btn-primary"
+                        [disabled]="formValidation() || !ifSomethingToChangeValue()">{{btnAction}}</button>
                     <button type="button" mat-raised-button class="btn-danger" (click)="reset()">Reset</button>
                     <button mat-raised-button (click)="back()">Back</button>
                 </div>
             </form>
         </ng-template>
-        
-       
-        
+
+
+
     </div>
 </app-admin-container>

@@ -20,6 +20,7 @@ export class MembersNewComponent {
         private router: Router
     ) {}
 
+    /** @States ===================================================== */
     title: string = "Member New";
     memberForm: FormGroup = this.fb.group({
         first_name: ["", Validators.required],
@@ -33,6 +34,7 @@ export class MembersNewComponent {
         mobile_number: ["", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     })
 
+    /** @Methods ===================================================== */
     create() {
         this.dialog.open(MembersDialogComponent, {
             disableClose: true,

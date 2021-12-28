@@ -22,6 +22,16 @@ export class StoresTableComponent {
         private snackBar: MatSnackBar
     ) { }
 
+    /** @LifeCycles ========================================================= */
+    ngOnInit(): void {
+        this.populateStoresWithPaginator()
+    }
+
+    ngDoCheck(): void {
+        this.checkSearchValue()
+    }
+
+    /** @States ========================================================= */
     title: string = "Stores";
     searchValue: string = "";
     isSearched: boolean = false;
@@ -52,14 +62,6 @@ export class StoresTableComponent {
                 this.clearSearch()
             }
         }
-    }
-
-    ngOnInit(): void {
-        this.populateStoresWithPaginator()
-    }
-
-    ngDoCheck(): void {
-        this.checkSearchValue()
     }
 
     populateStoresWithPaginator() {
