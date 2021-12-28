@@ -1,4 +1,4 @@
-<div *ngIf="data.action == 'import-earned-points'" class="import-earned-points"
+<div *ngIf="data.action == 'import-earned-points-validation'" class="import-earned-points"
     [class.dialog-large-size]="dataSource.data.length > 0">
     <h2 mat-dialog-title>{{data.title}}</h2>
     <mat-dialog-content class="mat-typography">
@@ -25,17 +25,17 @@
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="applyFilter($event)" #input autocomplete="off">
                     </mat-form-field>
-                    <table #tblMembers mat-table [dataSource]="dataSource">
+                    <table #tblEarnedPoints mat-table [dataSource]="dataSource">
 
                         <ng-container matColumnDef="errors">
                             <th mat-header-cell *matHeaderCellDef>
-                                <button mat-icon-button color="warn" matTooltipClass="tooltip-red">
+                                <button mat-icon-button color="warn" [matTooltip]=fetchErrors() *ngIf="allErrors.length > 0" matTooltipClass="tooltip-red">
                                     <mat-icon>error</mat-icon>
                                 </button>
                             </th>
-                            <td mat-cell *matCellDef="let member">
-                                <button mat-icon-button color="warn" *ngIf="member.error.length > 0"
-                                    [matTooltip]=member.error.join() matTooltipClass="tooltip-red">
+                            <td mat-cell *matCellDef="let earnedPoints">
+                                <button mat-icon-button color="warn" *ngIf="earnedPoints.error.length > 0"
+                                    [matTooltip]=earnedPoints.error.join() matTooltipClass="tooltip-red">
                                     <mat-icon>error</mat-icon>
                                 </button>
                             </td>
@@ -74,13 +74,39 @@
                             </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>  </th>
+                            <td mat-cell *matCellDef="let earnedPoints">
+                                <button *ngIf="isValidated"
+                                    mat-icon-button 
+                                    (click)="remove(earnedPoints.row)"
+                                    >
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
                         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
                 </div>
                 <div class="actions">
-
-                    <button *ngIf="readyToUpload">Upload Earned Points</button>
+                    <button 
+                        mat-raised-button 
+                        color="accent"
+                        [disabled]="isValidatingEarnedPoints"
+                        [class.spinner]="isValidatingEarnedPoints"
+                        (click)="validateEarnedPoints()"
+                        >
+                        {{btnValidate}}
+                    </button>
+                    <button mat-raised-button (click)="removeAllImportedEarnedPoinits()" *ngIf="allErrors.length > 0" color="warn">Remove All Imported Earned Points</button>
+                    <button 
+                        *ngIf="readyToUpload" 
+                        mat-raised-button 
+                        class="btn-primary"
+                        (click)="upload()"
+                        >Upload Earned Points</button>
                     <button mat-raised-button mat-dialog-close>Cancel</button>
                 </div>
             </div>
@@ -89,4 +115,23 @@
 
     </mat-dialog-content>
 
+</div>
+
+<div *ngIf="data.action == 'import-earned-points'" class="dialog-container-size">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <mat-dialog-content class="mat-typography">
+        {{data.question}}
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button 
+            mat-raised-button 
+            class="btn-primary" 
+            [disabled]="isUploadingEarnedPoints" 
+            [class.spinner]="isUploadingEarnedPoints" 
+            (click)="uploadEarnedPoints()"
+            >
+            {{btnUpload}}
+        </button>
+        <button mat-raised-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
 </div>

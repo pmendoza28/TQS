@@ -7,6 +7,7 @@ import { HelperServices } from "src/app/shared/services/helpers.service";
 import { MembersServices } from "../members.service";
 import * as XLSX from 'xlsx';
 import { MatTable, MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
     selector: 'app-members-dialog',
@@ -33,6 +34,7 @@ export class MembersDialogComponent {
     })
     excelData: any[] = []
     @ViewChild("tblMembers") tblMembers: MatTable<any>
+    @ViewChild(MatPaginator) tblMembersPaginator : MatPaginator
 
     ngOnInit(): void {
         console.log(this.data)
@@ -349,7 +351,92 @@ export class MembersDialogComponent {
 
     remove(rowNumber: number) {
         this.dataSource.data.splice(this.dataSource.data.findIndex((member: IMemberDataSource ) => member.row == rowNumber), 1)
-        this.tblMembers.renderRows()
+        this.dataSource.paginator = this.tblMembersPaginator
+        this.allErrors = []
+        this.dataSource.data.map(dt => dt.error = [])
+        this.dataSource.data.map((member: IMemberDataSource, index: number ) => {
+            if (member.first_name == undefined || member.first_name == "") {
+                this.allErrors.push(`No First Name # ${member.row}`)
+                member.error.push("First Name is required")
+            }
+
+            if (member.last_name == undefined || member.last_name == "") {
+                this.allErrors.push(`No Last Name # ${member.row}`)
+                member.error.push("Last Name is required")
+            }
+
+            if (member.gender == undefined || member.gender == "") {
+                this.allErrors.push(`No Gender # ${member.row}`)
+                member.error.push("Gender is required")
+            }
+
+            if (member.birthday == undefined || member.birthday == "") {
+                this.allErrors.push(`No Birthday # ${member.row}`)
+                member.error.push("Birthday is required")
+            }
+
+            if (member.barangay == undefined || member.barangay == "") {
+                this.allErrors.push(`No Barangay # ${member.row}`)
+                member.error.push("Barangay is required")
+            }
+
+            if (member.municipality == undefined || member.municipality == "") {
+                this.allErrors.push(`No Municipality # ${member.row}`)
+                member.error.push("Municipality is required")
+            }
+
+            if (member.province == undefined || member.province == "") {
+                this.allErrors.push(`No Province # ${member.row}`)
+                member.error.push("Province is required")
+            }
+
+            if (member.email == undefined || member.email == "") {
+                this.allErrors.push(`No Email # ${member.row}`)
+                member.error.push("Email is required")
+            }
+
+            if (member.mobile_number == undefined || member.mobile_number == "") {
+                this.allErrors.push(`No Mobile Number # ${member.row}`)
+                member.error.push("Mobile number is required")
+            }
+            if (member.mobile_number) {
+                if (member.mobile_number.length != 11) {
+                    this.allErrors.push(`Mobile Number is not 11 digits # ${member.row}`)
+                    member.error.push(`Mobile number is only ${member.mobile_number.length} digits`)
+                }
+            }
+        })
+        let { duplicateMobileNumbers } = this.checkDuplicateMobileNumbers();
+        if (duplicateMobileNumbers.length > 0) {
+            duplicateMobileNumbers.map(duplicateMobileNumber => this.allErrors.push(`Duplicate Mobile Numbers at row ${duplicateMobileNumber.row}`))
+        }
+        this.membersServices.validateMembers(this.dataSource.data).subscribe(res => {
+            const { memberExists } = res;
+            if(memberExists.length == 0) {
+                this.readyToUpload = true
+                this.snackBar.open("All Mobile Numbers are not yet registered. Upload Members to proceed", "", { duration: 3000})
+            }
+            if(this.validateQuery) {
+                this.membersServices.validateMembers(this.dataSource.data).subscribe(res => {
+                    const { memberExists } = res;
+                    if(memberExists.length == 0) {
+                        this.readyToUpload = true
+                        this.snackBar.open("All Mobile Numbers are not yet registered. Upload Members to proceed", "", { duration: 3000})
+                    }
+                    if(memberExists.length > 0) {
+                        this.readyToUpload = false;
+                        memberExists.map((mobileNumber: any) => {
+                            this.dataSource.data.map((member: IMemberDataSource) => {
+                                if(member.mobile_number == mobileNumber.mobile_number) {
+                                    this.allErrors.push(`Mobile Number at row ${member.row} is already exists`)
+                                    member.error?.push(`Mobile number is already exists`)
+                                }
+                            })
+                        })
+                    }
+                })
+            }
+        })
     }
 
     validateMember(member: IMemberDataSource) {
@@ -475,6 +562,6 @@ interface IMemberDataSource {
     email: string;
     mobile_number: string;
     is_active: string;
-    error?: string[];
+    error: string[];
     isEdit: boolean;
 }

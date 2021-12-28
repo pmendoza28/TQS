@@ -42,6 +42,111 @@
                 align-items: stretch;
                 overflow: auto;
                 max-height: 250px;
+                .mat-column-errors {
+                    word-wrap: break-word !important;
+                    white-space: unset !important;
+                    flex: 0 0 28% !important;
+                    width: 5% !important;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                  
+                    word-break: break-word;
+                  
+                    -ms-hyphens: auto;
+                    -moz-hyphens: auto;
+                    -webkit-hyphens: auto;
+                    hyphens: auto;
+                }
+                .mat-column-row {
+                    word-wrap: break-word !important;
+                    white-space: unset !important;
+                    flex: 0 0 28% !important;
+                    width: 5% !important;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                  
+                    word-break: break-word;
+                  
+                    -ms-hyphens: auto;
+                    -moz-hyphens: auto;
+                    -webkit-hyphens: auto;
+                    hyphens: auto;
+                }
+                .mat-column-member_id {
+                    word-wrap: break-word !important;
+                    white-space: unset !important;
+                    flex: 0 0 28% !important;
+                    width: 10% !important;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                  
+                    word-break: break-word;
+                  
+                    -ms-hyphens: auto;
+                    -moz-hyphens: auto;
+                    -webkit-hyphens: auto;
+                    hyphens: auto;
+                }
+                .mat-column-transaction_no {
+                    word-wrap: break-word !important;
+                    white-space: unset !important;
+                    flex: 0 0 28% !important;
+                    width: 20% !important;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                  
+                    word-break: break-word;
+                  
+                    -ms-hyphens: auto;
+                    -moz-hyphens: auto;
+                    -webkit-hyphens: auto;
+                    hyphens: auto;
+                }
+                .mat-column-amount {
+                    word-wrap: break-word !important;
+                    white-space: unset !important;
+                    flex: 0 0 28% !important;
+                    width: 20% !important;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                  
+                    word-break: break-word;
+                  
+                    -ms-hyphens: auto;
+                    -moz-hyphens: auto;
+                    -webkit-hyphens: auto;
+                    hyphens: auto;
+                }
+                .mat-column-points_earn {
+                    word-wrap: break-word !important;
+                    white-space: unset !important;
+                    flex: 0 0 28% !important;
+                    width: 20% !important;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                  
+                    word-break: break-word;
+                  
+                    -ms-hyphens: auto;
+                    -moz-hyphens: auto;
+                    -webkit-hyphens: auto;
+                    hyphens: auto;
+                }
+                .mat-column-transaction_datetime {
+                    word-wrap: break-word !important;
+                    white-space: unset !important;
+                    flex: 0 0 28% !important;
+                    width: 20% !important;
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                  
+                    word-break: break-word;
+                  
+                    -ms-hyphens: auto;
+                    -moz-hyphens: auto;
+                    -webkit-hyphens: auto;
+                    hyphens: auto;
+                }
             }
             .actions {
                 display: flex;

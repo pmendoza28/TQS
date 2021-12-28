@@ -12,7 +12,7 @@ export class EarnedPointsServices {
     constructor(
         private http: HttpClient,
         private credServices: CredServices
-    ) {}
+    ) { }
 
     getEarnedPointsWithPaginator(currentPage: number, pointsPerPage: number): Observable<any> {
         return this.http.get(`${this.credServices.port}/admin/earnedpoints/${pointsPerPage}/?page=${currentPage}`).pipe(
@@ -21,6 +21,14 @@ export class EarnedPointsServices {
     }
 
     searchEarnedPoints(searchvalue: string, currentPage: number, earnedPointsPerPage: number): Observable<any> {
-        return this.http.get(``)
+        return this.http.post(`${this.credServices.port}/admin/search-earnedpoints/${earnedPointsPerPage}/?page=${currentPage}`, { searchvalue })
+    }
+
+    validateEarnedPoints(earnedPoints: any[]): Observable<{errors?: any, message?: any}> {
+        return this.http.post<{errors?: any, message?: any}>(`${this.credServices.port}/admin/points/check`, earnedPoints)
+    }
+
+    uploadEarnedPoints(earnedPoints: any): Observable<any> {
+        return this.http.post(`${this.credServices.port}/admin/points/import`, earnedPoints)
     }
 }

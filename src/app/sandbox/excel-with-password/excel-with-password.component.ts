@@ -2,7 +2,9 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { HelperServices } from "src/app/shared/services/helpers.service";
 import exportFromJSON from 'export-from-json'
+import * as moment from "moment";
 const CryptoJS = require("crypto-js");
+
 @Component({
     selector: 'app-sandbox-excel-with-password',
     templateUrl: './excel-with-password.component.html',
@@ -15,10 +17,7 @@ export class ExcelWithPasswordComponent {
     ) { }
 
     data = [
-        { member_id: 1, transaction_no: "1", amount: 10, points_earn: 10, transaction_datetime: `${new Date(Date.now()).toLocaleDateString()} ${new Date(Date.now()).toLocaleTimeString()}` },
-        { member_id: 2, transaction_no: "2", amount: 10, points_earn: 10, transaction_datetime: `${new Date(Date.now()).toLocaleDateString()} ${new Date(Date.now()).toLocaleTimeString()}` },
-        { member_id: 3, transaction_no: "3", amount: 10, points_earn: 10, transaction_datetime: `${new Date(Date.now()).toLocaleDateString()} ${new Date(Date.now()).toLocaleTimeString()}` },
-        { member_id: 4, transaction_no: "4", amount: 10, points_earn: 10, transaction_datetime: `${new Date(Date.now()).toLocaleDateString()} ${new Date(Date.now()).toLocaleTimeString()}` },
+        { member_id: 21, transaction_no: "4", amount: 200, points_earn: 20, transaction_datetime: moment().format("yyyy-M-D hh:mm:ss") },
     ]
 
     details = {
@@ -38,7 +37,8 @@ export class ExcelWithPasswordComponent {
         ]
 
         let dateToday = `date: ${new Date(Date.now()).toLocaleDateString()} time: ${new Date(Date.now()).toLocaleTimeString()}`
-        console.log(`date today`, dateToday)
+        // console.log(`date today`, dateToday)
+        console.log()
         const fileName = `Earned Points - ${dateToday}`
         const exportType = 'json'
         exportFromJSON({ data, fileName, exportType })

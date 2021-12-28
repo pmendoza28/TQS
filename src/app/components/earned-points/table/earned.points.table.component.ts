@@ -21,7 +21,7 @@ export class EarnedPointsTableComponent {
         this.populateEarnedPointsWithPaginator()
     }
 
-    title: string = "Earned Points";
+    title: string = "Earned Points Transactions";
     searchValue: string = "";
     isTableLoading: boolean = false;
     isSearched: boolean = false;
@@ -37,9 +37,9 @@ export class EarnedPointsTableComponent {
         "amount",
         "points_earn",
         "transaction_datetime",
-        "actions",
+        // "actions",
     ]
-    lblLoading: "Loading..." | "No Data" | "No Member Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
+    lblLoading: "Loading..." | "No Data" | "No Earned Points Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
     pageSizeOption: number[] = [5, 10, 15, 20];
     earnedPointsPerPage: number = 5;
     totalMembers: number = 0;
@@ -64,6 +64,18 @@ export class EarnedPointsTableComponent {
         })
     }
 
+    ngDoCheck(): void {
+        this.checkSearchValue()
+    }
+
+    checkSearchValue() {
+        if (this.searchValue == "") {
+            if (this.isSearched) {
+                this.clearSearch()
+            }
+        }
+    }
+
     searchEarnedPoints(isOnPage: boolean) {
         this.isTableLoading = true;
         if (this.searchValue == "") {
@@ -82,7 +94,7 @@ export class EarnedPointsTableComponent {
                 this.isTableLoading = false;
                 this.dataSource.data = data
                 this.memberPaginator.length = total
-                if (data.length == 0) { this.lblLoading = "No Member Found" }
+                if (data.length == 0) { this.lblLoading = "No Earned Points Found" }
             })
         }
     }
@@ -114,7 +126,13 @@ export class EarnedPointsTableComponent {
             disableClose: true,
             data: {
                 title: "Import Earned Points",
-                action: "import-earned-points"
+                action: "import-earned-points-validation"
+            }
+        }).afterClosed().subscribe(dialogRes => {
+            console.log(dialogRes)
+            const { isImported } = dialogRes;
+            if(isImported) {
+                this.populateEarnedPointsWithPaginator()
             }
         })
     }
