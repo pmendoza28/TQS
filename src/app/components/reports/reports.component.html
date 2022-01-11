@@ -1,8 +1,16 @@
 <app-admin-container [title]="title">
-    <div actions>
-        
+    <div actions class="actions">
+        <mat-form-field appearance="fill" color="accent" class="select-report">
+            <mat-label>Select Report</mat-label>
+            <mat-select>
+                <mat-option></mat-option>
+                <mat-option *ngFor="let report of reports" [value]="report">
+                    {{report}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </div>
-    <div table>
+    <div table class="table">
         
     </div>
 </app-admin-container>

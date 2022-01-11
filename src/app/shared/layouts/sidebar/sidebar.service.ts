@@ -22,7 +22,6 @@ export class SidebarServices {
 
     userAccountSelected(routeModule: string) {
         this.titleServices.setTitle(`TQS | ${routeModule}`)
-        console.log(routeModule)
         switch (routeModule) {
             case "user-accounts":
                 this.menu = {

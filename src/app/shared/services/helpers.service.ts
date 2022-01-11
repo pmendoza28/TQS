@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Workbook } from 'exceljs';
 import exportFromJSON from 'export-from-json'
+const CryptoJS = require("crypto-js");
+
 @Injectable({
     providedIn: "root"
 })
@@ -18,6 +19,9 @@ export class HelperServices {
     }
 
     exportJsonData(data: any, fileName: string, exportType: any = 'json') {
+        const bytes  = CryptoJS.AES.decrypt(data[0], 'secret key 123');
+        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+        console.table(JSON.parse(originalText))
         exportFromJSON({ data, fileName, exportType })
     }
 

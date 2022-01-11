@@ -1,0 +1,28 @@
+@import "../../shared/scss/theme";
+.actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+    .select-report {
+        width: 300px;
+    }
+    @media only screen and (max-width: 600px) {
+        .select-report {
+            width: 100%;
+            margin: 0px 20px 0px 0px;
+        }
+    }
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 20px 20px;
+    
+}
+

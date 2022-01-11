@@ -120,18 +120,5 @@
             "mobile_number": "09122345421",
             "is_active": true
         }
-    ],
-    "earned_points": [
-        {
-            "id": 1,
-            "receipt_no": "RQ#as23",
-            "member_id": 101,
-            "first_name": "Philip",
-            "last_name": "Mendoza",
-            "mobile_number":"09122345421",
-            "amount": 500,
-            "earned_points": 5,
-            "earned_date": "January 11, 2022"
-        }
     ]
 }

@@ -10,4 +10,11 @@ export class ReportsComponent {
 
     /** @States */
     title: string = "Reports"
+    reports: string[] = [
+        "User-Accounts",
+        "Stores",
+        "Members",
+        "Earned-Points",
+        "Redeemed-Points",
+    ]
 }

@@ -2,14 +2,46 @@
     <div actions>
         <div class="generate-file-container">
             <div class="action">
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="exportType" [disabled]="isGeneratingDatabase">
+                    <mat-radio-button value="export-all">Export All</mat-radio-button>
+                    <mat-radio-button value="export-specific-module">Export Specific Module</mat-radio-button>
+                </mat-radio-group>
+
                 <button 
                     mat-raised-button 
-                    class="btn-primary"
+                    class="btn-primary" 
+                    [disabled]="isGeneratingDatabase"
                     (click)="generateDatabase()"
-                >Export Database
-            </button>
+                    *ngIf="exportType=='export-all'"
+                    >
+                    Export Database
+                </button>
+
+                <div class="custom-database" *ngIf="exportType == 'export-specific-module'">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Select Module</mat-label>
+                        <mat-select [formControl]="moduleSelected" multiple>
+                            <mat-select-trigger>
+                                {{moduleSelected.value ? moduleSelected.value[0] : ''}}
+                                <span *ngIf="moduleSelected.value?.length > 1" class="example-additional-selection">
+                                    (+{{moduleSelected.value.length - 1}} {{moduleSelected.value?.length === 2 ? 'other' : 'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let module of modules" [value]="module">{{module}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <button 
+                        mat-raised-button
+                        class="btn-primary"
+                        [disabled]="isGeneratingDatabase || validateCustomDatabase()"
+                        (click)="exportCustomDatabase()"
+                        >Export Custom Database
+                    </button>
+                </div>
+
             </div>
-            <div class="loader" *ngIf="isGeneratingDatabase"> 
+            <div class="loader" *ngIf="isGeneratingDatabase">
                 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
             </div>
         </div>
