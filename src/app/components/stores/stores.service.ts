@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { timeout } from "rxjs/operators";
 import { CredServices } from "src/app/shared/services/cred.service";
 
 @Injectable({
@@ -14,7 +15,9 @@ export class StoresServices {
     ) {}
 
     getStoresWithPaginator(currentPage: number, storePerPage: number): Observable<any> {
-        return this.http.get(`${this.credServices.port}/admin/stores/${storePerPage}/?page=${currentPage}`)
+        return this.http.get(`${this.credServices.port}/admin/stores/${storePerPage}/?page=${currentPage}`).pipe(
+            timeout(10000)
+        )
     }
 
     searchStore(searchvalue: string, currentPage: number, storePerPage: number):Observable<any> {

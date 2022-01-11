@@ -8,18 +8,21 @@ import { Title } from "@angular/platform-browser";
 export class SidebarServices {
     constructor(
         private titleServices: Title
-    ) {}
+    ) { }
     menu: Imenu = {
         userAccounts: false,
         stores: false,
         members: false,
         earned_points: false,
+        redeemed_points: false,
         transactions: false,
-        generateFile: false
+        generateFile: false,
+        reports: false
     }
 
     userAccountSelected(routeModule: string) {
         this.titleServices.setTitle(`TQS | ${routeModule}`)
+        console.log(routeModule)
         switch (routeModule) {
             case "user-accounts":
                 this.menu = {
@@ -27,8 +30,10 @@ export class SidebarServices {
                     stores: false,
                     members: false,
                     earned_points: false,
+                    redeemed_points: false,
                     transactions: false,
-                    generateFile: false
+                    generateFile: false,
+                    reports: false
                 }
                 break;
             case "stores":
@@ -37,8 +42,10 @@ export class SidebarServices {
                     stores: true,
                     members: false,
                     earned_points: false,
+                    redeemed_points: false,
                     transactions: false,
-                    generateFile: false
+                    generateFile: false,
+                    reports: false
                 }
                 break;
             case "members":
@@ -47,8 +54,10 @@ export class SidebarServices {
                     stores: false,
                     members: true,
                     earned_points: false,
+                    redeemed_points: false,
                     transactions: false,
-                    generateFile: false
+                    generateFile: false,
+                    reports: false
                 }
                 break;
             case "earned-points":
@@ -57,8 +66,22 @@ export class SidebarServices {
                     stores: false,
                     members: false,
                     earned_points: true,
+                    redeemed_points: false,
                     transactions: false,
-                    generateFile: false
+                    generateFile: false,
+                    reports: false
+                }
+                break;
+            case "redeemed-points":
+                this.menu = {
+                    userAccounts: false,
+                    stores: false,
+                    members: false,
+                    earned_points: false,
+                    redeemed_points: true,
+                    transactions: true,
+                    generateFile: false,
+                    reports: false
                 }
                 break;
             case "transactions":
@@ -67,8 +90,10 @@ export class SidebarServices {
                     stores: false,
                     members: false,
                     earned_points: false,
+                    redeemed_points: false,
                     transactions: true,
-                    generateFile: false
+                    generateFile: false,
+                    reports: false
                 }
                 break;
             case "generate-file":
@@ -77,8 +102,22 @@ export class SidebarServices {
                     stores: false,
                     members: false,
                     earned_points: false,
+                    redeemed_points: false,
                     transactions: false,
-                    generateFile: true
+                    generateFile: true,
+                    reports: false
+                }
+                break;
+            case "reports":
+                this.menu = {
+                    userAccounts: false,
+                    stores: false,
+                    members: false,
+                    earned_points: false,
+                    redeemed_points: false,
+                    transactions: false,
+                    generateFile: false,
+                    reports: true
                 }
                 break;
         }
@@ -90,6 +129,8 @@ interface Imenu {
     stores: boolean;
     members: boolean;
     earned_points: boolean;
+    redeemed_points: boolean;
     transactions: boolean;
     generateFile: boolean;
+    reports: boolean;
 }

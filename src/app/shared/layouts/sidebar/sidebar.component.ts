@@ -25,16 +25,4 @@ export class SidebarComponent {
     return hasAccess
   }
 
-  MouseEnter() {
-    if (!this.isExpanded) {
-      this.isShowing = true;
-    }
-  }
-
-  MouseLeave() {
-    if (!this.isExpanded) {
-      this.isShowing = false;
-    }
-  }
-
 }

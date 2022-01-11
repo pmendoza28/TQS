@@ -8,7 +8,7 @@ import { HeaderServices } from './header.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   constructor(
     private localService: LocalService,
@@ -16,8 +16,6 @@ export class HeaderComponent implements OnInit {
     private headerServices: HeaderServices
   ) { }
 
-  ngOnInit(): void {
-  }
   @Output() toogleSidebar: EventEmitter<any> = new EventEmitter();
   @Input() deviceXs: boolean
   loggingOut: boolean = false;

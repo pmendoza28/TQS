@@ -25,13 +25,18 @@
       <mat-icon mat-list-icon>savings</mat-icon> Earned Points
     </mat-list-item>
 
-    <mat-list-item [class.selected-menu]="sideBarServices.menu.transactions">
+    <mat-list-item [class.selected-menu]="sideBarServices.menu.redeemed_points" routerLink="/admin/redeemed-points">
       <mat-icon mat-list-icon>receipt_long</mat-icon> Redeemed Points
     </mat-list-item>
 
-    <mat-list-item [class.selected-menu]="sideBarServices.menu.generateFile">
-      <mat-icon mat-list-icon>history</mat-icon> Generate File
+    <mat-list-item [class.selected-menu]="sideBarServices.menu.generateFile" routerLink="/admin/generate-file">
+      <mat-icon mat-list-icon>cloud_download</mat-icon> Generate File
     </mat-list-item>
+
+    <mat-list-item [class.selected-menu]="sideBarServices.menu.reports" routerLink="/admin/reports">
+      <mat-icon mat-list-icon>report</mat-icon> Reports
+    </mat-list-item>
+
 
   </mat-nav-list>
 </mat-nav-list>

@@ -1,0 +1,17 @@
+<app-admin-container [title]="title">
+    <div actions>
+        <div class="generate-file-container">
+            <div class="action">
+                <button 
+                    mat-raised-button 
+                    class="btn-primary"
+                    (click)="generateDatabase()"
+                >Export Database
+            </button>
+            </div>
+            <div class="loader" *ngIf="isGeneratingDatabase"> 
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+        </div>
+    </div>
+</app-admin-container>

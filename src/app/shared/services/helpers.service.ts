@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Workbook } from 'exceljs';
-const fs = require("file-saver")
-
+import exportFromJSON from 'export-from-json'
 @Injectable({
     providedIn: "root"
 })
@@ -16,6 +15,10 @@ export class HelperServices {
         if (dataSource.paginator) {
           dataSource.paginator
         }
+    }
+
+    exportJsonData(data: any, fileName: string, exportType: any = 'json') {
+        exportFromJSON({ data, fileName, exportType })
     }
 
 }

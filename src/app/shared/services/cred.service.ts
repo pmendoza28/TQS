@@ -9,7 +9,8 @@ export class CredServices {
     constructor(
         private localService: LocalService
     ) {}
-    port: string = "http://10.10.8.22:8000/api";
+    // port: string = "http://10.10.8.22:8000/api";
+    port: string = "http://b00a-111-125-110-225.ngrok.io/api"
 
     getCredentials(): {token: string, user: any} {
         return {
