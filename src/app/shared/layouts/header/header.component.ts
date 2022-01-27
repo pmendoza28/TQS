@@ -13,7 +13,7 @@ export class HeaderComponent {
   constructor(
     private localService: LocalService,
     private router: Router,
-    private headerServices: HeaderServices
+    public headerServices: HeaderServices
   ) { }
 
   @Output() toogleSidebar: EventEmitter<any> = new EventEmitter();

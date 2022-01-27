@@ -19,7 +19,7 @@ export class UserAccountTableComponent {
         private userAccountsServices: UserAccountsServices,
         private router: Router,
         private route: ActivatedRoute,
-        private dialog: MatDialog
+        private dialog: MatDialog,
     ) { }
 
     /** @LifeCycles ============================================================== */
@@ -29,7 +29,6 @@ export class UserAccountTableComponent {
     ngDoCheck(): void {
         this.checkSearchValue()
     }
-
 
     /** @States ============================================================== */
     title: string = "User-Accounts";
@@ -51,12 +50,12 @@ export class UserAccountTableComponent {
     currentPage = 1;
     searchValue: string = "";
     isSearched: boolean = false;
+    isRateLimitReached = false;
     @ViewChild("userAccountPaginator") userAccountPaginator: MatPaginator
 
     /** @Methods  ============================================================== */
     populateUserAccounts() {
         this.isTableLoading = true;
-        this.lblLoading = "Loading...";
         this.dataSource = new MatTableDataSource<IUserAccountTable>()
         this.userAccountsServices.getUserAccountsWithPaginator(this.currentPage, this.userAccountsPerPage).subscribe(res => {
             this.isTableLoading = false;

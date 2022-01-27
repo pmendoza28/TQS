@@ -13,6 +13,13 @@
         width: 200px;
         object-fit:cover;
       }
+      .menu-yeah {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        border: 1px solid white;
+      }
     }
 
     .profile {

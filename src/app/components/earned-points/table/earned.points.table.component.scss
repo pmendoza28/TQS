@@ -33,5 +33,54 @@
         position: relative;
         top: 6px;
     }
+
+    .select {
+        min-width: 40px;
+    }
+    .id {
+        min-width: 40px;
+    }
+
+    .transaction-no {
+        min-width: 100px;
+    }
+
+    .category {
+        min-width: 100px;
+    }
+
+    .first-name {
+        min-width: 100px;
+    }
+
+    .last-name {
+        min-width: 100px;
+    }
+
+    .points-earn {
+        min-width: 100px;
+    }
+    .transaction-datetime {
+        min-width: 180px;
+    }
+
+    .mobile-number {
+        min-width: 100px;
+    }
+
+    .amount {
+        min-width: 100px;
+    }
+
+    .status {
+        min-width: 100px;
+    }
+
+    .created-at {
+        min-width: 180px;
+    }
+    .actions {
+        min-width: 100px;
+    }
 }
 

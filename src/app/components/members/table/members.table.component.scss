@@ -33,5 +33,59 @@
         position: relative;
         top: 6px;
     }
+
+    .id {
+        min-width: 100px;
+    }
+
+    .first-name {
+        min-width: 100px;
+    }
+
+    .last-name {
+        min-width: 100px;
+    }
+
+    .gender {
+        min-width: 100px;
+    }
+
+    .birthday {
+        min-width: 120px;
+    }
+
+    .barangay {
+        min-width: 100px;
+    }
+
+    .municipality {
+        min-width: 100px;
+    }
+
+    .province {
+        min-width: 100px;
+    }
+
+    .email {
+        min-width: 240px;
+    }
+    
+    .mobile-number {
+        min-width: 120px;
+    }
+
+    .status {
+        min-width: 100px;
+    }
+
+    .date-created {
+        min-width: 180px;
+    }
+
+    .actions-menu {
+        min-width: 40px;
+    }
+    
+   
 }
 

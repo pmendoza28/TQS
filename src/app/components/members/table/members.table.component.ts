@@ -58,8 +58,7 @@ export class MembersTableComponent {
 
     /** @Methods ====================================================== */
     checkSearchValue() {
-        if (this.searchValue == "")  if (this.isSearched)  this.clearSearch()
-            
+        if (this.searchValue == "")  if (this.isSearched)  this.clearSearch() 
     }
 
     populateMembersWithPaginator() {

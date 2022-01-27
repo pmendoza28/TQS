@@ -1,3 +1,4 @@
+import { SelectionModel } from "@angular/cdk/collections";
 import { Component, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
@@ -16,7 +17,7 @@ export class EarnedPointsTableComponent {
     constructor(
         private earnedPointsServices: EarnedPointsServices,
         private dialog: MatDialog
-    ) {}
+    ) { }
 
     /** @LifeCycles =============================================================== */
     ngOnInit(): void {
@@ -34,26 +35,31 @@ export class EarnedPointsTableComponent {
     isSearched: boolean = false;
     currentPage = 1;
     @ViewChild("earnedPointsPaginator") memberPaginator: MatPaginator
-    dataSource = new MatTableDataSource<any>()
+    dataSource = new MatTableDataSource<IEarnedPointsDataSource>()
     displayedColumns: string[] = [
+        "select",
         "id",
         "transaction_no",
+        "category",
         "first_name",
         "last_name",
         "mobile_number",
         "amount",
         "points_earn",
+        // "status",
         "transaction_datetime"
     ]
     lblLoading: "Loading..." | "No Data" | "No Earned Points Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
     pageSizeOption: number[] = [5, 10, 15, 20];
     earnedPointsPerPage: number = 5;
     totalMembers: number = 0;
+   
 
     /** @Methods =============================================================== */
     populateEarnedPointsWithPaginator() {
         this.isTableLoading = true;
         this.earnedPointsServices.getEarnedPointsWithPaginator(this.currentPage, this.earnedPointsPerPage).subscribe(res => {
+            console.log(`response`, res);
             this.isTableLoading = false;
             const { data, total } = res;
             if (data.length == 0) this.lblLoading = "No Data";
@@ -69,7 +75,7 @@ export class EarnedPointsTableComponent {
             }
         })
     }
-    
+
     checkSearchValue() {
         if (this.searchValue == "") if (this.isSearched) this.clearSearch()
     }
@@ -96,7 +102,7 @@ export class EarnedPointsTableComponent {
             })
         }
     }
-    
+
     onChangePage(pageData: PageEvent) {
         if (!this.isSearched) {
             this.currentPage = pageData.pageIndex + 1;
@@ -127,9 +133,78 @@ export class EarnedPointsTableComponent {
             }
         }).afterClosed().subscribe(dialogRes => {
             const { isImported } = dialogRes;
-            if(isImported) {
+            if (isImported) {
                 this.populateEarnedPointsWithPaginator()
             }
         })
     }
+    
+    selection: any = new SelectionModel<any>(true, []);
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggle() {
+        if (this.isAllSelected()) {
+            this.selection.clear();
+            return;
+        }
+
+        this.selection.select(...this.dataSource.data);
+    }
+
+    checkboxLabel(row?: any): string {
+        if (!row) {
+            return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    }
+
+    clearEarnedPoints() {
+        const selectedEarnedPoints: SelectedEarnedPoints  = this.selection.selected.map((earnedPoints: IEarnedPointsDataSource) => {
+            const { id, member_id, amount,points_earn } = earnedPoints;
+            return { 
+                id,
+                member_id,
+                amount,
+                points_earn
+            }
+        })
+        this.dialog.open(EarnedPointsDialogComponent, {
+            data: {
+                title: 'Confirmation',
+                question: 'are you sure you want to add these selected earned points to cleared points?',
+                button_name: 'Add',
+                action: 'add-to-cleared-points',
+                selectedEarnedPoints
+            }
+        }).afterClosed().subscribe(dialogResponse => {
+            const { code } = dialogResponse;
+            if(code == "201") {
+                this.populateEarnedPointsWithPaginator()
+            }
+        })
+    }
+
+    validateClearedPoints() {
+        if(this.selection.selected == 0) return true;
+        return false;
+    }
+}
+
+type SelectedEarnedPoints = Pick<IEarnedPointsDataSource, "id"| "member_id" | "amount" | "points_earn">
+
+interface IEarnedPointsDataSource {
+    id: number;
+    member_id: number;
+    first_name: string;
+    last_name: string;
+    mobile_number: string;
+    transaction_no: string;
+    amount: number;
+    points_earn: number;
+    transaction_datetime: string
 }

@@ -31,4 +31,10 @@ export class EarnedPointsServices {
     uploadEarnedPoints(earnedPoints: any): Observable<any> {
         return this.http.post(`${this.credServices.port}/admin/points/import`, earnedPoints)
     }
+
+    addToClearedPoints(earnedPoints: any): Observable<any> {
+        return this.http.put(`${this.credServices.port}/admin/points/cleared-points`, earnedPoints)
+    }
 }
+
+

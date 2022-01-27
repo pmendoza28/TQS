@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HelperServices } from "src/app/shared/services/helpers.service";
 import exportFromJSON from 'export-from-json'
 import * as moment from "moment";
@@ -15,6 +15,20 @@ export class ExcelWithPasswordComponent {
     constructor(
         private fb: FormBuilder,
     ) { }
+
+    employees: any = [
+        {
+            id: 1,
+            name: "phil",
+            salary: 10000
+        },
+        {
+            id: 2,
+            name: "josh",
+            salary: 5000
+        },
+    ]
+
 
     data = [
         { member_id: 21, transaction_no: "4", amount: 200, points_earn: 20, transaction_datetime: moment().format("yyyy-M-D hh:mm:ss") },
@@ -43,4 +57,22 @@ export class ExcelWithPasswordComponent {
         const exportType = 'json'
         exportFromJSON({ data, fileName, exportType })
     }
+
+
+    loginForm: FormGroup = this.fb.group({
+        username: ["", Validators.required],
+        password: ["", Validators.required]
+    })
+
+    login() {
+        alert(`logged in`)
+    }
+
+    loginValidation() {
+        if(!this.loginForm.valid) {
+            return true
+        }
+        return false;
+    }
 }
+

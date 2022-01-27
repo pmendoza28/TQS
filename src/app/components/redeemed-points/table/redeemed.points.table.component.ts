@@ -50,13 +50,13 @@ export class RedeemedPointsTableComponent {
     populateRedeemedPointsWithPaginator() {
         this.isTableLoading = true;
         this.lblLoading = "Loading...";
-        setTimeout(() => {
-            this.redeemedPointsServices.populateDummyRedeemedPoints().subscribe(res => {
-                this.isTableLoading = false;
-                console.log(res)
-                this.dataSource.data =res
-            })
-        }, 2000);
+        this.redeemedPointsServices.populateRedeemedPoints(this.currentPage, this.redeemedPointsPerPage).subscribe(res => {
+            const { data, total } = res;
+            this.totalRedeemedPoints = total;
+            this.dataSource.data = data;
+            this.isTableLoading = false;
+            if(data.length == 0) this.lblLoading = "No Redeemed Points Found";
+        })
     }
 
     searchRedeemedPoints(isOnPage: boolean) {
@@ -71,14 +71,14 @@ export class RedeemedPointsTableComponent {
                 this.currentPage = 1;
                 this.redeemedPointsPaginator.pageIndex = 0;
             }
-            // this.earnedPointsServices.searchEarnedPoints(this.searchValue, this.currentPage, this.earnedPointsPerPage).subscribe((res: any) => {
-            //     const { data, total } = res;
-            //     this.isSearched = true;
-            //     this.isTableLoading = false;
-            //     this.dataSource.data = data
-            //     this.memberPaginator.length = total
-            //     if (data.length == 0) { this.lblLoading = "No Earned Points Found" }
-            // })
+            this.redeemedPointsServices.searchRedeemedPoints(this.searchValue, this.currentPage, this.redeemedPointsPerPage).subscribe((res: any) => {
+                const { data, total } = res;
+                this.isSearched = true;
+                this.isTableLoading = false;
+                this.dataSource.data = data
+                this.redeemedPointsPaginator.length = total
+                if (data.length == 0) { this.lblLoading = "No Redeemed Points Found" }
+            })
         }
     }
 

@@ -2,6 +2,7 @@ import { Component, Inject, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { HelperServices } from "src/app/shared/services/helpers.service";
 import { EarnedPointsServices } from "../earned.points.service";
@@ -20,7 +21,8 @@ export class EarnedPointsDialogComponent {
         private fb: FormBuilder,
         private helperServices: HelperServices,
         private earnedPointsServices: EarnedPointsServices,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private snackbar: MatSnackBar
     ) { }
 
     /** @States ===============================================================*/
@@ -183,6 +185,24 @@ export class EarnedPointsDialogComponent {
         this.dataSource.paginator = this.tblEarnedPointsPaginator;
         this.allErrors = []
         this.readyToUpload = true;
+    }
+
+    addingToClearedPoints: boolean = false;
+    btnAddToClearedPoints: "Add" | "Adding" = "Add"
+    addToClearedPoints() {
+        const { selectedEarnedPoints } = this.data;
+        this.addingToClearedPoints = true;
+        this.btnAddToClearedPoints = "Adding";
+        this.earnedPointsServices.addToClearedPoints({data: selectedEarnedPoints}).subscribe(res => {
+            console.log(res);
+            const { message, code } = res;
+            this.snackbar.open(message,"", {
+                duration: 3000
+            })
+            this.addingToClearedPoints = false;          
+            this.btnAddToClearedPoints = "Add";
+            this.dialogRef.close({ code })
+        })
     }
 }
 

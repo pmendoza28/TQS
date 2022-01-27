@@ -33,5 +33,33 @@
         position: relative;
         top: 6px;
     }
+
+    .id {
+        min-width: 40px;
+    }
+    .first-name {
+        min-width: 100px;
+    }
+
+    .last-name {
+        min-width: 100px;
+    }
+
+    .username {
+        min-width: 100px;
+    }
+
+    .is-active {
+        min-width: 100px;
+    }
+
+    .created-at {
+        min-width: 180px;
+    }
+
+    .actions-menu {
+        min-width: 40px;
+    }
+
 }
 

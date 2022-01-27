@@ -22,19 +22,23 @@
     </mat-list-item>
 
     <mat-list-item *ngIf="checkAccess('earned-points')" routerLink="/admin/earned-points"  [class.selected-menu]="sideBarServices.menu.earned_points">
-      <mat-icon mat-list-icon>savings</mat-icon> Earned Points
+      <mat-icon class="selected-icon" mat-list-icon>savings</mat-icon> Earned Points
     </mat-list-item>
 
     <mat-list-item [class.selected-menu]="sideBarServices.menu.redeemed_points" routerLink="/admin/redeemed-points">
-      <mat-icon mat-list-icon>receipt_long</mat-icon> Redeemed Points
+      <mat-icon class="selected-icon" mat-list-icon>receipt_long</mat-icon> Redeemed Points
+    </mat-list-item>
+
+    <mat-list-item [class.selected-menu]="sideBarServices.menu.cleared_points" routerLink="/admin/cleared-points">
+      <mat-icon class="selected-icon" mat-list-icon>receipt</mat-icon> Cleared Points
     </mat-list-item>
 
     <mat-list-item [class.selected-menu]="sideBarServices.menu.generateFile" routerLink="/admin/generate-file">
-      <mat-icon mat-list-icon>cloud_download</mat-icon> Generate File
+      <mat-icon class="selected-icon" mat-list-icon>cloud_download</mat-icon> Generate File
     </mat-list-item>
 
     <mat-list-item [class.selected-menu]="sideBarServices.menu.reports" routerLink="/admin/reports">
-      <mat-icon mat-list-icon>report</mat-icon> Reports
+      <mat-icon class="selected-icon" mat-list-icon>report</mat-icon> Reports
     </mat-list-item>
 
 

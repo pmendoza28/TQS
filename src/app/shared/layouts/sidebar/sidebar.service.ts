@@ -15,6 +15,7 @@ export class SidebarServices {
         members: false,
         earned_points: false,
         redeemed_points: false,
+        cleared_points: false,
         transactions: false,
         generateFile: false,
         reports: false
@@ -30,6 +31,7 @@ export class SidebarServices {
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
+                    cleared_points: false,
                     transactions: false,
                     generateFile: false,
                     reports: false
@@ -42,6 +44,7 @@ export class SidebarServices {
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
+                    cleared_points: false,
                     transactions: false,
                     generateFile: false,
                     reports: false
@@ -54,6 +57,7 @@ export class SidebarServices {
                     members: true,
                     earned_points: false,
                     redeemed_points: false,
+                    cleared_points: false,
                     transactions: false,
                     generateFile: false,
                     reports: false
@@ -66,6 +70,7 @@ export class SidebarServices {
                     members: false,
                     earned_points: true,
                     redeemed_points: false,
+                    cleared_points: false,
                     transactions: false,
                     generateFile: false,
                     reports: false
@@ -78,7 +83,22 @@ export class SidebarServices {
                     members: false,
                     earned_points: false,
                     redeemed_points: true,
+                    cleared_points: false,
                     transactions: true,
+                    generateFile: false,
+                    reports: false
+                }
+                break;
+
+            case "cleared-points":
+                this.menu = {
+                    userAccounts: false,
+                    stores: false,
+                    members: false,
+                    earned_points: false,
+                    redeemed_points: false,
+                    cleared_points: true,
+                    transactions: false,
                     generateFile: false,
                     reports: false
                 }
@@ -90,6 +110,7 @@ export class SidebarServices {
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
+                    cleared_points: false,
                     transactions: true,
                     generateFile: false,
                     reports: false
@@ -102,6 +123,7 @@ export class SidebarServices {
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
+                    cleared_points: false,
                     transactions: false,
                     generateFile: true,
                     reports: false
@@ -114,6 +136,7 @@ export class SidebarServices {
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
+                    cleared_points: false,
                     transactions: false,
                     generateFile: false,
                     reports: true
@@ -129,6 +152,7 @@ interface Imenu {
     members: boolean;
     earned_points: boolean;
     redeemed_points: boolean;
+    cleared_points: boolean;
     transactions: boolean;
     generateFile: boolean;
     reports: boolean;

@@ -33,5 +33,37 @@
         position: relative;
         top: 6px;
     }
+
+    .id {
+        min-width: 40px;
+    }
+    .code {
+        min-width: 100px;
+    }
+    .store-name {
+        min-width: 100px;
+    }
+    .area {
+        min-width: 100px;
+    }
+    .region {
+        min-width: 100px;
+    }
+    .cluster {
+        min-width: 100px;
+    }
+    .business-model {
+        min-width: 100px;
+    }
+    .status {
+        min-width: 100px;
+    }
+    .date-created {
+        min-width: 100px;
+    }
+    .actions-menu {
+        min-width: 100px;
+    }
+
 }
 

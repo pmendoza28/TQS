@@ -28,6 +28,7 @@ export class StoresDialogComponent {
         const { storeForm } = this.data;
         this.isButtonLoading = true;
         this.data.button_name = "Creating"
+        console.log(storeForm);
         this.storesServices.createStore(storeForm).subscribe(res => {
             this.isButtonLoading = false;
             const { isCreated, message } = res;

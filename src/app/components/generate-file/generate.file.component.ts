@@ -1,7 +1,5 @@
 import { Component } from "@angular/core";
 import { FormControl } from "@angular/forms";
-
-import exportFromJSON from 'export-from-json'
 import { HelperServices } from "src/app/shared/services/helpers.service";
 import { GenerateFileServices } from "./generate-file.service";
 const CryptoJS = require("crypto-js");
@@ -27,47 +25,49 @@ export class GenerateFileComponent {
 
     modules: string[] = ['User-Accounts', 'Stores', 'Members'];
     generateDatabase() {
-        this.isGeneratingDatabase = true
-        this.generateFileServices.generateDatabase().subscribe(res => {
-            setTimeout(() => {
-                this.isGeneratingDatabase = false
-                const updatedDatabaseCyper: any = CryptoJS.AES.encrypt(JSON.stringify(res), 'secret key 123').toString()
-                let dateToday = `date: ${new Date(Date.now()).toLocaleDateString()} time: ${new Date(Date.now()).toLocaleTimeString()}`
-                const fileName = `TQS Database - ${dateToday}`
-                this.helpersServices.exportJsonData([updatedDatabaseCyper], fileName)
-            }, 1000);
+        this.isGeneratingDatabase = true;
+        const selectedReport = {
+            user_account: true,
+            member: true,
+            store: true
+        }
+        this.generateFileServices.generateFile(selectedReport).subscribe(res => {
+            this.isGeneratingDatabase = false
+            const updatedDatabaseCyper: any = CryptoJS.AES.encrypt(JSON.stringify(res), 'secret key 123').toString()
+            let dateToday = `date: ${new Date(Date.now()).toLocaleDateString()} time: ${new Date(Date.now()).toLocaleTimeString()}`
+            const fileName = `TQS Database - ${dateToday}`
+            this.helpersServices.exportJsonData([updatedDatabaseCyper], fileName)
         })
     }
 
     validateCustomDatabase() {
-        if(this.moduleSelected.value == null || this.moduleSelected.value.length == 0) {
-            return true
-        }
-        else {
-            return false
-        }
+        if(this.moduleSelected.value == null || this.moduleSelected.value.length == 0) return true
+        return false
     }
 
     exportCustomDatabase() {
         this.isGeneratingDatabase = true
         this.moduleSelected.disable()
-        this.generateFileServices.generateDatabase().subscribe(res => {
-            const { user_accounts, stores, members } = res;
+        
+        const selectedReport = {
+            user_account: false,
+            member: false,
+            store: false,
+        }
+        this.moduleSelected.value.map((module: any) => {
+            if(module == "User-Accounts") selectedReport.user_account = true
+            if(module == "Stores") selectedReport.store = true
+            if(module == "Members") selectedReport.member = true
+        })
+        this.generateFileServices.generateFile(selectedReport).subscribe(res => {
             this.isGeneratingDatabase = false
             this.moduleSelected.enable()
-            let customData: any;
-            this.moduleSelected.value.forEach((module: any) => {
-                if(module == "User-Accounts") customData = {...customData, user_accounts: user_accounts}
-                if(module == "Stores") customData = { ...customData, stores: stores}
-                if(module == "Members") customData = {...customData, members: members}
-            })
-            const updatedDatabaseCyper: any = CryptoJS.AES.encrypt(JSON.stringify(customData), 'secret key 123').toString()
+
+            const updatedDatabaseCyper: any = CryptoJS.AES.encrypt(JSON.stringify(res), 'secret key 123').toString()
             let dateToday = `date: ${new Date(Date.now()).toLocaleDateString()} time: ${new Date(Date.now()).toLocaleTimeString()}`
             const modules = this.moduleSelected.value.toString()
-            console.log(`modules`, modules)
             const fileName = `TQS Custom Database - Modules: ${modules}   - ${dateToday}`
             this.helpersServices.exportJsonData([updatedDatabaseCyper], fileName)
-
         })
         
     }
