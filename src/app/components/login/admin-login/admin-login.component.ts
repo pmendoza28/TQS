@@ -38,13 +38,13 @@ export class AdminLoginComponent {
       /*****************@SET_STATE_VALUES ******************** */
       this.isAuthenticating = false;
       this.btnLogin = "Login";
-      
+
       const { isAuthenticated, message, data } = res;
       this.snackBar.open(message, "", { duration: 3000 })
 
       if (isAuthenticated) {
         const { token, user } = data;
-        if(user) {
+        if (user) {
           user.access_permission = user.access_permission.split(", ")
         }
         this.localService.setJsonValue("token", token);
@@ -58,5 +58,5 @@ export class AdminLoginComponent {
       this.btnLogin = "Login";
     })
   }
-  
+
 }

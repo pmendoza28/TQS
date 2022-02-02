@@ -27,15 +27,20 @@ export class IsLoggedIn implements CanActivate {
             }
             return true
         }, err => {
-            // this.dialog.open(DialogComponent, {
-            //     disableClose: true,
-            //     data: {
-            //         title: "Session Expired",
-            //         content: "Please Login In Again",
-            //     }
-            // })
-            // this.router.navigate([""])
-            // this.localService.clearToken()
+            console.log(err);
+            const { status } = err
+            if(status == 401) {
+                this.dialog.open(DialogComponent, {
+                    disableClose: true,
+                    data: {
+                        title: "Session Expired",
+                        content: "Please Login In Again",
+                    }
+                })
+                this.router.navigate([""])
+                this.localService.clearToken()
+            }
+            
         })
         return true
     }
