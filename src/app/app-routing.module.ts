@@ -6,8 +6,9 @@ import { IsLoggedIn } from './guards/is.logged.in.guard';
 import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'administrator/authentication', pathMatch: 'full' },
+  { path: '', redirectTo: 'portal', pathMatch: 'full' },
   { path: 'sandbox', loadChildren: () => import("./sandbox/sandbox.module").then(m => m.SandboxModule) },
+  { path: 'portal', loadChildren: () => import("./components/portal/installation/installation.module").then(m => m.InstallationModule) },
   { path: 'administrator/authentication', canActivate: [LoginGuard], loadChildren: () => import("./components/login/admin-login/admin-login.module").then(m => m.AdminLoginModule) },
   { path: 'admin', canActivate: [AuthGuard, IsLoggedIn], loadChildren: () => import("./layouts/admin/layout.admin.module").then(m => m.LayoutAdminModule) },
   { path: '**', component: NotFoundComponent },

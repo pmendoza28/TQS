@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { CredServices } from '../../services/cred.service';
 import { LocalService } from '../../services/local.service';
 import { HeaderServices } from './header.service';
 
@@ -13,7 +14,8 @@ export class HeaderComponent {
   constructor(
     private localService: LocalService,
     private router: Router,
-    public headerServices: HeaderServices
+    public headerServices: HeaderServices,
+    private credServices: CredServices
   ) { }
 
   @Output() toogleSidebar: EventEmitter<any> = new EventEmitter();
@@ -36,6 +38,11 @@ export class HeaderComponent {
       this.localService.clearToken()
       this.router.navigate([""])
     })
+  }
+
+  getNameOfUser() {
+    const { user: {first_name, last_name} } = this.credServices.getCredentials();
+    return `${first_name} ${last_name}`;
   }
   
 }

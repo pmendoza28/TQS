@@ -142,6 +142,18 @@ export class SidebarServices {
                     reports: true
                 }
                 break;
+            default:
+                this.menu = {
+                    userAccounts: false,
+                    stores: false,
+                    members: false,
+                    earned_points: false,
+                    redeemed_points: false,
+                    cleared_points: false,
+                    transactions: false,
+                    generateFile: false,
+                    reports: false
+                }
         }
     }
 }

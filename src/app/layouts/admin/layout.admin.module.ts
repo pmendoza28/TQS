@@ -22,6 +22,7 @@ const routes: Routes = [
             { path: 'cleared-points', canActivate: [SidebarCssSelected], loadChildren: () => import("../../components/cleared-points/cleared.points.module").then(m => m.ClearedPointsModule) },
             { path: 'generate-file', canActivate: [SidebarCssSelected], loadChildren: () => import("../../components/generate-file/generate.file.module").then(m => m.GenerateFileModule) },
             { path: 'reports', canActivate: [SidebarCssSelected], loadChildren: () => import("../../components/reports/reports.module").then(m => m.ReportsModule) },
+            { path: 'settings', canActivate: [SidebarCssSelected], loadChildren: () => import("../../components/settings/settings.module").then(m => m.SettingsModule) },
             { path: 'unauthorized', component: UnauthorizedComponent },
             { path: '**', component: NotFoundComponent },
         ]
