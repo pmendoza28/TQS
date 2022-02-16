@@ -21,7 +21,6 @@ export class HeaderComponent {
   @Output() toogleSidebar: EventEmitter<any> = new EventEmitter();
   @Input() deviceXs: boolean
   loggingOut: boolean = false;
-  
 
   ToogleSideBar() {
     this.toogleSidebar.emit();

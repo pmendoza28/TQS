@@ -158,4 +158,9 @@ export class HelperServices {
 
   }
 
+  decryptDb(encryptedDb: any) {
+    const bytes  = CryptoJS.AES.decrypt(encryptedDb, 'secret key 123');
+    const originalDb = bytes.toString(CryptoJS.enc.Utf8);
+    console.log(originalDb);
+  }
 }

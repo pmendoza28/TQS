@@ -16,7 +16,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.appServices.createOnline$().subscribe(isOnline => {
-      this.appServices.isOnline = isOnline;
+      this.appServices.internetForm.setValue({isOnline})
       if(!isOnline) {
         this.dialog.open(DialogComponent, {
           disableClose: true,

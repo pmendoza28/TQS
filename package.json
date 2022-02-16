@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "httpserver": "http-server -p 8080 -c-1 dist/TQS"
   },
   "private": true,
   "dependencies": {
@@ -35,6 +36,7 @@
     "ngx-skeleton-loader": "^4.0.0",
     "rxjs": "~6.6.0",
     "secure-web-storage": "^1.0.2",
+    "sqlite3": "^5.0.2",
     "tslib": "^2.3.0",
     "xlsx": "^0.17.4",
     "zone.js": "~0.11.4"

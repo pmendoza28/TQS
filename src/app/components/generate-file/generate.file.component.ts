@@ -29,9 +29,11 @@ export class GenerateFileComponent {
         const selectedReport = {
             user_account: true,
             member: true,
-            store: true
+            store: true,
+            settings: true
         }
         this.generateFileServices.generateFile(selectedReport).subscribe(res => {
+            console.log(res);
             this.isGeneratingDatabase = false
             const updatedDatabaseCyper: any = CryptoJS.AES.encrypt(JSON.stringify(res), 'secret key 123').toString()
             let dateToday = `date: ${new Date(Date.now()).toLocaleDateString()} time: ${new Date(Date.now()).toLocaleTimeString()}`

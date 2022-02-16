@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 @Injectable({
@@ -6,7 +7,12 @@ import { map } from 'rxjs/operators';
 })
 
 export class AppServices {
-    isOnline: boolean;
+    constructor(
+        private fb: FormBuilder
+    ) {}
+    internetForm: FormGroup = this.fb.group({
+        isOnline: []
+    })
     createOnline$() {
         return merge<boolean>(
             fromEvent(window, 'offline').pipe(map(() => false)),

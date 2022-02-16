@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HelperServices } from "src/app/shared/services/helpers.service";
 import exportFromJSON from 'export-from-json'
 import * as moment from "moment";
+import { asyncScheduler, from, Observable, of, Subject } from "rxjs";
+import { concatMap, delay } from "rxjs/operators";
 const CryptoJS = require("crypto-js");
 
 @Component({
@@ -29,7 +31,6 @@ export class ExcelWithPasswordComponent {
         },
     ]
 
-
     data = [
         { member_id: 21, transaction_no: "4", amount: 200, points_earn: 20, transaction_datetime: moment().format("yyyy-M-D hh:mm:ss") },
     ]
@@ -38,11 +39,11 @@ export class ExcelWithPasswordComponent {
         dateGenerated: new Date(Date.now()).toLocaleDateString(),
         timeGenerated: new Date(Date.now()).toLocaleDateString()
     }
-    
+
     export() {
         var earnedPointsCyper = CryptoJS.AES.encrypt(JSON.stringify(this.data), 'secret key 123').toString();
         var detailsCyper = CryptoJS.AES.encrypt(JSON.stringify(this.details), 'secret key 123').toString();
-        var bytes  = CryptoJS.AES.decrypt(earnedPointsCyper, 'secret key 123');
+        var bytes = CryptoJS.AES.decrypt(earnedPointsCyper, 'secret key 123');
         var originalText = bytes.toString(CryptoJS.enc.Utf8);
 
         let data = [
@@ -69,10 +70,39 @@ export class ExcelWithPasswordComponent {
     }
 
     loginValidation() {
-        if(!this.loginForm.valid) {
+        if (!this.loginForm.valid) {
             return true
         }
         return false;
+    }
+
+    numbers = [1, 2, 3];
+    uploadedNumber: number = 0;
+    sample = new Subject()
+    ngOnInit(): void {
+        from(this.numbers).pipe(
+            concatMap(val => of(val).pipe(delay(500)))
+        ).subscribe({
+            next: (num) => {
+                console.log(num)
+                this.uploadedNumber++;
+                if(this.numbers.length == this.uploadedNumber) {
+                    setTimeout(() => {
+                        this.sample.complete()
+                    }, 1000);
+                }
+            },
+            complete: () => {
+                
+                this.sample.subscribe({
+                    next: (emit) => console.log(`emit`, emit),
+                    complete: () => console.log(`done`)
+                })
+
+            }
+        })
+
+        console.log(Array(100))
     }
 }
 
