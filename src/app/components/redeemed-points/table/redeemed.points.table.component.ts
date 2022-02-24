@@ -13,7 +13,7 @@ export class RedeemedPointsTableComponent {
 
     constructor(
         private redeemedPointsServices: RedeemedPointsServices
-    ){}
+    ) { }
 
     /** @States ========================================*/
     title: string = "Redeemed Points Transactions";
@@ -44,7 +44,7 @@ export class RedeemedPointsTableComponent {
         //Add 'implements OnInit' to the class.
         this.populateRedeemedPointsWithPaginator()
     }
-    
+
     /** @METHODS  =====================================*/
 
     populateRedeemedPointsWithPaginator() {
@@ -55,7 +55,7 @@ export class RedeemedPointsTableComponent {
             this.totalRedeemedPoints = total;
             this.dataSource.data = data;
             this.isTableLoading = false;
-            if(data.length == 0) this.lblLoading = "No Redeemed Points Found";
+            if (data.length == 0) this.lblLoading = "No Redeemed Points Found";
         })
     }
 
@@ -71,6 +71,7 @@ export class RedeemedPointsTableComponent {
                 this.currentPage = 1;
                 this.redeemedPointsPaginator.pageIndex = 0;
             }
+            this.lblLoading = "Loading...";
             this.redeemedPointsServices.searchRedeemedPoints(this.searchValue, this.currentPage, this.redeemedPointsPerPage).subscribe((res: any) => {
                 const { data, total } = res;
                 this.isSearched = true;

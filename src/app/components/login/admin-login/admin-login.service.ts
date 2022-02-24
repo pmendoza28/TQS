@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
 import { CredServices } from "src/app/shared/services/cred.service";
 import { retry, timeout } from 'rxjs/operators';
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: "root"
@@ -15,7 +15,7 @@ export class AdminLoginServices {
         private credServices: CredServices
     ) {}
 
-    authenticate(loginForm: {username: string, password: string}) {
+    authenticate(loginForm: {username: string, password: string}): Observable<any> {
         return this.http.post<any>(`${this.credServices.port}/login`, loginForm).pipe(
             timeout(10000),
         )

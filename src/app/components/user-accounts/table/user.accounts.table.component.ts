@@ -86,13 +86,13 @@ export class UserAccountTableComponent {
     deactivate(user: any) {
         const { is_active } = user;
         let rootWord;
-        if(is_active) {
+        if (is_active) {
             rootWord = "Deactivate"
         }
-        if(!is_active) {
+        if (!is_active) {
             rootWord = "Activate"
         }
-        
+
         this.dialog.open(UserAccountsDialogComponent, {
             disableClose: true,
             data: {
@@ -135,25 +135,26 @@ export class UserAccountTableComponent {
             this.populateUserAccounts();
         }
         else {
-            if(!isOnPage) {
+            if (!isOnPage) {
                 this.currentPage = 1;
                 this.userAccountPaginator.pageIndex = 0;
-             }
+            }
+            this.lblLoading = "Loading...";
             this.userAccountsServices.searchUserAccount(this.searchValue, this.currentPage, this.userAccountsPerPage).subscribe(res => {
                 const { data, total } = res;
                 this.dataSource.data = data;
                 this.userAccountPaginator.length = total;
-                
+
                 this.isSearched = true;
                 this.isTableLoading = false;
                 if (data.length == 0) { this.lblLoading = "No User Account Found" }
             })
         }
     }
-  
+
     checkSearchValue() {
-        if(this.searchValue == "") {
-            if(this.isSearched) {
+        if (this.searchValue == "") {
+            if (this.isSearched) {
                 this.clearSearch()
             }
         }

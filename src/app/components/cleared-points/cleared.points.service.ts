@@ -21,6 +21,6 @@ export class ClearedPointsServices {
     }
 
     searchClearedPoints(searchvalue: string, currentPage: number, clearedPointsPerPage: number): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/search-cleared-points/${clearedPointsPerPage}/?page=${currentPage}`, { searchvalue })
+        return this.http.post(`${this.credServices.port}/admin/search-cleared-points/${clearedPointsPerPage}?page=${currentPage}`, { searchvalue })
     }
 }

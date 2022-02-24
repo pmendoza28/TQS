@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="field">
+        <div class="title">ADDRESS</div>
+        <mat-form-field appearance="legacy">
+            <mat-label>PROVINCE</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="membersRegisterServices.province">
+        </mat-form-field>
+
+        <mat-form-field appearance="legacy">
+            <mat-label>MUNICIPALITY</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="membersRegisterServices.municipality">
+        </mat-form-field>
+
+        <mat-form-field appearance="legacy">
+            <mat-label>BARANGAY</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="membersRegisterServices.barangay">
+        </mat-form-field>
+
+
+        <div class="actions">
+            <button mat-raised-button (click)="back()">BACK</button>
+            <button mat-raised-button class="btn-primary" (click)="next()">NEXT</button>
+        </div>
+    </div>
+    
+</div>

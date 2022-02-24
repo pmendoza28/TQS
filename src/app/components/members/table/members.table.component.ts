@@ -58,7 +58,7 @@ export class MembersTableComponent {
 
     /** @Methods ====================================================== */
     checkSearchValue() {
-        if (this.searchValue == "")  if (this.isSearched)  this.clearSearch() 
+        if (this.searchValue == "") if (this.isSearched) this.clearSearch()
     }
 
     populateMembersWithPaginator() {
@@ -96,6 +96,7 @@ export class MembersTableComponent {
                 this.currentPage = 1;
                 this.memberPaginator.pageIndex = 0;
             }
+            this.lblLoading = "Loading...";
             this.membersServices.searchMember(this.searchValue, this.currentPage, this.memberPerPage).subscribe(res => {
                 const { data, total } = res;
                 this.isSearched = true;
@@ -116,7 +117,7 @@ export class MembersTableComponent {
     }
 
     editMember(memberId: number) {
-        this.router.navigate(["/admin/members/edit", { memberId}])
+        this.router.navigate(["/admin/members/edit", { memberId }])
     }
 
     activateInactivate(action: string, member: any) {
@@ -131,12 +132,12 @@ export class MembersTableComponent {
             }
         }).afterClosed().subscribe(dialogResponse => {
             const { memberId, status } = dialogResponse;
-            if(status) {
+            if (status) {
                 let index = this.dataSource.data.findIndex((member: any) => member.id == memberId)
                 this.dataSource.data[index].status = status;
                 this.dataSource.data[index].hasChanged = true;
             }
-            
+
         })
     }
 
@@ -161,10 +162,10 @@ export class MembersTableComponent {
                 action: "import-members-validation"
             }
         }).afterClosed().subscribe(dialogResponse => {
-            if(dialogResponse) {
+            if (dialogResponse) {
                 const { imported_members } = dialogResponse;
-                if(imported_members) {
-                    if(imported_members.length > 0) {
+                if (imported_members) {
+                    if (imported_members.length > 0) {
                         this.populateMembersWithPaginator()
                     }
                 }

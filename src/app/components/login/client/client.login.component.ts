@@ -1,4 +1,9 @@
 import { Component } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { LocalService } from "src/app/shared/services/local.service";
+import { ClientLoginServices } from "./client.login.service";
 
 @Component({
     selector: 'app-client-login',
@@ -7,5 +12,31 @@ import { Component } from "@angular/core";
 })
 
 export class ClientLoginComponent {
-    
+    constructor(
+        private clientLoginServices: ClientLoginServices,
+        private fb: FormBuilder,
+        private snackBar: MatSnackBar,
+        private localService: LocalService,
+        private router: Router
+    ) {}
+
+    loginForm: FormGroup = this.fb.group({
+        username: ['', Validators.required],
+        password: ['', Validators.required],
+    })
+
+    login() {
+        this.clientLoginServices.login(this.loginForm.value).subscribe(res => {
+            const { token, user } = res;
+            this.localService.setJsonValue("client-user", user)
+            this.localService.setJsonValue("client-token", token)
+            this.router.navigate(['/client/transactions']).then(() => location.reload())
+        }, err => {
+            console.log(err)
+            const { error: { message } } = err;
+            this.snackBar.open(message, "", {
+                duration: 3000
+            })
+        })
+    }
 }

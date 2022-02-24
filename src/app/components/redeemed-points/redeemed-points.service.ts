@@ -22,6 +22,6 @@ export class RedeemedPointsServices {
     }
 
     searchRedeemedPoints(searchvalue: string, currentPage: number, redeemedPointsPerPage: number): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/search-redeem/${redeemedPointsPerPage}/?page=${currentPage}`, { searchvalue })
+        return this.http.post(`${this.credServices.port}/admin/search-redeem/${redeemedPointsPerPage}?page=${currentPage}`, { searchvalue })
     }
 }

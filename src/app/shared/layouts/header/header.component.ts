@@ -35,7 +35,7 @@ export class HeaderComponent {
     this.loggingOut = true;
     this.headerServices.logOut().subscribe(() => {
       this.localService.clearToken()
-      this.router.navigate([""])
+      this.router.navigate(["/administrator/authentication"]).then(() => location.reload())
     })
   }
 

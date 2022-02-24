@@ -78,6 +78,7 @@ export class ClearedPointsTableComponent {
                 this.currentPage = 1;
                 this.clearedPointsPaginator.pageIndex = 0;
             }
+            this.lblLoading = "Loading...";
             this.clearedPointsServices.searchClearedPoints(this.searchValue, this.currentPage, this.clearedPointsPerPage).subscribe((res: any) => {
                 const { data, total } = res;
                 this.isSearched = true;

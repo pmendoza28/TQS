@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="field">
+        <div class="title">NAME OF THE CUSTOMER</div>
+        <mat-form-field appearance="legacy">
+            <mat-label>FIRST NAME</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="membersRegisterServices.first_name">
+        </mat-form-field>
+
+        <mat-form-field appearance="legacy">
+            <mat-label>LAST NAME</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="membersRegisterServices.last_name">
+        </mat-form-field>
+
+        <div class="actions">
+            <button mat-raised-button (click)="back()">BACK</button>
+            <button mat-raised-button class="btn-primary" (click)="next()">NEXT</button>
+        </div>
+    </div>
+    
+</div>

@@ -53,7 +53,7 @@ export class EarnedPointsTableComponent {
     pageSizeOption: number[] = [5, 10, 15, 20];
     earnedPointsPerPage: number = 5;
     totalMembers: number = 0;
-   
+
 
     /** @Methods =============================================================== */
     populateEarnedPointsWithPaginator() {
@@ -92,6 +92,7 @@ export class EarnedPointsTableComponent {
                 this.currentPage = 1;
                 this.memberPaginator.pageIndex = 0;
             }
+            this.lblLoading = "Loading...";
             this.earnedPointsServices.searchEarnedPoints(this.searchValue, this.currentPage, this.earnedPointsPerPage).subscribe((res: any) => {
                 const { data, total } = res;
                 this.isSearched = true;
@@ -138,7 +139,7 @@ export class EarnedPointsTableComponent {
             }
         })
     }
-    
+
     selection: any = new SelectionModel<any>(true, []);
     isAllSelected() {
         const numSelected = this.selection.selected.length;
@@ -164,9 +165,9 @@ export class EarnedPointsTableComponent {
     }
 
     clearEarnedPoints() {
-        const selectedEarnedPoints: SelectedEarnedPoints  = this.selection.selected.map((earnedPoints: IEarnedPointsDataSource) => {
-            const { id, member_id, amount,points_earn } = earnedPoints;
-            return { 
+        const selectedEarnedPoints: SelectedEarnedPoints = this.selection.selected.map((earnedPoints: IEarnedPointsDataSource) => {
+            const { id, member_id, amount, points_earn } = earnedPoints;
+            return {
                 id,
                 member_id,
                 amount,
@@ -183,19 +184,19 @@ export class EarnedPointsTableComponent {
             }
         }).afterClosed().subscribe(dialogResponse => {
             const { code } = dialogResponse;
-            if(code == "201") {
+            if (code == "201") {
                 this.populateEarnedPointsWithPaginator()
             }
         })
     }
 
     validateClearedPoints() {
-        if(this.selection.selected == 0) return true;
+        if (this.selection.selected == 0) return true;
         return false;
     }
 }
 
-type SelectedEarnedPoints = Pick<IEarnedPointsDataSource, "id"| "member_id" | "amount" | "points_earn">
+type SelectedEarnedPoints = Pick<IEarnedPointsDataSource, "id" | "member_id" | "amount" | "points_earn">
 
 interface IEarnedPointsDataSource {
     id: number;

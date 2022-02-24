@@ -19,7 +19,7 @@ export class GettingStartedComponent {
         setTimeout(() => {
             this.gettingStarted = false;
             this.router.navigate(['/portal/installation'])
-        }, 2000);
+        }, 0);
         
     }
 }

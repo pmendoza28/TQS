@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { SwUpdate } from '@angular/service-worker';
 import { AppServices } from './app.service';
 import { DialogComponent } from './shared/components/dialog/dialog.component';
 
@@ -11,7 +12,8 @@ import { DialogComponent } from './shared/components/dialog/dialog.component';
 export class AppComponent {
   constructor(
     private appServices : AppServices,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private update: SwUpdate
   ) {}
 
   ngOnInit(): void {
@@ -27,5 +29,19 @@ export class AppComponent {
         })
       }
     })
+    this.updateClient()
   }  
+
+  updateClient() {
+    if(this.update.isEnabled) {
+      this.update.checkForUpdate().then(res => {
+        if(res) {
+          if(confirm('There is a new update')) {
+            this.update.activateUpdate().then(() => location.reload()) 
+          }
+        }
+      })
+    }
+    
+  }
 }

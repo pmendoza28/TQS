@@ -49,7 +49,7 @@ export class AdminLoginComponent {
         }
         this.localService.setJsonValue("token", token);
         this.localService.setJsonValue("user", user);
-        this.router.navigate(["/admin/user-accounts"])
+        this.router.navigate(["/admin/user-accounts"]).then(() => location.reload())
       }
     }, err => {
       this.troubleshoot = true;

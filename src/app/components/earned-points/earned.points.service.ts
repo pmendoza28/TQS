@@ -21,7 +21,7 @@ export class EarnedPointsServices {
     }
 
     searchEarnedPoints(searchvalue: string, currentPage: number, earnedPointsPerPage: number): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/search-earnedpoints/${earnedPointsPerPage}/?page=${currentPage}`, { searchvalue })
+        return this.http.post(`${this.credServices.port}/admin/search-earnedpoints/${earnedPointsPerPage}?page=${currentPage}`, { searchvalue })
     }
 
     validateEarnedPoints(earnedPoints: any[]): Observable<{errors?: any, message?: any}> {

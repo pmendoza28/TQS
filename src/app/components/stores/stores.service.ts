@@ -15,13 +15,13 @@ export class StoresServices {
     ) {}
 
     getStoresWithPaginator(currentPage: number, storePerPage: number): Observable<any> {
-        return this.http.get(`${this.credServices.port}/admin/stores/${storePerPage}/?page=${currentPage}`).pipe(
+        return this.http.get(`${this.credServices.port}/admin/stores/${storePerPage}?page=${currentPage}`).pipe(
             timeout(10000)
         )
     }
 
     searchStore(searchvalue: string, currentPage: number, storePerPage: number):Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/store/search/${storePerPage}/?page=${currentPage}`, { searchvalue })
+        return this.http.post(`${this.credServices.port}/admin/store/search/${storePerPage}?page=${currentPage}`, { searchvalue })
     }
 
     getAllRegions(): Observable<any> {

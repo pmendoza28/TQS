@@ -10,7 +10,10 @@ import { DialogModule } from './shared/components/dialog/dialog.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { JwtModule } from '@auth0/angular-jwt';
+export function tokenGetter() {
+  return ""
+}
 @NgModule({
   declarations: [
     AppComponent
@@ -22,6 +25,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     DialogModule,
     ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        allowedDomains: ["localhost:5000"],
+      }
+    }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable

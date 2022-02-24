@@ -24,6 +24,8 @@ export class StoresTableComponent {
 
     /** @LifeCycles ========================================================= */
     ngOnInit(): void {
+        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+        //Add 'implements OnInit' to the class.
         this.populateStoresWithPaginator()
     }
 
@@ -57,8 +59,8 @@ export class StoresTableComponent {
     ];
 
     checkSearchValue() {
-        if(this.searchValue == "") {
-            if(this.isSearched) {
+        if (this.searchValue == "") {
+            if (this.isSearched) {
                 this.clearSearch()
             }
         }
@@ -73,7 +75,7 @@ export class StoresTableComponent {
             if (data.length == 0) { this.lblLoading = "No Data"; }
             this.dataSource.data = data;
             this.totalStores = total;
-            this.storePaginator.length = total;
+            // this.storePaginator.length = total;
         }, err => {
             const { message } = err;
             switch (message) {
@@ -92,16 +94,17 @@ export class StoresTableComponent {
             this.populateStoresWithPaginator();
         }
         else {
-            if(!isOnPage) {
+            if (!isOnPage) {
                 this.currentPage = 1;
                 this.storePaginator.pageIndex = 0;
-             }
+            }
+            this.lblLoading = "Loading...";
             this.storesServices.searchStore(this.searchValue, this.currentPage, this.storesPerPage).subscribe(res => {
                 const { data, total } = res;
                 this.isSearched = true;
                 this.isTableLoading = false;
                 this.dataSource.data = data
-                this.storePaginator.length = total
+                this.totalStores = total;
                 if (data.length == 0) { this.lblLoading = "No Store Found" }
             })
         }
@@ -116,7 +119,7 @@ export class StoresTableComponent {
     }
 
     editStore(storeId: number) {
-        this.router.navigate(["/admin/stores/edit/", {storeId}])
+        this.router.navigate(["/admin/stores/edit/", { storeId }])
     }
 
     onChangePage(pageData: PageEvent) {
@@ -148,14 +151,14 @@ export class StoresTableComponent {
             }
         }).afterClosed().subscribe(dialogResponse => {
             const { storeId, status } = dialogResponse;
-            if(status) {
+            if (status) {
                 let index = this.dataSource.data.findIndex((store: any) => store.id == storeId)
                 this.dataSource.data[index].status = status;
                 this.dataSource.data[index].hasChanged = true;
             }
-            
+
         })
-        
+
     }
 
     copyToken(code: number) {

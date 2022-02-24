@@ -21,7 +21,7 @@ export class MembersServices {
     }
 
     searchMember(searchvalue: string, currentPage: number, memberPerPage: number): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/search-member/${memberPerPage}/?page=${currentPage}`, { searchvalue })
+        return this.http.post(`${this.credServices.port}/admin/search-member/${memberPerPage}?page=${currentPage}`, { searchvalue })
     }
 
     createMember(memberForm: any): Observable<any> {
