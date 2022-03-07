@@ -11,7 +11,7 @@ export class GenderComponent {
     constructor(
         public membersRegisterServices: MembersRegisterServices
     ) {}
-
+    
     next() {
         this.membersRegisterServices.steps = "Birthday"
     }
@@ -20,5 +20,11 @@ export class GenderComponent {
         this.membersRegisterServices.steps = "Name"
     }
 
+    validateFields() {
+        if(this.membersRegisterServices.gender == '') {
+            return true
+        }
+        return false;
+    }
     
 }

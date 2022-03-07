@@ -5,6 +5,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { HelperServices } from "src/app/shared/services/helpers.service";
+import { EarnService } from "../earn/earn.service";
 import { EarnedPointsServices } from "../earned.points.service";
 const CryptoJS = require("crypto-js");
 @Component({
@@ -22,7 +23,8 @@ export class EarnedPointsDialogComponent {
         private helperServices: HelperServices,
         private earnedPointsServices: EarnedPointsServices,
         private dialog: MatDialog,
-        private snackbar: MatSnackBar
+        private snackbar: MatSnackBar,
+        private earnServices: EarnService
     ) { }
 
     /** @States ===============================================================*/
@@ -203,6 +205,29 @@ export class EarnedPointsDialogComponent {
             this.btnAddToClearedPoints = "Add";
             this.dialogRef.close({ code })
         })
+    }
+
+    earn() {
+        this.isEarning = true;
+        this.earnServices.earnPoints(this.data.earnForm).subscribe(res => {
+            const { message } = res;
+            this.isEarning = false;
+            this.snackbar.open(message, "", {
+                duration: 3000
+            })
+            this.dialogRef.close({isEarned: true})
+        }, err => {
+            const { error: {message} } = err;
+            this.isEarning = false;
+            this.snackbar.open(message, "", {
+                duration: 3000
+            })
+            this.dialogRef.close({isEarned: false})
+        })
+    }
+    isEarning: boolean = false;
+    cancel() {
+        this.dialogRef.close({ isEarned: false })
     }
 }
 

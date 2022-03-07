@@ -3,12 +3,29 @@
         <div class="title">MOBILE NUMBER</div>
         <mat-form-field appearance="legacy">
             <mat-label>ENTER MOBILE NUMBER</mat-label>
-            <input type="number" matInput autocomplete="off" [(ngModel)]="membersRegisterServices.mobile_number">
+            <input 
+            (keydown.enter)="validate()"
+            [specialCharacters]="[ '[' ,']' , '-' ]" mask="0000-000-0000"
+            [OnlyNumber]
+            autocomplete="off" min="11" max="11" matInput autocomplete="off" [(ngModel)]="membersRegisterServices.mobile_number">
         </mat-form-field>
 
         <div class="actions">
             <button mat-raised-button routerLink="/client/transactions">CANCEL</button>
-            <button mat-raised-button class="btn-primary" (click)="next()">NEXT</button>
+            <button 
+                mat-raised-button 
+                class="btn-accent" 
+                [disabled]="fieldValidation()" 
+                [class.spinner]= "isValidating"
+                *ngIf="validateButton()"
+                (click)="validate()"
+            >Validate</button>
+            <button 
+                mat-raised-button 
+                class="btn-primary" 
+                *ngIf="validateNextButton()" 
+                (click)="next()"
+            >NEXT</button>
         </div>
     </div>
     <div class="border"></div>

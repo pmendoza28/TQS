@@ -27,9 +27,11 @@ export class ClientLoginComponent {
 
     login() {
         this.clientLoginServices.login(this.loginForm.value).subscribe(res => {
-            const { token, user } = res;
+            console.log(res)
+            const { token, user, storeActivated } = res;
             this.localService.setJsonValue("client-user", user)
             this.localService.setJsonValue("client-token", token)
+            this.localService.setJsonValue("store-activated", storeActivated)
             this.router.navigate(['/client/transactions']).then(() => location.reload())
         }, err => {
             console.log(err)

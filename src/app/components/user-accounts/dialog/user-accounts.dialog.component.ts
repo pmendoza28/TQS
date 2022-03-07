@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { CredServices } from "src/app/shared/services/cred.service";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { LocalService } from "src/app/shared/services/local.service";
 import { UserAccountsServices } from "../user-accounts.service";
 
@@ -21,8 +22,9 @@ export class UserAccountsDialogComponent {
         private router: Router,
         private snackBar: MatSnackBar,
         private localServices: LocalService,
-        private credServices: CredServices
-    ) {}
+        private credServices: CredServices,
+        private helperServices: HelperServices
+    ) { }
 
     /** @States ==================================================== */
     isButtonLoading: boolean = false;
@@ -32,11 +34,11 @@ export class UserAccountsDialogComponent {
         this.isButtonLoading = true;
         this.data.button_name = "Creating..";
         this.userAccountServices.createUserAccount(this.data.userAccountForm).subscribe(res => {
-            const { message, data: { is_created} } = res;
+            const { message, data: { is_created } } = res;
             this.snackBar.open(message, "", { duration: 3000 })
             this.isButtonLoading = false;
             this.data.button_name = "Create";
-            if(is_created) {
+            if (is_created) {
                 this.router.navigate(["/admin/user-accounts"])
                 this.dialogRef.close()
             }
@@ -48,50 +50,75 @@ export class UserAccountsDialogComponent {
         this.data.button_name = "Updating";
         const { userId, updatedUserAccounts } = this.data;
         this.userAccountServices.updateUserAccountById(userId, updatedUserAccounts).subscribe(res => {
-            this.isButtonLoading = false;
-            const { isUpdated, message } = res;
-            this.snackBar.open(message, "", { duration: 3000 })
-            if(isUpdated) {
-                if(this.credServices.getCredentials().user.id == userId) this.localServices.setJsonValue("user", { id: userId,...updatedUserAccounts})
+            const isOk = this.helperServices.isOk(res);
+            if (isOk) {
+                const { body: { message } } = res;
+                this.snackBar.open(message, "", { duration: 3000 })
+                if (this.credServices.getCredentials().user.id == userId) {
+                    this.localServices.setJsonValue("user", { id: userId, ...updatedUserAccounts })
+                }
+                this.isButtonLoading = false;
                 this.router.navigate(["/admin/user-accounts"])
                 this.dialogRef.close()
+                
             }
+        }, err => {
+            this.helperServices.catchError(err, true, 3000)
+            this.isButtonLoading = false;
+            this.data.button_name = "Retry Update"
+
         })
     }
-    
+
     activate_deactivate() {
         const { button_name, user: { id } } = this.data;
-        if(button_name == "Deactivate") {
+        if (button_name == "Deactivate" || button_name == "Re-Deactivate") {
             this.data.button_name = "Deactivating";
             this.isButtonLoading = true;
             this.userAccountServices.deactivateUserAccountById(id, "Deactivate").subscribe(res => {
-                this.isButtonLoading = false;
-                const { isDeactivated, message } = res;
-                if(isDeactivated) {
-                    this.snackBar.open(message, "", { duration: 3000 })
-                    this.dialogRef.close({
-                        id,
-                        is_active: false
-                    })
+                console.log(res)
+                const isOk = this.helperServices.isOk(res);
+                if (isOk) {
+                    const { body: { isDeactivated, message } } = res;
+                    this.isButtonLoading = false;
+                    if (isDeactivated) {
+                        this.snackBar.open(message, "", { duration: 3000 })
+                        this.dialogRef.close({
+                            id,
+                            is_active: false
+                        })
+                    }
                 }
-               
+
+            }, err => {
+                console.log(`err `, err)
+                this.isButtonLoading = false;
+                this.data.button_name = "Re-Deactivate";
+                const error = this.helperServices.catchError(err, false)
             })
         }
 
-        if(button_name == "Activate") {
+        if (button_name == "Activate" || button_name == "Re-Activate") {
             this.data.button_name = "Activating";
             this.isButtonLoading = true;
             this.userAccountServices.deactivateUserAccountById(id, "Activate").subscribe(res => {
-                this.isButtonLoading = false;
-                const { isActivated, message } = res;
-                if(isActivated) {
-                    this.snackBar.open(message, "", { duration: 3000 })
-                    this.dialogRef.close({
-                        id,
-                        is_active: true
-                    })
+                const isOk = this.helperServices.isOk(res);
+                if (isOk) {
+                    const { body: { isActivated, message } } = res;
+                    this.isButtonLoading = false;
+                    if (isActivated) {
+                        this.snackBar.open(message, "", { duration: 3000 })
+                        this.dialogRef.close({
+                            id,
+                            is_active: true
+                        })
+                    }
                 }
-               
+            }, err => {
+                console.log(err)
+                this.isButtonLoading = false;
+                this.data.button_name = "Re-Activate";
+                const error = this.helperServices.catchError(err, true, 3000)
             })
         }
     }
@@ -101,15 +128,24 @@ export class UserAccountsDialogComponent {
         this.isButtonLoading = true;
         this.data.button_name = "Password Resetting";
         this.userAccountServices.resetPassword(id).subscribe(res => {
-            this.isButtonLoading = false;
-            const { message, isReset } = res;
-            this.snackBar.open(message, "", { duration: 3000 })
-            if(isReset) {
-                this.dialogRef.close({
-                    id,
-                    isReset: true
-                })
+            const isOk = this.helperServices.isOk(res);
+            if (isOk) {
+                const { body: { message, isReset } } = res;
+                this.isButtonLoading = false;
+                this.snackBar.open(message, "", { duration: 3000 })
+                if (isReset) {
+                    this.dialogRef.close({
+                        id,
+                        isReset: true
+                    })
+                }
             }
+
+
+        }, err => {
+            this.helperServices.catchError(err, true, 3000)
+            this.isButtonLoading = false;
+            this.data.button_name = "Retry Reset Password";
         })
     }
 

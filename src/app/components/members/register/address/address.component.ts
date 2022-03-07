@@ -17,6 +17,13 @@ export class AddressComponent {
     }
 
     next() {
-        this.membersRegisterServices.steps = "Working";
+        this.membersRegisterServices.steps = "Email";
+    }
+
+    validateFields() {
+        if(this.membersRegisterServices.province.trim() == '' || this.membersRegisterServices.municipality.trim() == '' || this.membersRegisterServices.barangay.trim() == '') {
+            return true
+        }
+        return false;
     }
 }

@@ -1,0 +1,11 @@
+<div *ngIf="data.action == 'redeem'" class="dialog-container-size">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <mat-dialog-content class="mat-typography">
+      {{data.question}}
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button (click)="redeem()" mat-raised-button class="btn-primary" [disabled]="isRedeeming"
+        [class.spinner]="isRedeeming">{{data.button_name}}</button>
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+  </div>

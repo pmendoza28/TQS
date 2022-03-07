@@ -1,18 +1,21 @@
 <div class="container">
     <div class="title">Store Transactions</div>
-    <div class="sub-title">FOMP01 - DOLORES</div>
+    <div class="sub-title">{{getStoreName()}}</div>
     <div class="main-menu-container ">
         <div class="menu-container">
             <div class="menu" routerLink="/client/transactions/register-customer">
                 <img src="../../../assets/logo/client_transactions/register_menu.png" alt="">
             </div>
-            <div class="menu">
+            <div class="menu" routerLink="/client/transactions/earn-points">
                 <img src="../../../assets/logo/client_transactions/earn_points.png" alt="">
             </div>
-            <div class="menu">
+            <div [className]="appServices.internetForm.value.isOnline ? 'menu' : 'menu-disabled'" (click)="redeem()">
                 <img src="../../../assets/logo/client_transactions/redeem_points.png" alt="">
             </div>
-            <div class="menu">
+            <!-- <div class="menu-disabled">
+                <img src="../../../assets/logo/client_transactions/redeem_points_disable3.png" alt="">
+            </div>  -->
+            <div class="menu" routerLink="/client/transactions/transaction-points">
                 <img src="../../../assets/logo/client_transactions/transactions.png" alt="">
             </div>
             <div class="menu">

@@ -11,6 +11,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 export function tokenGetter() {
   return ""
 }
@@ -25,6 +26,7 @@ export function tokenGetter() {
     HttpClientModule,
     DialogModule,
     ReactiveFormsModule,
+    MatSnackBarModule,
     JwtModule.forRoot({
       config: {
         tokenGetter,

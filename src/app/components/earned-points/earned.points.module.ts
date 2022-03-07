@@ -29,7 +29,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         EarnedPointsTableComponent,
-        EarnedPointsDialogComponent
+        EarnedPointsDialogComponent,
     ],
     imports: [
         RouterModule.forChild(routes),

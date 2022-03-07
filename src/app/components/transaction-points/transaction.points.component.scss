@@ -1,0 +1,106 @@
+@import "../../shared/scss/theme";
+.container {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    padding: 30px 50px;
+    grid-gap: 10px;
+  
+    .title-container {
+        grid-column: 1/25;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        grid-gap: 5px;
+        .title {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: 24px;
+            font-weight:900;
+            letter-spacing: 1px;
+        }
+        .sub-title {
+            display: flex;
+            flex-direction: row;
+            padding-left: 40px;
+            color: $secondary;
+        }
+    }
+    
+    .tab-container {
+        background-color: #1d1b1b;
+        grid-column: 4/22;
+        grid-row: 2;
+        height: calc(100vh - 300px);
+        border-radius: 1em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        mat-tab-group {
+            height: 100%;
+            width: 100%;
+            .tab-content {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                // border: 1px solid white;
+                height: calc(100vh - 351px);
+                .search {
+                    width: 95%;
+                    margin: 10px 20px 0px;
+                    mat-form-field {
+                        width: 100%;
+                    }
+                }
+                .table-container {
+                    width: 95%;
+                    .transaction-no {
+                        min-width: 150px;
+                        min-height: 100px;
+                    }
+                    .mobile-number {
+                        min-width: 150px;
+                    }
+                    .name {
+                        min-width: 200px;
+                    }
+                    .bought-amount {
+                        min-width: 150px;
+                    }
+                    .earned-points {
+                        min-width: 150px;
+                    }
+                    .date-earned {
+                        min-width: 180px;
+                    }
+                    // table {
+                    //     // min-height: 250px;
+                    // }
+                }
+                mat-paginator {
+                    width: 95%;
+                }
+            }
+        }
+       
+    }
+
+ 
+
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -19,4 +19,11 @@ export class CookingComponent {
     back() {
         this.membersRegisterServices.steps = "Working"
     }
+
+    validateFields() {
+        if(this.membersRegisterServices.cooking == '') {
+            return true
+        }
+        return false
+    }
 }

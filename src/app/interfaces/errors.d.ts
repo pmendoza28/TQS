@@ -1,0 +1,1 @@
+export type TextError = "" | "No Data" | "No Data Found" | "Loading..." | "Server cannot be reach. Please Try Again Later" | "Something went wrong";

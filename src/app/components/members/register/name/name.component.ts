@@ -26,4 +26,11 @@ export class NameComponent {
     back() {
         this.membersRegisterServices.steps = "Mobile Number";
     }
+
+    validateFields() {
+        if(this.membersRegisterServices.first_name.trim() == '' || this.membersRegisterServices.last_name.trim() == '') {
+            return true
+        }
+        return false;
+    }
 }

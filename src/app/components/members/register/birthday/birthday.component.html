@@ -3,14 +3,14 @@
         <div class="title">BIRTHDAY</div>
         <mat-form-field appearance="legacy">
             <mat-label>SELECT BIRTHDATE</mat-label>
-            <input matInput [matDatepicker]="picker">
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="membersRegisterServices.birthday" [min]="minDate" [max]="maxDate" autocomplete="off">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
 
         <div class="actions">
             <button mat-raised-button (click)="back()">BACK</button>
-            <button mat-raised-button class="btn-primary" (click)="next()">NEXT</button>
+            <button [disabled]="validateFields()" mat-raised-button class="btn-primary" (click)="next()">NEXT</button>
         </div>
     </div>
     

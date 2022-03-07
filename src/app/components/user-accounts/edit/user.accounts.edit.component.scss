@@ -76,4 +76,27 @@
             margin-top: 10px;
         }
     }
+    .error {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 220px);
+        font-weight: 100;
+        font-size: 16px;
+        text-transform: uppercase;
+        gap: 10px;
+        padding: 20px;
+        .error-actions {
+            button {
+                width: 100px;
+            }
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+    }
 }

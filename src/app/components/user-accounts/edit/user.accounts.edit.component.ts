@@ -2,6 +2,8 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
+import { TextError } from "src/app/interfaces/errors";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { UserAccountsDialogComponent } from "../dialog/user-accounts.dialog.component";
 import { UserAccountsServices } from "../user-accounts.service";
 
@@ -18,7 +20,8 @@ export class UserAccountEditComponent {
         private router: Router,
         private userAccountServices: UserAccountsServices,
         private route: ActivatedRoute,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private helperServices: HelperServices
     ) { }
 
     /** @LifeCycles ========================================================= */
@@ -52,30 +55,38 @@ export class UserAccountEditComponent {
     userAccountClone: any;
     permissions: string[] = [];
     btnAction: "Nothing to update" | "Update" = "Nothing to update";
+    httpStatusText: TextError = "";
+    hasHttpError: boolean = false;
 
     /** @Methods ============================================================== */
     populateUserAccountByUserId() {
         this.isGettingUserAccountById = true;
         this.userAccountServices.getUserAccountById(this.userIdParams).subscribe(res => {
-            this.isGettingUserAccountById = false;
-            const { isUserExist, data: { user } } = res;
-            this.userAccountClone = user;
-            this.roleQuery = user.role
-
-            const access_permission = user.access_permission.split(", ");
-            if (isUserExist) {
-                this.userAccountForm.patchValue({
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    username: user.username,
-                    role: user.role,
-                })
-                access_permission.map((access: string) => {
-                    this.populatePermissionValue(access);
-                })
-                this.convertAccessPermission()
-
+            const isOk = this.helperServices.isOk(res)
+            if(isOk) {
+                const { body: {  isUserExist, data: { user } } } = res;
+                this.isGettingUserAccountById = false;
+                this.userAccountClone = user;
+                this.roleQuery = user.role
+                const access_permission = user.access_permission.split(", ");
+                if (isUserExist) {
+                    this.userAccountForm.patchValue({
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        username: user.username,
+                        role: user.role,
+                    })
+                    access_permission.map((access: string) => {
+                        this.populatePermissionValue(access);
+                    })
+                    this.convertAccessPermission()
+                }
             }
+        }, err => {
+            const error = this.helperServices.catchError(err,true, 3000);
+            this.httpStatusText = error;
+            this.hasHttpError = true;
+            this.isGettingUserAccountById = false;
         })
     }
 
@@ -265,12 +276,16 @@ export class UserAccountEditComponent {
         this.permissions = []
         if (this.getRole() == this.roleQuery) {
             this.userAccountServices.getUserAccountById(this.userIdParams).subscribe(res => {
-                const { data: { user } } = res;
-                const access_permission = user.access_permission.split(", ");
-                access_permission.map((access: string) => {
-                    this.populatePermissionValue(access);
-                })
-                this.convertAccessPermission()
+                const isOk = this.helperServices.isOk(res);
+                if(isOk) {
+                    const { body: { data: { user } } } = res;
+                    const access_permission = user.access_permission.split(", ");
+                    access_permission.map((access: string) => {
+                        this.populatePermissionValue(access);
+                    })
+                    this.convertAccessPermission()    
+                }
+                
             })
         }
     }

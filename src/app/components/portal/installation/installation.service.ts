@@ -37,6 +37,10 @@ export class InstallationServices {
     activateStore(activateStore: IActivateStoreBody): Observable<any> {
         return this.http.post(`${this.credServices.clientPort}/store-activate`, activateStore)
     }
+
+    createEarningPointsPercentage(settings: {setting_mysql_id: number, earning_percentage: number}): Observable<any> {
+        return this.http.post(`${this.credServices.clientPort}/settings`, settings)
+    }
 }
 
 export interface IStore {

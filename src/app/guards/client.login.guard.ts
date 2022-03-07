@@ -15,7 +15,7 @@ export class ClientLoginGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         let user = this.credServices.getCredentials().client_user;
         if(user) {
-            this.router.navigate(['/client'])
+            this.router.navigate(['/client/transactions'])
         }
         return true;
     }

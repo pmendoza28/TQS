@@ -94,7 +94,7 @@
                 </tr>
             </table>
         </div>
-        <mat-paginator #userAccountPaginator showFirstLastButtons  [length]="totalUserAccounts" [pageSizeOptions]="pageSizeOption"
+        <mat-paginator color="accent" #userAccountPaginator showFirstLastButtons  [length]="totalUserAccounts" [pageSizeOptions]="pageSizeOption"
             [pageSize]="userAccountsPerPage" (page)="onChangePage($event)">
         </mat-paginator>
        </div>

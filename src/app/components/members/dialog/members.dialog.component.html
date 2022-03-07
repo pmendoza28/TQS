@@ -318,3 +318,26 @@
     <button mat-raised-button mat-dialog-close>Cancel</button>
   </mat-dialog-actions>
 </div>
+
+<div *ngIf="data.action == 'createMemberInStore'" class="dialog-container-size">
+  <h2 mat-dialog-title>{{data.title}}</h2>
+  <mat-dialog-content class="mat-typography">
+    {{data.question}}
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button (click)="createMemberInStore()" mat-raised-button class="btn-primary" [disabled]="isCreatedMemberInStore"
+      [class.spinner]="isCreatedMemberInStore">{{data.button_name}}</button>
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="data.action == 'return-to-transactions'" class="dialog-container-size">
+  <h2 mat-dialog-title>{{data.title}}</h2>
+  <mat-dialog-content class="mat-typography">
+    {{data.question}}
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button (click)="back()" mat-raised-button class="btn-primary" >{{data.button_name}}</button>
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</div>

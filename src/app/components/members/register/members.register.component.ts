@@ -1,4 +1,8 @@
 import { Component } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
+import { CredServices } from "src/app/shared/services/cred.service";
+import { MembersDialogComponent } from "../dialog/members.dialog.component";
 import { MembersRegisterServices, TSteps } from "./members.register.service";
 
 @Component({
@@ -10,8 +14,15 @@ import { MembersRegisterServices, TSteps } from "./members.register.service";
 export class MembersRegisterComponent {
 
   constructor(
-    public membersRegisterServices: MembersRegisterServices
-  ) {}
+    public membersRegisterServices: MembersRegisterServices,
+    private dialog: MatDialog,
+    private router: Router,
+    private credServices: CredServices
+  ) { }
+
+  getStoreName() {
+    return this.credServices.getCredentials().activated_store.storeObject.name
+  }
 
   stepTo(step: TSteps) {
     switch (step) {
@@ -20,43 +31,99 @@ export class MembersRegisterComponent {
         break;
 
       case 'Name':
-        this.membersRegisterServices.steps = "Name";
+        if(this.membersRegisterServices.can_access_layer == "Name") {
+          this.membersRegisterServices.steps = "Name";
+        }
         break;
 
       case 'Gender':
-        this.membersRegisterServices.steps = "Gender";
+        if(this.membersRegisterServices.first_name.trim() != '' || this.membersRegisterServices.last_name.trim() != '') {
+          this.membersRegisterServices.steps = "Gender";
+        }
         break;
 
       case 'Birthday':
-        this.membersRegisterServices.steps = "Birthday";
+        if(this.membersRegisterServices.gender != '') {
+          this.membersRegisterServices.steps = "Birthday";
+        }
         break;
 
       case 'Address':
-        this.membersRegisterServices.steps = "Address";
+        if(this.membersRegisterServices.birthday != '') {
+          this.membersRegisterServices.steps = "Address";
+        }
+        break;
+
+      case 'Email':
+        if(this.membersRegisterServices.province.trim() != '' && this.membersRegisterServices.municipality.trim() != '' && this.membersRegisterServices.barangay.trim() != '') { 
+          this.membersRegisterServices.steps = "Email";
+        }
         break;
 
       case 'Working':
-        this.membersRegisterServices.steps = "Working";
+        if(this.membersRegisterServices.email != ''){
+          this.membersRegisterServices.steps = "Working";
+        }
         break;
 
       case 'Cooking':
-        this.membersRegisterServices.steps = "Cooking";
+        if(this.membersRegisterServices.working != '') {
+          this.membersRegisterServices.steps = "Cooking";
+        }
         break;
 
       case 'Overview':
-        this.membersRegisterServices.steps = "Overview";
+        if(this.membersRegisterServices.cooking != '') {
+          this.membersRegisterServices.steps = "Overview";
+        } 
         break;
     }
   }
 
   ngOnInit(): void {
-    // window.onbeforeunload = (e) => {
-    //   e = e || window.event;
-    //   if(e) {
-    //     e.returnValue = 'Sure?'
-    //   }
-    // }
-    // this.membersRegisterServices.steps = "Mobile Number";
+    this. resetMemberForm()
+    window.onbeforeunload = (e) => {
+      e = e || window.event;
+      if(e) {
+        e.returnValue = 'Sure?'
+      }
+    }
+    
+  }
+
+  back() {
+    if(this.membersRegisterServices.buttonName == "CREATE") {
+      this.dialog.open(MembersDialogComponent, {
+        disableClose: true,
+        data: {
+          title: "Confirmation",
+          question: "Changes you made may not be saved",
+          button_name: 'Continue',
+          action: 'return-to-transactions'
+        }
+      })
+    }
+    else {
+      this.router.navigate(['/client/transactions'])
+    }
+  }
+
+  resetMemberForm() {
+    this.membersRegisterServices.mobile_number = '';
+    this.membersRegisterServices.first_name = '';
+    this.membersRegisterServices.last_name = '';
+    this.membersRegisterServices.gender = '';
+    this.membersRegisterServices.birthday = '';
+    this.membersRegisterServices.province = '';
+    this.membersRegisterServices.municipality = '';
+    this.membersRegisterServices.barangay = '';
+    this.membersRegisterServices.email = '';
+    this.membersRegisterServices.working = '';
+    this.membersRegisterServices.cooking = '';
+    this.membersRegisterServices.isMobileNumberExists= true;
+    this.membersRegisterServices.validatedMobileNumber = '';
+    this.membersRegisterServices.buttonName = "CREATE";
+    this.membersRegisterServices.steps = "Mobile Number";
   }
 }
 

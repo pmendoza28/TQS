@@ -1,9 +1,12 @@
 import { Component, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map } from "rxjs/operators";
+import { TextError } from "src/app/interfaces/errors";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { UserAccountsDialogComponent } from "../dialog/user-accounts.dialog.component";
 import { UserAccountsServices } from "../user-accounts.service";
 
@@ -16,10 +19,12 @@ import { UserAccountsServices } from "../user-accounts.service";
 export class UserAccountTableComponent {
 
     constructor(
-        private userAccountsServices: UserAccountsServices,
+        public userAccountsServices: UserAccountsServices,
         private router: Router,
         private route: ActivatedRoute,
         private dialog: MatDialog,
+        private helperServices: HelperServices,
+        private snackbar: MatSnackBar
     ) { }
 
     /** @LifeCycles ============================================================== */
@@ -33,7 +38,6 @@ export class UserAccountTableComponent {
     /** @States ============================================================== */
     title: string = "User-Accounts";
     isTableLoading: boolean = false;
-    lblLoading: "Loading..." | "No Data" | "No User Account Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
     displayedColumns: string[] = [
         'id',
         'first_name',
@@ -52,26 +56,24 @@ export class UserAccountTableComponent {
     isSearched: boolean = false;
     isRateLimitReached = false;
     @ViewChild("userAccountPaginator") userAccountPaginator: MatPaginator
-
+    lblLoading: TextError = "Loading...";
     /** @Methods  ============================================================== */
     populateUserAccounts() {
         this.isTableLoading = true;
         this.dataSource = new MatTableDataSource<IUserAccountTable>()
         this.userAccountsServices.getUserAccountsWithPaginator(this.currentPage, this.userAccountsPerPage).subscribe(res => {
-            this.isTableLoading = false;
-            const { data, total } = res;
-            if (data.length == 0) { this.lblLoading = "No Data"; }
-            this.dataSource.data = data
-            this.totalUserAccounts = total;
-            this.userAccountPaginator.length = total;
-        }, err => {
-            const { message } = err;
-            switch (message) {
-                case "Timeout has occurred":
-                    this.lblLoading = "Server cannot be reach. Please Try Again Later";
-                    this.isTableLoading = false;
+            console.log(res)
+            const isOK = this.helperServices.isOk(res)
+            if(isOK) {
+                const { body: { data, total } } = res;
+                this.isTableLoading = false;
+                if (data.length == 0) { this.lblLoading = "No Data"; }
+                this.dataSource.data = data
+                this.totalUserAccounts = total;
             }
-
+        }, err => {
+            const error = this.helperServices.catchError(err, true, 3000)
+            this.lblLoading = error;
         })
     }
 
@@ -103,10 +105,12 @@ export class UserAccountTableComponent {
                 user
             }
         }).afterClosed().subscribe(dialogRes => {
-            const { id, is_active } = dialogRes;
-            let index = this.dataSource.data.findIndex((user: any) => user.id == id);
-            this.dataSource.data[index].is_active = is_active;
-            this.dataSource.data[index].changed = true;
+            if(dialogRes) {
+                const { id, is_active } = dialogRes;
+                let index = this.dataSource.data.findIndex((user: any) => user.id == id);
+                this.dataSource.data[index].is_active = is_active;
+                this.dataSource.data[index].changed = true;
+            }
         })
     }
 
@@ -141,13 +145,19 @@ export class UserAccountTableComponent {
             }
             this.lblLoading = "Loading...";
             this.userAccountsServices.searchUserAccount(this.searchValue, this.currentPage, this.userAccountsPerPage).subscribe(res => {
-                const { data, total } = res;
-                this.dataSource.data = data;
-                this.userAccountPaginator.length = total;
-
-                this.isSearched = true;
-                this.isTableLoading = false;
-                if (data.length == 0) { this.lblLoading = "No User Account Found" }
+                const response = this.helperServices.isOk(res)
+                if(response) {
+                    const { body: { data, total } } = res;
+                    this.dataSource.data = data;
+                    this.totalUserAccounts = total;
+                    this.isSearched = true;
+                    this.isTableLoading = false;
+                    if (data.length == 0) { this.lblLoading = "No Data Found" }
+                }
+                
+            }, err => {
+                const error = this.helperServices.catchError(err, false, 10000)
+                this.lblLoading = error;
             })
         }
     }

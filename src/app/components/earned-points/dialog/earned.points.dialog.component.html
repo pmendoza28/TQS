@@ -29,7 +29,8 @@
 
                         <ng-container matColumnDef="errors">
                             <th mat-header-cell *matHeaderCellDef>
-                                <button mat-icon-button color="warn" [matTooltip]=fetchErrors() *ngIf="allErrors.length > 0" matTooltipClass="tooltip-red">
+                                <button mat-icon-button color="warn" [matTooltip]=fetchErrors()
+                                    *ngIf="allErrors.length > 0" matTooltipClass="tooltip-red">
                                     <mat-icon>error</mat-icon>
                                 </button>
                             </th>
@@ -75,12 +76,9 @@
                         </ng-container>
 
                         <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef>  </th>
+                            <th mat-header-cell *matHeaderCellDef> </th>
                             <td mat-cell *matCellDef="let earnedPoints">
-                                <button *ngIf="isValidated"
-                                    mat-icon-button 
-                                    (click)="remove(earnedPoints.row)"
-                                    >
+                                <button *ngIf="isValidated" mat-icon-button (click)="remove(earnedPoints.row)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </td>
@@ -91,22 +89,14 @@
                     </table>
                 </div>
                 <div class="actions">
-                    <button 
-                        mat-raised-button 
-                        color="accent"
-                        [disabled]="isValidatingEarnedPoints"
-                        [class.spinner]="isValidatingEarnedPoints"
-                        (click)="validateEarnedPoints()"
-                        >
+                    <button mat-raised-button color="accent" [disabled]="isValidatingEarnedPoints"
+                        [class.spinner]="isValidatingEarnedPoints" (click)="validateEarnedPoints()">
                         {{btnValidate}}
                     </button>
-                    <button mat-raised-button (click)="removeAllImportedEarnedPoinits()" *ngIf="allErrors.length > 0" color="warn">Remove All Imported Earned Points</button>
-                    <button 
-                        *ngIf="readyToUpload" 
-                        mat-raised-button 
-                        class="btn-primary"
-                        (click)="upload()"
-                        >Upload Earned Points</button>
+                    <button mat-raised-button (click)="removeAllImportedEarnedPoinits()" *ngIf="allErrors.length > 0"
+                        color="warn">Remove All Imported Earned Points</button>
+                    <button *ngIf="readyToUpload" mat-raised-button class="btn-primary" (click)="upload()">Upload Earned
+                        Points</button>
                     <button mat-raised-button mat-dialog-close>Cancel</button>
                 </div>
             </div>
@@ -123,13 +113,8 @@
         {{data.question}}
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-        <button 
-            mat-raised-button 
-            class="btn-primary" 
-            [disabled]="isUploadingEarnedPoints" 
-            [class.spinner]="isUploadingEarnedPoints" 
-            (click)="uploadEarnedPoints()"
-            >
+        <button mat-raised-button class="btn-primary" [disabled]="isUploadingEarnedPoints"
+            [class.spinner]="isUploadingEarnedPoints" (click)="uploadEarnedPoints()">
             {{btnUpload}}
         </button>
         <button mat-raised-button mat-dialog-close>Cancel</button>
@@ -142,15 +127,22 @@
         {{data.question}}
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-        <button 
-            mat-raised-button 
-            class="btn-primary" 
-            [class.spinner]="addingToClearedPoints"
-            [disabled]="addingToClearedPoints"
-            (click)="addToClearedPoints()"
-            >
+        <button mat-raised-button class="btn-primary" [class.spinner]="addingToClearedPoints"
+            [disabled]="addingToClearedPoints" (click)="addToClearedPoints()">
             {{btnAddToClearedPoints}}
         </button>
         <button mat-raised-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="data.action == 'earn-points'" class="dialog-container-size">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <mat-dialog-content class="mat-typography">
+        {{data.question}}
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button (click)="earn()" mat-raised-button class="btn-primary" [disabled]="isEarning"
+            [class.spinner]="isEarning">{{data.button_name}}</button>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
     </mat-dialog-actions>
 </div>

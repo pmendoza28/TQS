@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import exportFromJSON from 'export-from-json'
 const CryptoJS = require("crypto-js");
 import { Workbook } from 'exceljs';
+import { TextError } from "src/app/interfaces/errors";
+import { MatSnackBar } from "@angular/material/snack-bar";
 const fs = require("file-saver")
 
 @Injectable({
@@ -9,6 +11,10 @@ const fs = require("file-saver")
 })
 
 export class HelperServices {
+
+  constructor(
+    private snackbar: MatSnackBar
+  ) {}
   hasInternet: boolean;
   today = new Date()
 
@@ -162,5 +168,40 @@ export class HelperServices {
     const bytes  = CryptoJS.AES.decrypt(encryptedDb, 'secret key 123');
     const originalDb = bytes.toString(CryptoJS.enc.Utf8);
     console.log(originalDb);
+  }
+
+  isOk(httpResponse: any) {
+    console.log(`httpResponse`,httpResponse)
+    if(httpResponse.status != 200) {
+      return false
+    }
+    return true;
+
+  }
+
+  catchError(err: any, hasDuration: boolean, duration?: number) {
+    console.log(`err`,err)
+    let error: TextError = ""
+    if(err.status == 500) {
+      error = "Something went wrong";
+    }
+    if(err.status == 400) {
+      if(err.error.message == "User Not Found!!") {
+        error = "No Data Found"
+      }
+    }
+    if(err.name == "TimeoutError") {
+      error = "Server cannot be reach. Please Try Again Later";
+    }
+    if(err.statusText == "Unknown Error") {
+      error = "Something went wrong";
+    }
+    if(hasDuration) {
+      this.snackbar.open(error, "", { duration })
+    }
+    if(!hasDuration) {
+      this.snackbar.open(error, "")
+    }
+    return error;
   }
 }

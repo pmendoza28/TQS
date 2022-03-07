@@ -8,6 +8,7 @@ import { MembersServices } from "../members.service";
 import * as XLSX from 'xlsx';
 import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
+import { MembersRegisterServices } from "../register/members.register.service";
 
 @Component({
     selector: 'app-members-dialog',
@@ -25,7 +26,8 @@ export class MembersDialogComponent {
         private snackBar: MatSnackBar,
         private fb: FormBuilder,
         private helpersServices: HelperServices,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private membersRegisterService: MembersRegisterServices
     ) { }
 
     /** @States ========================================================== */
@@ -541,6 +543,23 @@ export class MembersDialogComponent {
         })
 
     }
+
+    isCreatedMemberInStore: boolean = false;
+    createMemberInStore() {
+        this.isCreatedMemberInStore = true
+        this.membersRegisterService.createMember(this.data.memberForm).subscribe(res => {
+            this.isCreatedMemberInStore = false;
+            this.dialogRef.close({res, isCreated: true})
+        }, err => {
+            this.dialogRef.close(err)
+        })
+    }
+
+    back() {
+        this.router.navigate(['/client/transactions'])
+        this.dialogRef.close()
+    }
+    
 }
 
 interface IMemberDataSource {

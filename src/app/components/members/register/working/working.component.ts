@@ -17,6 +17,13 @@ export class WorkingComponent {
     }
 
     back() {
-        this.membersRegisterServices.steps = "Address"
+        this.membersRegisterServices.steps = "Email"
+    }
+
+    validateFields() {
+        if(this.membersRegisterServices.working == '') {
+            return true;
+        }
+        return false;
     }
 }

@@ -66,30 +66,30 @@ export class InstallationComponent {
 
     validateToken() {
         this.isValidatingToken = true;
-       setTimeout(() => {
-        this.installationServices.validateToken(this.storeActivateForm.value).subscribe(res => {
-            const { message, valid } = res;
-            this.isValidatingToken = false;
-            this.tokenValidationMessage = message;
-            this.tokenValid = valid;
-            this.snackbar.open(message, "", { duration: 3000 })
-
-        }, err => {
-            console.log(err)
-            const { error: { message, valid } } = err;
-            this.isValidatingToken = false;
-            this.tokenValidationMessage = message;
-            this.tokenValid = valid;
-            if(message) {
+        setTimeout(() => {
+            this.installationServices.validateToken(this.storeActivateForm.value).subscribe(res => {
+                const { message, valid } = res;
+                this.isValidatingToken = false;
+                this.tokenValidationMessage = message;
+                this.tokenValid = valid;
                 this.snackbar.open(message, "", { duration: 3000 })
-            }
-            else {
-                this.snackbar.open("Internet Connection Interrupt", "", { duration: 3000 })
-                this.populateStores()
-            }
-            
-        })
-       }, 0);
+
+            }, err => {
+                console.log(err)
+                const { error: { message, valid } } = err;
+                this.isValidatingToken = false;
+                this.tokenValidationMessage = message;
+                this.tokenValid = valid;
+                if (message) {
+                    this.snackbar.open(message, "", { duration: 3000 })
+                }
+                else {
+                    this.snackbar.open("Internet Connection Interrupt", "", { duration: 3000 })
+                    this.populateStores()
+                }
+
+            })
+        }, 0);
     }
     hasInternet: boolean = false;
     uploadedPercentage: number = 0;
@@ -109,7 +109,7 @@ export class InstallationComponent {
     UserDataSubject = new Subject();
     StoreDataSubject = new Subject();
     MemberDataSubject = new Subject();
-    
+
     uploadDatabase() {
         this.uploadingDb = true;
         this.uploadingDb = true;
@@ -121,16 +121,17 @@ export class InstallationComponent {
             const resultObj = JSON.parse(result)
             const data = CryptoJS.AES.decrypt(resultObj[0], this.credServices.secretKey);
             const decryptedDb = JSON.parse(data.toString(CryptoJS.enc.Utf8))
+            console.log(decryptedDb)
             const { memberdata, storedata, userdata, settingdata } = decryptedDb;
-            if(userdata) this.UserDataLength = userdata.length;
-            if(storedata) this.StoreDataLength = storedata.length;
-            if(memberdata) this.MemberDataLength = memberdata.length
-            
-            this.totalRowCount = this.UserDataLength + this.StoreDataLength  + this.MemberDataLength
-            
+            if (userdata) this.UserDataLength = userdata.length;
+            if (storedata) this.StoreDataLength = storedata.length;
+            if (memberdata) this.MemberDataLength = memberdata.length
+
+            this.totalRowCount = this.UserDataLength + this.StoreDataLength + this.MemberDataLength
+
             if (settingdata) this.totalRowCount++;
 
-            if(this.UserDataLength > 0) {
+            if (this.UserDataLength > 0) {
                 this.moduleUploading = "User";
                 this.currentUploaded = 0
                 this.totalCurrentUploading = this.UserDataLength;
@@ -146,7 +147,7 @@ export class InstallationComponent {
                 this.UserDataSubject.complete()
             }
 
-            if(this.StoreDataLength > 0) {
+            if (this.StoreDataLength > 0) {
                 this.UserDataSubject.subscribe({
                     complete: () => {
                         this.moduleUploading = "Store";
@@ -167,7 +168,7 @@ export class InstallationComponent {
                 this.StoreDataSubject.complete()
             }
 
-            if(this.MemberDataLength > 0) {
+            if (this.MemberDataLength > 0) {
                 this.StoreDataSubject.subscribe({
                     complete: () => {
                         this.moduleUploading = "Member";
@@ -187,14 +188,14 @@ export class InstallationComponent {
                 this.MemberDataSubject.complete()
             }
 
-            if(settingdata) {
+            if (settingdata) {
                 this.MemberDataSubject.subscribe({
                     complete: () => {
                         this.moduleUploading = "Settings";
                         this.currentUploaded = 0;
                         this.totalCurrentUploading = 1
                         setTimeout(() => {
-                            this.uploadSettings()
+                            this.uploadSettings(settingdata)
                         }, 500);
                     }
                 })
@@ -202,7 +203,7 @@ export class InstallationComponent {
         }
 
     }
-    
+
 
     uploadUser(user: any) {
         this.installationServices.createUser(user).subscribe(() => {
@@ -216,7 +217,6 @@ export class InstallationComponent {
                 }, 500);
             }
         }, (err) => {
-            console.log(err)
             const { error, status, statusText } = err;
             this.uploadErrors.push({ error, statusCode: status, statusText, document: { type: "User", object: user } })
             this.uploadedPercentage = this.totalUploadedRows / this.totalRowCount * 100;
@@ -283,7 +283,7 @@ export class InstallationComponent {
         })
     }
 
-    uploadSettings() {
+    uploadSettings(settingdata: any) {
         const activateStoreBody: IActivateStoreBody = {
             store_mysql_id: this.storeActivateForm.value.store_id,
             token: this.storeActivateForm.value.token,
@@ -291,12 +291,16 @@ export class InstallationComponent {
         }
         this.totalUploadedRows++;
         this.installationServices.activateStore(activateStoreBody).subscribe(() => {
-            this.uploadedPercentage = this.totalUploadedRows / this.totalRowCount * 100;
-            this.currentUploaded = 1;
+            this.installationServices.createEarningPointsPercentage(settingdata).subscribe(() => {
+                this.uploadedPercentage = this.totalUploadedRows / this.totalRowCount * 100;
+                this.currentUploaded = 1;
+            })
         }, err => {
-            this.uploadedPercentage = this.totalUploadedRows / this.totalRowCount * 100;
-            this.currentUploaded = 1;
-        })       
+            this.installationServices.createEarningPointsPercentage(settingdata).subscribe(() => {
+                this.uploadedPercentage = this.totalUploadedRows / this.totalRowCount * 100;
+                this.currentUploaded = 1;
+            })
+        })
     }
 
     redirecting: number = 10;
