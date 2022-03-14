@@ -16,4 +16,8 @@ export class PortalServices {
     checkIfStoreIsActivated(): Observable<any> {
         return this.http.get(`${this.credServices.clientPort}/store-activate/check-if-activated`)
     }
+
+    activateStore(token: string): Observable<any> {
+        return this.http.put(`${this.credServices.port}/activate-store`, {token}, { observe: 'response' })
+    }
 }

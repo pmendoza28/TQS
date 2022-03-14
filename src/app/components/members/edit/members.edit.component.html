@@ -72,6 +72,20 @@
                     </mat-form-field>
                 </div>
                 <div class="contact">
+                    <mat-form-field class="upper-case" color="accent">
+                        <mat-label>Registered Store</mat-label>
+                        <mat-select formControlName="store_id">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="StoreFilterCtrl"
+                                    placeholderLabel="{{storesPlaceHolder}}" noEntriesFoundLabel="'no matching Store'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngFor="let item of filteredStores | async" [value]="item.id">
+                                {{item.name | uppercase}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    
                     <mat-form-field appearance="legacy" color="accent">
                         <mat-label>Email</mat-label>
                         <input matInput autocomplete="off" formControlName="email">

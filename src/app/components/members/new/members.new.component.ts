@@ -1,10 +1,13 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import * as moment from "moment";
-
+import { ReplaySubject, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { MembersDialogComponent } from "../dialog/members.dialog.component";
+import { MembersServices, storesPlaceHolder } from "../members.service";
 
 @Component({
     selector: 'app-members-new',
@@ -17,7 +20,9 @@ export class MembersNewComponent {
     constructor(
         private fb: FormBuilder,
         private dialog: MatDialog,
-        private router: Router
+        private router: Router,
+        private memberServices: MembersServices,
+        private helperServices: HelperServices
     ) {}
 
     /** @States ===================================================== */
@@ -30,9 +35,19 @@ export class MembersNewComponent {
         barangay: ["", Validators.required],
         municipality: ["", Validators.required],
         province: ["", Validators.required],
+        store_id: ["", Validators.required],
         email: ["", [Validators.required, Validators.email]],
         mobile_number: ["", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     })
+
+    ngOnInit(): void {
+        this.populateStores()
+        this.subscribeDropDown()
+    }
+    ngOnDestroy() {
+        this._onDestroy.next();
+        this._onDestroy.complete();
+    }
 
     /** @Methods ===================================================== */
     create() {
@@ -69,5 +84,50 @@ export class MembersNewComponent {
         return this.memberForm.controls[property]
     }
 
+    public StoreFilterCtrl: FormControl = new FormControl();
+    public filteredStores: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+    protected _onDestroy = new Subject<void>();
+    storesPlaceHolder: storesPlaceHolder = "Loading...";
+    stores: any = []
+
+    protected filterStores() {
+        if (!this.stores) {
+            return;
+        }
+
+        let search = this.StoreFilterCtrl.value;
+        if (!search) {
+            this.filteredStores.next(this.stores.slice());
+            return;
+        } else {
+            search = search.toLowerCase();
+        }
+
+        this.filteredStores.next(
+            this.stores.filter((ac: any) => ac.name.toLowerCase().indexOf(search) > -1)
+        );
+    }
     
+    populateStores() {
+        this.memberServices.populateStores().subscribe(res => {
+            const { status, body } = res;
+            if(status == 200) {
+                this.stores = body
+                this.filteredStores.next(this.stores.slice());
+                if(body.length == 0) this.storesPlaceHolder = "No Store Found"
+                if(body.length > 0) this.storesPlaceHolder = "Find Store..."
+            }
+        }, err => {
+            this.helperServices.catchError(err, true, 3000)
+        })
+    }
+
+    subscribeDropDown() {
+        this.StoreFilterCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+            this.filterStores();
+        });
+    }
 }
+

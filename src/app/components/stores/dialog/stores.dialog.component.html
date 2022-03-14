@@ -88,3 +88,39 @@
       <button mat-raised-button mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
   </div>
+
+  <div *ngIf="data.action == 'GenerateNewToken'" class="dialog-container-size">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <mat-dialog-content class="mat-typography">
+      {{data.question}}
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button 
+      
+        mat-raised-button 
+        class="btn-primary"
+        [disabled]="isGenerating"
+        [class.spinner]="isGenerating"
+        (click)="generateToken()"
+        >{{buttonGenerate}}</button>
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+  </div>
+
+  <div *ngIf="data.action == 'RemoveToken'" class="dialog-container-size">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <mat-dialog-content class="mat-typography">
+      {{data.question}}
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button 
+      
+        mat-raised-button 
+        class="btn-primary"
+        [disabled]="isRemoving"
+        [class.spinner]="isRemoving"
+        (click)="removeToken()"
+        >{{buttonRemoveToken}}</button>
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+  </div>

@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { Title } from "@angular/platform-browser";
 
 @Injectable({
@@ -9,9 +10,46 @@ export class SidebarServices {
     constructor(
         private titleServices: Title
     ) { }
+    dataSource = new MatTreeNestedDataSource<any>();
+
+    Modules: any[] = [
+        {
+            name: 'Master list',
+            childrens: [
+                { name: 'User Accounts' },
+                { name: 'Store Codes' },
+                { name: 'Areas' },
+                { name: 'Clusters' },
+                { name: 'Business-Model' },
+                { name: 'Stores' },
+                { name: 'Members' }
+            ],
+        },
+        {
+            name: 'Transactions',
+            childrens: [
+                { name: 'Earned Points' },
+                { name: 'Redeemed Points' },
+                { name: 'Cleared Points' }
+            ],
+        },
+        {
+            name: 'Generate File / Update File',
+            childrens: [
+                { name: 'Generate File' },
+                { name: 'Update File' }
+            ],
+        },
+    ];
+
+
     menu: Imenu = {
         userAccounts: false,
         stores: false,
+        store_codes: false,
+        areas: false,
+        clusters: false,
+        business_model: false,
         members: false,
         earned_points: false,
         redeemed_points: false,
@@ -22,12 +60,17 @@ export class SidebarServices {
     }
 
     userAccountSelected(routeModule: string) {
-        this.titleServices.setTitle(`TQS | ${routeModule}`)
+
         switch (routeModule) {
             case "user-accounts":
+                this.titleServices.setTitle(`TQS | User Accounts`)
                 this.menu = {
                     userAccounts: true,
                     stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
@@ -38,9 +81,14 @@ export class SidebarServices {
                 }
                 break;
             case "stores":
+                this.titleServices.setTitle(`TQS | Stores`)
                 this.menu = {
                     userAccounts: false,
                     stores: true,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
@@ -50,10 +98,93 @@ export class SidebarServices {
                     reports: false
                 }
                 break;
-            case "members":
+
+            case "store-codes":
+                this.titleServices.setTitle(`TQS | Store Codes`)
                 this.menu = {
                     userAccounts: false,
                     stores: false,
+                    store_codes: true,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
+                    members: false,
+                    earned_points: false,
+                    redeemed_points: false,
+                    cleared_points: false,
+                    transactions: false,
+                    generateFile: false,
+                    reports: false
+                }
+                break;
+
+
+            case "areas":
+                this.titleServices.setTitle(`TQS | Areas`)
+                this.menu = {
+                    userAccounts: false,
+                    stores: false,
+                    store_codes: false,
+                    areas: true,
+                    clusters: false,
+                    business_model: false,
+                    members: false,
+                    earned_points: false,
+                    redeemed_points: false,
+                    cleared_points: false,
+                    transactions: false,
+                    generateFile: false,
+                    reports: false
+                }
+                break;
+
+            case "clusters":
+                this.titleServices.setTitle(`TQS | Clusters`)
+                this.menu = {
+                    userAccounts: false,
+                    stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: true,
+                    business_model: false,
+                    members: false,
+                    earned_points: false,
+                    redeemed_points: false,
+                    cleared_points: false,
+                    transactions: false,
+                    generateFile: false,
+                    reports: false
+                }
+                break;
+
+            case "business-model":
+                this.titleServices.setTitle(`TQS | Business Model`)
+                this.menu = {
+                    userAccounts: false,
+                    stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: true,
+                    members: false,
+                    earned_points: false,
+                    redeemed_points: false,
+                    cleared_points: false,
+                    transactions: false,
+                    generateFile: false,
+                    reports: false
+                }
+                break;
+
+            case "members":
+                this.titleServices.setTitle(`TQS | Members`)
+                this.menu = {
+                    userAccounts: false,
+                    stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: true,
                     earned_points: false,
                     redeemed_points: false,
@@ -64,9 +195,14 @@ export class SidebarServices {
                 }
                 break;
             case "earned-points":
+                this.titleServices.setTitle(`TQS | Earned Points`)
                 this.menu = {
                     userAccounts: false,
                     stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: true,
                     redeemed_points: false,
@@ -77,9 +213,14 @@ export class SidebarServices {
                 }
                 break;
             case "redeemed-points":
+                this.titleServices.setTitle(`TQS | Redeemed Points`)
                 this.menu = {
                     userAccounts: false,
                     stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: false,
                     redeemed_points: true,
@@ -91,9 +232,14 @@ export class SidebarServices {
                 break;
 
             case "cleared-points":
+                this.titleServices.setTitle(`TQS | Cleared Points`)
                 this.menu = {
                     userAccounts: false,
                     stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
@@ -107,6 +253,10 @@ export class SidebarServices {
                 this.menu = {
                     userAccounts: false,
                     stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
@@ -120,6 +270,10 @@ export class SidebarServices {
                 this.menu = {
                     userAccounts: false,
                     stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
@@ -133,6 +287,10 @@ export class SidebarServices {
                 this.menu = {
                     userAccounts: false,
                     stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
@@ -146,6 +304,10 @@ export class SidebarServices {
                 this.menu = {
                     userAccounts: false,
                     stores: false,
+                    store_codes: false,
+                    areas: false,
+                    clusters: false,
+                    business_model: false,
                     members: false,
                     earned_points: false,
                     redeemed_points: false,
@@ -161,6 +323,10 @@ export class SidebarServices {
 interface Imenu {
     userAccounts: boolean;
     stores: boolean;
+    store_codes: boolean;
+    areas: boolean;
+    clusters: boolean;
+    business_model: boolean;
     members: boolean;
     earned_points: boolean;
     redeemed_points: boolean;

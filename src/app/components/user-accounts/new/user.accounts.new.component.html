@@ -10,7 +10,7 @@
                         matInput 
                         autocomplete="off"
                         formControlName="first_name"
-                        class="capitalize"
+                        class="upper-case"
                         >
                         <mat-error *ngIf="inputControl('first_name').errors?.['required']">
                             First Name is required
@@ -24,7 +24,7 @@
                         matInput 
                         autocomplete="off"
                         formControlName="last_name"
-                        class="capitalize"
+                        class="upper-case"
                         >
                         <mat-error *ngIf="inputControl('last_name').errors?.['required']">
                             Last Name is required
@@ -39,6 +39,7 @@
                         matInput 
                         autocomplete="off"
                         formControlName="username"
+                        class="upper-case"
                         >
                         <mat-error *ngIf="inputControl('username').errors?.['required']">
                             User Name is required
@@ -63,7 +64,7 @@
                 <label for="">Role</label>
                 <mat-radio-group formControlName="role" (change)="resetPermissions()">
                     <mat-radio-button value="admin" [checked]=true>Admin</mat-radio-button>
-                    <mat-radio-button value="cashier">Cashier</mat-radio-button>
+                    <mat-radio-button value="cashier">Store</mat-radio-button>
                 </mat-radio-group>
                 <label *ngIf="getRole() == 'admin' || getRole() == 'cashier'"  for="">Permissions</label>
                 

@@ -14,30 +14,33 @@ export class MembersServices {
         private credServices: CredServices
     ) { }
 
-    getMembersWithPaginator(currentPage: number, memberPerPage: number): Observable<any> {
-        return this.http.get(`${this.credServices.port}/admin/members/${memberPerPage}/?page=${currentPage}`).pipe(
+    getMembersWithPaginator(searchvalue: string, currentPage: number, memberPerPage: number): Observable<any> {
+        return this.http.post(`${this.credServices.port}/admin/search-member/${memberPerPage}?page=${currentPage}`, { searchvalue }, { observe: 'response'}).pipe(
             timeout(10000)
         )
     }
 
-    searchMember(searchvalue: string, currentPage: number, memberPerPage: number): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/search-member/${memberPerPage}?page=${currentPage}`, { searchvalue })
-    }
 
     createMember(memberForm: any): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/create-member`, memberForm)
+        return this.http.post(`${this.credServices.port}/admin/create-member`, memberForm, { observe: 'response'}).pipe(
+            timeout(10000)
+        )
     }
 
     getMemberbyID(memberId: number): Observable<any> {
-        return this.http.get(`${this.credServices.port}/admin/member/getmemberbyid/${memberId}`)
+        return this.http.get(`${this.credServices.port}/admin/member/getmemberbyid/${memberId}`, { observe: 'response'})
     }
 
     updateMemberbyId(memberId: number, memberForm: any): Observable<any> {
-        return this.http.put(`${this.credServices.port}/admin/update-member/${memberId}`, memberForm)
+        return this.http.put(`${this.credServices.port}/admin/update-member/${memberId}`, memberForm, { observe: 'response'}).pipe(
+            timeout(10000)
+        )
     }
 
     updateStatusById(memberId: number, is_active: boolean): Observable<any> {
-        return this.http.put(`${this.credServices.port}/admin/update-member-status/${memberId}`, { is_active })
+        return this.http.put(`${this.credServices.port}/admin/update-member-status/${memberId}`, { is_active }, { observe: 'response'}).pipe(
+            timeout(10000)
+        )
     }
 
     importMembers(importMemberForm: any): Observable<any> {
@@ -47,4 +50,12 @@ export class MembersServices {
     validateMembers(importMemberForm: any): Observable<any> {
         return this.http.post(`${this.credServices.port}/admin/member/check-members`, importMemberForm)
     }
+
+    populateStores() : Observable<any> {
+        return this.http.get(`${this.credServices.port}/admin/get_all_stores`, { observe: 'response'}).pipe(
+            timeout(10000)
+        )
+    }
 }
+
+export type storesPlaceHolder = "Loading..." | "Find Store..." | "No Store Found"

@@ -70,12 +70,17 @@ export class MembersDialogComponent {
         this.membersServices.createMember(memberForm).subscribe(res => {
             this.isButtonLoading = false;
             this.data.button_name = "Create";
-            const { data, message } = res;
-            this.snackBar.open(message, "", { duration: 3000 })
-            if (data) {
+            const { status, body: { data, message } } = res
+            if(status == 201) {
+                this.snackBar.open(message, "", { duration: 3000 })
                 this.dialogRef.close();
                 this.router.navigate(["/admin/members"])
             }
+        }, err => {
+            this.isButtonLoading = false;
+            this.data.button_name = "Create";
+            this.helpersServices.catchError(err, true, 3000, err.error.errors.mobile_number[0])
+            console.log(err)
         })
     }
 
@@ -84,12 +89,18 @@ export class MembersDialogComponent {
         this.data.button_name = "Updating";
         const { memberId, memberForm } = this.data;
         this.membersServices.updateMemberbyId(memberId, memberForm).subscribe(res => {
-            const { isUpdated, message } = res;
-            this.snackBar.open(message, "", { duration: 3000 })
-            if (isUpdated) {
+            this.isButtonLoading = false;
+            this.data.button_name = "Update";
+            const { status, body: { message } } = res;
+            if (status == 200) {
+                this.snackBar.open(message, "", { duration: 3000 })
                 this.dialogRef.close()
                 this.router.navigate(["/admin/members"])
             }
+        }, err => {
+            this.isButtonLoading = false;
+            this.data.button_name = "Update";
+            this.helpersServices.catchError(err, true, 3000)
         })
     }
 
@@ -100,15 +111,20 @@ export class MembersDialogComponent {
             const { member: { id } } = this.data;
             if (this.data.button_name == "Deactivating") {
                 this.membersServices.updateStatusById(id, false).subscribe(res => {
+                    this.isButtonLoading = false;
                     this.data.button_name = "Deactivate";
-                    const { isDeactivated, message } = res;
-                    this.snackBar.open(message, "", { duration: 3000 })
-                    if (isDeactivated) {
+                    const { status, body: { message } } = res;
+                    if(status == 200) {
+                        this.snackBar.open(message, "", { duration: 3000 })    
                         this.dialogRef.close({
                             memberId: id,
                             status: "Inactive",
                         })
                     }
+                }, err => {
+                    this.data.button_name = "Deactivate";
+                    this.isButtonLoading = false;
+                    this.helpersServices.catchError(err, true , 3000)
                 })
             }
         }
@@ -117,14 +133,18 @@ export class MembersDialogComponent {
             const { member: { id } } = this.data;
             this.membersServices.updateStatusById(id, true).subscribe(res => {
                 this.data.button_name = "Activate";
-                const { isActivated, message } = res;
-                this.snackBar.open(message, "", { duration: 3000 })
-                if (isActivated) {
+                const { status, body: { message } } = res;
+                if(status == 200) {
+                    this.snackBar.open(message, "", { duration: 3000 })
                     this.dialogRef.close({
                         memberId: id,
                         status: "Active",
                     })
                 }
+            },err => {
+                this.data.button_name = "Activate";
+                this.isButtonLoading = false;
+                this.helpersServices.catchError(err, true, 3000)
             })
         }
     }

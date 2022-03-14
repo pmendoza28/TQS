@@ -57,6 +57,7 @@ export class UserAccountsDialogComponent {
                 if (this.credServices.getCredentials().user.id == userId) {
                     this.localServices.setJsonValue("user", { id: userId, ...updatedUserAccounts })
                 }
+                this.helperServices.refreshAccessModules()
                 this.isButtonLoading = false;
                 this.router.navigate(["/admin/user-accounts"])
                 this.dialogRef.close()

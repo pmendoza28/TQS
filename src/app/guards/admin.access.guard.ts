@@ -17,8 +17,17 @@ export class AdminAccessGuard implements CanActivate {
         const { user: { access_permission } } = this.credServices.getCredentials();
         const { url } = state
         const routeModule = url.split("/")[2];
-        
+        console.log(`access_permission`, access_permission)
         let hasAccess = access_permission.some((access: string) => access == routeModule)
+        
+        let hasStore = access_permission.some((access: string) => access == "stores")
+        if(hasStore) {
+            if(routeModule == "store-codes") return true
+            if(routeModule == "areas") return true
+            if(routeModule == "regions") return true
+            if(routeModule == "clusters") return true
+            if(routeModule == "business-model") return true
+        }
         if(!hasAccess) {
             this.router.navigate(["/admin/unauthorized"])
         }

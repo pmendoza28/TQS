@@ -1,10 +1,13 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as moment from "moment";
+import { ReplaySubject, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { MembersDialogComponent } from "../dialog/members.dialog.component";
-import { MembersServices } from "../members.service";
+import { MembersServices, storesPlaceHolder } from "../members.service";
 
 @Component({
     selector: 'app-members-edit',
@@ -19,13 +22,16 @@ export class MembersEditComponent {
         private router: Router,
         private membersServices: MembersServices,
         private route: ActivatedRoute,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private helperServices: HelperServices
     ) {}
 
     /** @LifeCycles ======================================================= */
     ngOnInit(): void {
         this.populateMemberById()
         this.checkFormValueChanges()
+        this.populateStores()
+        this.subscribeDropDown()
     }
 
     /** @States =========================================================== */
@@ -42,6 +48,7 @@ export class MembersEditComponent {
         barangay: ["", Validators.required],
         municipality: ["", Validators.required],
         province: ["", Validators.required],
+        store_id: ["", Validators.required],
         email: ["", [Validators.required, Validators.email]],
         mobile_number: ["", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     })
@@ -50,10 +57,11 @@ export class MembersEditComponent {
     populateMemberById() {
         this.isGettingStoreById = true;
         this.membersServices.getMemberbyID(this.memberIdParams).subscribe(res => {
+            console.log(res)
             this.isGettingStoreById = false;
-            const { isMemberExist, data: { member } } = res;
-            const { first_name, last_name, gender, birthday, barangay, municipality, province, email, mobile_number } = member;
-            if(isMemberExist) {
+            const { status, body: { data: { member }, message } } = res;
+            if(status == 200) {
+                const { first_name, last_name, gender, birthday, barangay, municipality, province, store_id, store_registered, email, mobile_number } = member;
                 this.memberClone = { 
                     first_name, 
                     last_name, 
@@ -62,6 +70,7 @@ export class MembersEditComponent {
                     barangay, 
                     municipality, 
                     province, 
+                    store_id,
                     email, 
                     mobile_number: mobile_number
                 };
@@ -73,10 +82,14 @@ export class MembersEditComponent {
                     barangay, 
                     municipality, 
                     province, 
+                    store_id,
                     email, 
                     mobile_number: mobile_number
                 })
             }
+        }, err => {
+            const error = this.helperServices.catchError(err, true, 3000)
+            
         })
     }
 
@@ -143,6 +156,50 @@ export class MembersEditComponent {
         else {
             this.router.navigate(["/admin/members"])
         }
+    }
+
+    populateStores() {
+        this.membersServices.populateStores().subscribe(res => {
+            const { status, body } = res;
+            if(status == 200) {
+                this.stores = body
+                this.filteredStores.next(this.stores.slice());
+                if(body.length == 0) this.storesPlaceHolder = "No Store Found"
+                if(body.length > 0) this.storesPlaceHolder = "Find Store..."
+            }
+        }, err => {
+            this.helperServices.catchError(err, true, 3000)
+        })
+    }
+
+    public StoreFilterCtrl: FormControl = new FormControl();
+    public filteredStores: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+    protected _onDestroy = new Subject<void>();
+    storesPlaceHolder: storesPlaceHolder = "Loading...";
+    stores: any = []
+    protected filterStores() {
+        if (!this.stores) {
+            return;
+        }
+
+        let search = this.StoreFilterCtrl.value;
+        if (!search) {
+            this.filteredStores.next(this.stores.slice());
+            return;
+        } else {
+            search = search.toLowerCase();
+        }
+
+        this.filteredStores.next(
+            this.stores.filter((ac: any) => ac.name.toLowerCase().indexOf(search) > -1)
+        );
+    }
+    subscribeDropDown() {
+        this.StoreFilterCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+            this.filterStores();
+        });
     }
     
 }

@@ -2,6 +2,7 @@ import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { StoresServices } from "../stores.service";
 
 @Component({
@@ -17,7 +18,8 @@ export class StoresDialogComponent {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private storesServices: StoresServices,
         private snackBar: MatSnackBar,
-        private router: Router
+        private router: Router,
+        private helperServices: HelperServices
     ) { }
 
     /** @States ====================================================== */
@@ -28,16 +30,19 @@ export class StoresDialogComponent {
         const { storeForm } = this.data;
         this.isButtonLoading = true;
         this.data.button_name = "Creating"
-        console.log(storeForm);
         this.storesServices.createStore(storeForm).subscribe(res => {
             this.isButtonLoading = false;
-            const { isCreated, message } = res;
-            this.snackBar.open(message, "", { duration: 3000 })
             this.data.button_name = "Create";
-            if(isCreated) {
+            const { status, body: { message } } = res;
+            if(status == 201) {
+                this.snackBar.open(message, "", { duration: 3000 })
                 this.router.navigate(["/admin/stores"])
                 this.dialogRef.close()
             }
+        }, err => {
+            this.isButtonLoading = false;
+            this.data.button_name = "Create"
+            this.helperServices.catchError(err, true, 3000, "Store Code is already exists")
         })
     }
 
@@ -64,15 +69,18 @@ export class StoresDialogComponent {
             const { store: { id } } = this.data;
             if(this.data.button_name == "Deactivating") {
                 this.storesServices.updateStoreStatus(id, false).subscribe(res => {
-                    this.data.button_name = "Deactivate";
-                    const { isDeactivated, message } = res;
-                    this.snackBar.open(message, "", { duration: 3000 })
-                    if(isDeactivated) {
+                    console.log(res)
+                    const { status, body: { message } } = res;
+                    if(status == 200) {
+                        this.data.button_name = "Deactivate";
+                        this.snackBar.open(message, "", { duration: 3000 })
                         this.dialogRef.close({
-                            storeId : id,
-                            status: "Inactive",
+                            storeId: id,
+                            status: 'Inactive'
                         })
                     }
+                }, err => {
+                    this.helperServices.catchError(err, true, 3000)
                 })
             }
         }
@@ -80,15 +88,17 @@ export class StoresDialogComponent {
             this.data.button_name = "Activating";
             const { store: { id } } = this.data;
             this.storesServices.updateStoreStatus(id, true).subscribe(res => {
-                this.data.button_name = "Activate";
-                const { isActivated, message } = res;
-                this.snackBar.open(message, "", { duration: 3000 })
-                if(isActivated) {
+                const  { status, body: { message } } = res;
+                if(status == 200) {
+                    this.data.button_name = "Activate";
+                    this.snackBar.open(message, "", { duration: 3000 })
                     this.dialogRef.close({
                         storeId: id,
                         status: "Active",
                     })
                 }
+            }, err => {
+                this.helperServices.catchError(err, true, 3000)
             })
         }
     }
@@ -98,4 +108,44 @@ export class StoresDialogComponent {
         this.dialogRef.close()
     }
 
+    buttonGenerate: "Generate" | "Generating..." = "Generate";
+    isGenerating: boolean = false;
+    generateToken() {
+        this.isGenerating = true;
+        this.storesServices.generateNewToken(this.data.store_id).subscribe(res => {
+            this.isGenerating = false;
+            const { status, body: { message } } = res;
+            if(status == 201) {
+                this.snackBar.open(message, "", { duration: 3000})
+                this.dialogRef.close({isGenerated: true})
+            }
+        }, err => {
+            this.helperServices.catchError(err, true, 3000)
+        })
+    }
+
+    cancelGenerateToken() {
+        this.dialogRef.close({ isGenerated: false })
+    }
+
+    buttonRemoveToken: "Remove" | "Removing..." = "Remove"
+    isRemoving: boolean = false
+    removeToken() {
+        this.buttonRemoveToken = "Removing..."
+        this.isRemoving = true
+        this.storesServices.removeToken(this.data.tokenId).subscribe(res => {
+            console.log(res)
+            this.buttonRemoveToken = "Remove"
+            this.isRemoving = false;
+            const { status, body: { message } } = res;
+            if(status == 200) {
+                this.snackBar.open(message, "", { duration: 3000 })
+                this.dialogRef.close({ isRemoved: true })
+            }
+        }, err => {
+            this.buttonRemoveToken = "Remove"
+            this.isRemoving = false;
+            this.helperServices.catchError(err, true, 3000)
+        })
+    }
 }

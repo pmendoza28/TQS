@@ -10,7 +10,7 @@
         <mat-form-field appearance="legacy" color="accent">
             <mat-label>Search</mat-label>
             <input matInput autocomplete="off" [(ngModel)]="searchValue" autofocus
-                (keydown.enter)="searchMember(false)">
+                (keydown.enter)="searchMember()">
             <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
                 <mat-icon>close</mat-icon>
             </button>
@@ -81,13 +81,20 @@
                         </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="store_registered">
+                        <th mat-header-cell *matHeaderCellDef> Store Registered </th>
+                        <td mat-cell class="status" *matCellDef="let member">
+                            <label>{{member.store_registered}}</label>
+                        </td>
+                    </ng-container>
+
                     <ng-container matColumnDef="created_at">
                         <th mat-header-cell *matHeaderCellDef> Date Created </th>
                         <td mat-cell class="date-created" *matCellDef="let member"> {{member.created_at | date: 'MMM dd, yyyy hh:mm:ss a'}} </td>
                     </ng-container>
 
 
-                    <ng-container matColumnDef="actions">
+                    <ng-container matColumnDef="actions" stickyEnd>
                         <th mat-header-cell *matHeaderCellDef> Actions </th>
                         <td mat-cell class="actions-menu" *matCellDef="let member">
                             <button mat-icon-button [matMenuTriggerFor]="menu"
@@ -123,7 +130,7 @@
                     </tr>
                 </table>
             </div>
-            <mat-paginator #memberPaginator showFirstLastButtons [length]="totalMembers"
+            <mat-paginator color="accent" #memberPaginator showFirstLastButtons [length]="totalItems"
                 [pageSizeOptions]="pageSizeOption" [pageSize]="memberPerPage" (page)="onChangePage($event)">
             </mat-paginator>
         </div>

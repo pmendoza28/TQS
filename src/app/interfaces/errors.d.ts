@@ -1,1 +1,1 @@
-export type TextError = "" | "No Data" | "No Data Found" | "Loading..." | "Server cannot be reach. Please Try Again Later" | "Something went wrong";
+export type TextError = "" | "No Data" | "No Data Found" | "Loading..." | "Too many requests" | "Server cannot be reach. Please Try Again Later" | "Something went wrong" | "Unprocessable Content";

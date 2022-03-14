@@ -4,6 +4,8 @@ const CryptoJS = require("crypto-js");
 import { Workbook } from 'exceljs';
 import { TextError } from "src/app/interfaces/errors";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { CredServices } from "./cred.service";
+import { SidebarServices } from "../layouts/sidebar/sidebar.service";
 const fs = require("file-saver")
 
 @Injectable({
@@ -13,7 +15,9 @@ const fs = require("file-saver")
 export class HelperServices {
 
   constructor(
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private credServices: CredServices,
+    private sidebarServices: SidebarServices
   ) {}
   hasInternet: boolean;
   today = new Date()
@@ -171,7 +175,6 @@ export class HelperServices {
   }
 
   isOk(httpResponse: any) {
-    console.log(`httpResponse`,httpResponse)
     if(httpResponse.status != 200) {
       return false
     }
@@ -179,9 +182,9 @@ export class HelperServices {
 
   }
 
-  catchError(err: any, hasDuration: boolean, duration?: number) {
-    console.log(`err`,err)
-    let error: TextError = ""
+  catchError(err: any, hasDuration: boolean, duration?: number, customMessage?: string) {
+    console.log(err)
+    let error: TextError  | "" = ""
     if(err.status == 500) {
       error = "Something went wrong";
     }
@@ -190,6 +193,12 @@ export class HelperServices {
         error = "No Data Found"
       }
     }
+    if(err.status == 429) {
+      error = "Too many requests";
+    }
+    if(err.status == 422) {
+      error = "Unprocessable Content"
+    }
     if(err.name == "TimeoutError") {
       error = "Server cannot be reach. Please Try Again Later";
     }
@@ -197,11 +206,43 @@ export class HelperServices {
       error = "Something went wrong";
     }
     if(hasDuration) {
-      this.snackbar.open(error, "", { duration })
+      if(err.status == 422) {
+        this.snackbar.open(error, customMessage, { duration })
+      }
+      else {
+        this.snackbar.open(error, "", { duration })
+      }
+      
     }
     if(!hasDuration) {
       this.snackbar.open(error, "")
     }
     return error;
+  }
+
+  refreshAccessModules() {
+    this.sidebarServices.dataSource.data = []
+    let { user: { access_permission } } = this.credServices.getCredentials()
+    let masterlist_childrens: any = []
+    let transaction_childrens: any = []
+    access_permission.map((access: string) => {
+      if (access == "user-accounts") masterlist_childrens.push({ name: "User Accounts" })
+      if (access == "stores") {
+        masterlist_childrens.push({ name: "Store Codes" })
+        masterlist_childrens.push({ name: "Areas" })
+        masterlist_childrens.push({ name: "Regions" })
+        masterlist_childrens.push({ name: "Clusters" })
+        masterlist_childrens.push({ name: "Business Model" })
+        masterlist_childrens.push({ name: "Stores" })
+      }
+      if (access == "members") masterlist_childrens.push({ name: "Members" })
+      if (access == "earned-points") transaction_childrens.push({ name: "Earned Points" })
+      if (access == "redeemed-points") transaction_childrens.push({ name: "Redeemed Points" })
+    })
+    this.sidebarServices.Modules.map((module: any) => {
+      if (module.name == "Master list") module.childrens = masterlist_childrens
+      if (module.name == "Transactions") module.childrens = transaction_childrens
+    })
+    this.sidebarServices.dataSource.data = this.sidebarServices.Modules
   }
 }

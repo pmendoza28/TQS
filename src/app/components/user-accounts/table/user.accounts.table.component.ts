@@ -154,7 +154,6 @@ export class UserAccountTableComponent {
                     this.isTableLoading = false;
                     if (data.length == 0) { this.lblLoading = "No Data Found" }
                 }
-                
             }, err => {
                 const error = this.helperServices.catchError(err, false, 10000)
                 this.lblLoading = error;

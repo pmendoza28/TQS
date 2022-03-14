@@ -6,7 +6,7 @@
 
         <mat-form-field appearance="legacy" color="accent">
             <mat-label>Search</mat-label>
-            <input matInput autocomplete="off" [(ngModel)]="searchValue" autofocus (keydown.enter)="searchStore(false)">
+            <input matInput autocomplete="off" [(ngModel)]="searchValue" autofocus (keydown.enter)="searchStore()">
             <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
                 <mat-icon>close</mat-icon>
             </button>
@@ -88,10 +88,6 @@
                                         <span>Activate</span>
                                     </button>
                                 </ng-template>
-                                <button mat-menu-item (click)="copyToken(store.code)" [cdkCopyToClipboard]="store.token">
-                                    <span>Copy Token</span>
-                                </button>
-                                
                             </mat-menu>
                         </td>
                     </ng-container>
@@ -107,7 +103,7 @@
                     </tr>
                 </table>
             </div>
-            <mat-paginator #storePaginator showFirstLastButtons [length]="totalStores" [pageSizeOptions]="pageSizeOption"
+            <mat-paginator color="accent" #storePaginator showFirstLastButtons [length]="totalItems" [pageSizeOptions]="pageSizeOption"
                 [pageSize]="storesPerPage" (page)="onChangePage($event)">
             </mat-paginator>
         </div>

@@ -3,6 +3,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
+import { TextError } from "src/app/interfaces/errors";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { MembersDialogComponent } from "../dialog/members.dialog.component";
 import { MembersServices } from "../members.service";
 
@@ -16,7 +18,8 @@ export class MembersTableComponent {
     constructor(
         private membersServices: MembersServices,
         private router: Router,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private helperServices: HelperServices
     ) { }
 
     /** @LifeCycles ================================================= */
@@ -45,14 +48,15 @@ export class MembersTableComponent {
         "email",
         "mobile_number",
         "status",
+        "store_registered",
         "created_at",
         "actions",
     ]
-    lblLoading: "Loading..." | "No Data" | "No Member Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
+    lblLoading: TextError = "Loading...";
     isSearched: boolean = false;
     pageSizeOption: number[] = [5, 10, 15, 20];
     memberPerPage: number = 5;
-    totalMembers: number = 0;
+    totalItems: number = 0;
     @ViewChild("memberPaginator") memberPaginator: MatPaginator
     currentPage = 1;
 
@@ -63,20 +67,18 @@ export class MembersTableComponent {
 
     populateMembersWithPaginator() {
         this.isTableLoading = true;
-        this.membersServices.getMembersWithPaginator(this.currentPage, this.memberPerPage).subscribe(res => {
+        this.membersServices.getMembersWithPaginator(this.searchValue, this.currentPage, this.memberPerPage).subscribe(res => {
+            console.log(res)
             this.isTableLoading = false;
-            const { data, total } = res;
-            if (data.length == 0) { this.lblLoading = "No Data"; }
-            this.dataSource.data = data;
-            this.totalMembers = total;
-            this.memberPaginator.length = total;
-        }, err => {
-            const { message } = err;
-            switch (message) {
-                case "Timeout has occurred":
-                    this.lblLoading = "Server cannot be reach. Please Try Again Later";
-                    this.isTableLoading = false;
+            const { status, body: { data, total } } = res;
+            if(status == 200) {
+                if(data.length == 0) this.lblLoading = "No Data";
+                this.dataSource.data = data
+                this.totalItems = total;
             }
+        }, err => {
+            const error = this.helperServices.catchError(err, true, 3000)
+            this.lblLoading = error;
         })
     }
 
@@ -84,28 +86,20 @@ export class MembersTableComponent {
         this.router.navigate(["/admin/members/new"])
     }
 
-    searchMember(isOnPage: boolean) {
+    searchMember() {
         this.isTableLoading = true;
-        if (this.searchValue == "") {
-            this.isSearched = false;
-            this.memberPaginator.pageIndex = 0;
-            this.populateMembersWithPaginator();
-        }
-        else {
-            if (!isOnPage) {
-                this.currentPage = 1;
-                this.memberPaginator.pageIndex = 0;
-            }
-            this.lblLoading = "Loading...";
-            this.membersServices.searchMember(this.searchValue, this.currentPage, this.memberPerPage).subscribe(res => {
-                const { data, total } = res;
-                this.isSearched = true;
-                this.isTableLoading = false;
+        this.membersServices.getMembersWithPaginator(this.searchValue, this.currentPage, this.memberPerPage).subscribe(res => {
+            this.isTableLoading = false;
+            const { status, body: { data, total } } = res;
+            if(status == 200) {
+                if(data.length == 0) this.lblLoading = "No Data Found";
                 this.dataSource.data = data
-                this.memberPaginator.length = total
-                if (data.length == 0) { this.lblLoading = "No Member Found" }
-            })
-        }
+                this.totalItems = total;
+            }
+        }, err => {
+            const error = this.helperServices.catchError(err, true, 3000)
+            this.lblLoading = error;
+        })
     }
 
     clearSearch() {
@@ -142,16 +136,9 @@ export class MembersTableComponent {
     }
 
     onChangePage(pageData: PageEvent) {
-        if (!this.isSearched) {
-            this.currentPage = pageData.pageIndex + 1;
-            this.memberPerPage = pageData.pageSize
-            this.populateMembersWithPaginator()
-        }
-        else {
-            this.currentPage = pageData.pageIndex + 1;
-            this.memberPerPage = pageData.pageSize
-            this.searchMember(true)
-        }
+        this.currentPage = pageData.pageIndex + 1;
+        this.memberPerPage = pageData.pageSize
+        this.populateMembersWithPaginator()
     }
 
     upload() {

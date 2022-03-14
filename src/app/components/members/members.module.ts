@@ -25,6 +25,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 const maskConfig: Partial<IConfig> = {
   validation: false,
 };
@@ -65,7 +66,8 @@ const routes: Routes = [
     NgxSkeletonLoaderModule,
     MatSnackBarModule,
     NgxMatFileInputModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgxMatSelectSearchModule
   ]
 })
 export class MembersModule { }

@@ -41,6 +41,10 @@ export class InstallationServices {
     createEarningPointsPercentage(settings: {setting_mysql_id: number, earning_percentage: number}): Observable<any> {
         return this.http.post(`${this.credServices.clientPort}/settings`, settings)
     }
+
+    activateStoreInAdmin(token: string): Observable<any> {
+        return this.http.put(`${this.credServices.port}/activate-store`, {token}, { observe: 'response' })
+    }
 }
 
 export interface IStore {

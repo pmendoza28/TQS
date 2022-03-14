@@ -4,6 +4,7 @@ import { ThemePalette } from "@angular/material/core";
 import { ProgressBarMode } from "@angular/material/progress-bar";
 import { Subscription } from "rxjs";
 import { CredServices } from "src/app/shared/services/cred.service";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { LayoutAdminServices } from "./layout.admin.service";
 
 type NewType = Subscription;
@@ -17,7 +18,8 @@ type NewType = Subscription;
 export class LayoutAdminComponent {
   constructor(
     public mediaObserver: MediaObserver,
-    private credServices: CredServices
+    private credServices: CredServices,
+    private helperServices: HelperServices
   ) { }
 
   mediaSub: NewType
@@ -31,7 +33,6 @@ export class LayoutAdminComponent {
 
   ngOnInit(): void {
     this.mediaQuery()
-    console.log(this.credServices.getCredentials())
   }
 
 

@@ -126,7 +126,7 @@
                     </tr>
                 </table>
             </div>
-            <mat-paginator #earnedPointsPaginator showFirstLastButtons [length]="totalMembers"
+            <mat-paginator color="accent" #earnedPointsPaginator showFirstLastButtons [length]="totalMembers"
                 [pageSizeOptions]="pageSizeOption" [pageSize]="earnedPointsPerPage" (page)="onChangePage($event)">
             </mat-paginator>
         </div>

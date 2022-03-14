@@ -292,8 +292,11 @@ export class InstallationComponent {
         this.totalUploadedRows++;
         this.installationServices.activateStore(activateStoreBody).subscribe(() => {
             this.installationServices.createEarningPointsPercentage(settingdata).subscribe(() => {
-                this.uploadedPercentage = this.totalUploadedRows / this.totalRowCount * 100;
-                this.currentUploaded = 1;
+                this.installationServices.activateStoreInAdmin(this.storeActivateForm.value.token).subscribe(() => {
+                    this.uploadedPercentage = this.totalUploadedRows / this.totalRowCount * 100;
+                    this.currentUploaded = 1;
+                })
+                
             })
         }, err => {
             this.installationServices.createEarningPointsPercentage(settingdata).subscribe(() => {

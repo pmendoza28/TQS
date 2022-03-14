@@ -11,11 +11,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RouterModule } from '@angular/router';
 import {MatTreeModule} from '@angular/material/tree';
 import { MatMenuModule } from '@angular/material/menu';
+import {MatRippleModule} from '@angular/material/core';
 const MaterialModules = [
   MatListModule,
   MatProgressBarModule,
   MatTreeModule,
-  MatMenuModule
+  MatMenuModule,
+  MatRippleModule
 ]
 
 
@@ -31,7 +33,8 @@ const MaterialModules = [
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    RouterModule
+    RouterModule,
+    
   ],
   exports: [
     HeaderComponent,

@@ -20,28 +20,28 @@
                     <div class="name">
                         <mat-form-field appearance="legacy" color="accent">
                             <mat-label>First Name</mat-label>
-                            <input (change)="convertAccessPermission()" autofocus matInput autocomplete="off"
+                            <input (change)="convertAccessPermission()" autofocus matInput autocomplete="off" class="upper-case"
                                 formControlName="first_name">
                         </mat-form-field>
 
                         <mat-form-field appearance="legacy" color="accent">
                             <mat-label>Last Name</mat-label>
                             <input (change)="convertAccessPermission()" matInput autocomplete="off"
-                                formControlName="last_name">
+                                formControlName="last_name" class="upper-case">
                         </mat-form-field>
                     </div>
                     <div class="cred">
                         <mat-form-field appearance="legacy" color="accent">
                             <mat-label>User Name</mat-label>
                             <input (change)="convertAccessPermission()" matInput autocomplete="off"
-                                formControlName="username">
+                                formControlName="username" class="upper-case">
                         </mat-form-field>
                     </div>
                     <div class="role-permission">
                         <label for="">Role</label>
                         <mat-radio-group formControlName="role" (change)="resetPermissions()">
                             <mat-radio-button value="admin">Admin</mat-radio-button>
-                            <mat-radio-button value="cashier">Cashier</mat-radio-button>
+                            <mat-radio-button value="cashier">Store</mat-radio-button>
                         </mat-radio-group>
                         <label *ngIf="getRole() == 'admin' || getRole() == 'cashier'" for="">Permissions</label>
 

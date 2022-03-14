@@ -59,7 +59,7 @@
                     </tr>
                 </table>
             </div>
-            <mat-paginator #redeemedPointsPaginator showFirstLastButtons [length]="totalRedeemedPoints"
+            <mat-paginator color="accent" #redeemedPointsPaginator showFirstLastButtons [length]="totalRedeemedPoints"
                 [pageSizeOptions]="pageSizeOption" [pageSize]="redeemedPointsPerPage" (page)="onChangePage($event)">
             </mat-paginator>
         </div>

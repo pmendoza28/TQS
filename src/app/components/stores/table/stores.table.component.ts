@@ -4,6 +4,8 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
+import { TextError } from "src/app/interfaces/errors";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 import { StoresDialogComponent } from "../dialog/stores.dialog.component";
 import { StoresServices } from "../stores.service";
 
@@ -19,18 +21,13 @@ export class StoresTableComponent {
         private storesServices: StoresServices,
         private router: Router,
         private dialog: MatDialog,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private helperServices: HelperServices
     ) { }
 
     /** @LifeCycles ========================================================= */
     ngOnInit(): void {
-        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-        //Add 'implements OnInit' to the class.
         this.populateStoresWithPaginator()
-    }
-
-    ngDoCheck(): void {
-        this.checkSearchValue()
     }
 
     /** @States ========================================================= */
@@ -39,11 +36,11 @@ export class StoresTableComponent {
     isSearched: boolean = false;
     pageSizeOption: number[] = [5, 10, 15, 20];
     storesPerPage: number = 5;
-    totalStores: number = 0;
+    totalItems: number = 0;
     currentPage = 1;
     dataSource = new MatTableDataSource<IStoreDataSource>();
     isTableLoading: boolean = false;
-    lblLoading: "Loading..." | "No Data" | "No Store Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
+    lblLoading: TextError;
     @ViewChild("storePaginator") storePaginator: MatPaginator
     displayedColumns: string[] = [
         'id',
@@ -69,45 +66,35 @@ export class StoresTableComponent {
     populateStoresWithPaginator() {
         this.isTableLoading = true;
         this.lblLoading = "Loading...";
-        this.storesServices.getStoresWithPaginator(this.currentPage, this.storesPerPage).subscribe(res => {
+        this.storesServices.getStoresWithPaginator(this.searchValue, this.currentPage, this.storesPerPage).subscribe(res => {
             this.isTableLoading = false;
-            const { data, total } = res;
-            if (data.length == 0) { this.lblLoading = "No Data"; }
-            this.dataSource.data = data;
-            this.totalStores = total;
-            // this.storePaginator.length = total;
-        }, err => {
-            const { message } = err;
-            switch (message) {
-                case "Timeout has occurred":
-                    this.lblLoading = "Server cannot be reach. Please Try Again Later";
-                    this.isTableLoading = false;
+            const { status, body: { data, total } } = res;
+            if(status == 200) {
+                if(data == 0) this.lblLoading = "No Data";
+                this.totalItems = total
+                this.dataSource.data = data;
             }
+        }, err => {
+            const error = this.helperServices.catchError(err, true, 3000)
+            this.lblLoading = error;
         })
     }
 
-    searchStore(isOnPage: boolean) {
+    searchStore() {
         this.isTableLoading = true;
-        if (this.searchValue == "") {
-            this.isSearched = false;
-            this.storePaginator.pageIndex = 0;
-            this.populateStoresWithPaginator();
-        }
-        else {
-            if (!isOnPage) {
-                this.currentPage = 1;
-                this.storePaginator.pageIndex = 0;
+        this.lblLoading = "Loading...";
+        this.storesServices.getStoresWithPaginator(this.searchValue, this.currentPage, this.storesPerPage).subscribe(res => {
+            this.isTableLoading = false;
+            const { status, body: { data, total } } = res;
+            if(status == 200) {
+                if(data == 0) this.lblLoading = "No Data Found";
+                this.totalItems = total
+                this.dataSource.data = data;
             }
-            this.lblLoading = "Loading...";
-            this.storesServices.searchStore(this.searchValue, this.currentPage, this.storesPerPage).subscribe(res => {
-                const { data, total } = res;
-                this.isSearched = true;
-                this.isTableLoading = false;
-                this.dataSource.data = data
-                this.totalStores = total;
-                if (data.length == 0) { this.lblLoading = "No Store Found" }
-            })
-        }
+        }, err => {
+            const error = this.helperServices.catchError(err, true, 3000)
+            this.lblLoading = error;
+        })
     }
 
     clearSearch() {
@@ -123,16 +110,9 @@ export class StoresTableComponent {
     }
 
     onChangePage(pageData: PageEvent) {
-        if (!this.isSearched) {
-            this.currentPage = pageData.pageIndex + 1;
-            this.storesPerPage = pageData.pageSize
-            this.populateStoresWithPaginator()
-        }
-        else {
-            this.currentPage = pageData.pageIndex + 1;
-            this.storesPerPage = pageData.pageSize
-            this.searchStore(true)
-        }
+        this.currentPage = pageData.pageIndex + 1;
+        this.storesPerPage = pageData.pageSize;
+        this.populateStoresWithPaginator()
     }
 
     newStore() {
