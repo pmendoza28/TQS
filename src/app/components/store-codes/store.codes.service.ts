@@ -12,10 +12,10 @@ export class StoreCodesServices {
     constructor(
         private http: HttpClient,
         private credServices: CredServices
-    ) {}
+    ) { }
 
     getStatusCodesNoPaginate(action: string): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/storemodulestorecode/${action}`,{}, { observe: 'response' }).pipe(
+        return this.http.post(`${this.credServices.port}/admin/storemodulestorecode/${action}`, {}, { observe: 'response' }).pipe(
             timeout(10000)
         )
     }
@@ -27,13 +27,13 @@ export class StoreCodesServices {
     }
 
     createStoreCode(store_code: any): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/storemodulestorecode`, { store_code }, {observe: 'response'}).pipe(
+        return this.http.post(`${this.credServices.port}/admin/storemodulestorecode`, { store_code }, { observe: 'response' }).pipe(
             timeout(10000)
         )
     }
 
     updateStoreCode(store_code_id: number, store_code: any): Observable<any> {
-        return this.http.put(`${this.credServices.port}/admin/storemodulestorecode/${store_code_id}`, { store_code }, {observe: 'response'}).pipe(
+        return this.http.put(`${this.credServices.port}/admin/storemodulestorecode/${store_code_id}`, { store_code }, { observe: 'response' }).pipe(
             timeout(10000)
         )
     }

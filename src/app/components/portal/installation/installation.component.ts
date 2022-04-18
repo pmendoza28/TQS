@@ -9,6 +9,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { HelperServices } from "src/app/shared/services/helpers.service";
 import { CredServices } from "src/app/shared/services/cred.service";
 import { AppServices } from "src/app/app.service";
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 const CryptoJS = require("crypto-js");
 
 @Component({
@@ -68,14 +69,35 @@ export class InstallationComponent {
         this.isValidatingToken = true;
         setTimeout(() => {
             this.installationServices.validateToken(this.storeActivateForm.value).subscribe(res => {
-                const { message, valid } = res;
-                this.isValidatingToken = false;
-                this.tokenValidationMessage = message;
-                this.tokenValid = valid;
-                this.snackbar.open(message, "", { duration: 3000 })
+                console.log(`store document`, res)
+                const storeObject = {
+                    store_mysql_id: Number(res.store.id),
+                    business_category_id: Number(res.store.businesscategory_id),
+                    code: res.store.code,
+                    name: res.store.name,
+                    area: res.store.area,
+                    region: res.store.region,
+                    cluster: res.store.cluster,
+                    business_model: res.store.business_model,
+                    token: this.storeActivateForm.value.token
+                }
+                console.log(`storeObject`, storeObject)
+                this.installationServices.createStore(storeObject).subscribe(() => {
+                    const { message, valid } = res;
+                    this.isValidatingToken = false;
+                    this.tokenValidationMessage = message;
+                    this.tokenValid = valid;
+                    this.snackbar.open(message, "", { duration: 3000 })
+                }, err => {
+                    const { message, valid } = res;
+                    this.isValidatingToken = false;
+                    this.tokenValidationMessage = message;
+                    this.tokenValid = valid;
+                    this.snackbar.open(message, "", { duration: 3000 })
+                })
+              
 
             }, err => {
-                console.log(err)
                 const { error: { message, valid } } = err;
                 this.isValidatingToken = false;
                 this.tokenValidationMessage = message;
@@ -109,10 +131,12 @@ export class InstallationComponent {
     UserDataSubject = new Subject();
     StoreDataSubject = new Subject();
     MemberDataSubject = new Subject();
+    uploadStatus: "Done" | "" = "";
+    buttonNext: "Next" | "Initializing..." | "Uploading..." | "Waiting to Server..." = "Next";
 
     uploadDatabase() {
         this.uploadingDb = true;
-        this.uploadingDb = true;
+        this.buttonNext = "Initializing..."
         const { db } = this.uploadForm.value;
         const fileReader = new FileReader()
         fileReader.readAsBinaryString(db)
@@ -120,87 +144,41 @@ export class InstallationComponent {
             const result: any = event.target?.result
             const resultObj = JSON.parse(result)
             const data = CryptoJS.AES.decrypt(resultObj[0], this.credServices.secretKey);
-            const decryptedDb = JSON.parse(data.toString(CryptoJS.enc.Utf8))
-            console.log(decryptedDb)
-            const { memberdata, storedata, userdata, settingdata } = decryptedDb;
-            if (userdata) this.UserDataLength = userdata.length;
-            if (storedata) this.StoreDataLength = storedata.length;
-            if (memberdata) this.MemberDataLength = memberdata.length
+            const database = JSON.parse(data.toString(CryptoJS.enc.Utf8))
 
-            this.totalRowCount = this.UserDataLength + this.StoreDataLength + this.MemberDataLength
-
-            if (settingdata) this.totalRowCount++;
-
-            if (this.UserDataLength > 0) {
-                this.moduleUploading = "User";
-                this.currentUploaded = 0
-                this.totalCurrentUploading = this.UserDataLength;
-                from(userdata).pipe(
-                    concatMap(val => of(val).pipe(delay(100)))
-                ).pipe(delay(100)).subscribe({
-                    next: (user: any) => {
-                        this.uploadUser(user)
-                    }
-                })
+            const activateStoreBody: IActivateStoreBody = {
+                store_mysql_id: this.storeActivateForm.value.store_id,
+                token: this.storeActivateForm.value.token,
+                activated_date: `${new Date(Date.now()).toLocaleDateString()} ${new Date(Date.now()).toLocaleTimeString()}`
             }
-            else {
-                this.UserDataSubject.complete()
-            }
-
-            if (this.StoreDataLength > 0) {
-                this.UserDataSubject.subscribe({
-                    complete: () => {
-                        this.moduleUploading = "Store";
-                        this.currentUploaded = 0
-                        this.totalCurrentUploading = this.StoreDataLength;
-                        from(storedata).pipe(
-                            concatMap(val => of(val).pipe(delay(100)))
-                        ).pipe(delay(100)).subscribe({
-                            next: (store: any) => {
-                                console.log(store)
-                                this.uploadStore(store)
+            this.buttonNext = "Waiting to Server...";
+            if(database.userdata.length > 0) {
+                this.installationServices.installInitialDatabse({ database, activateStoreBody }).subscribe((event: HttpEvent<any> | any) => {
+                    switch (event.type) {
+                        case HttpEventType.Sent:
+                            break;
+                        case HttpEventType.UploadProgress:
+                            this.uploadedPercentage = Math.round(event.loaded / event.total * 100);
+                            break;
+                        case HttpEventType.Response:
+                            const { status, body } = event;
+                            if (status == 200) {
+                                this.installationServices.activateStoreInAdmin(this.storeActivateForm.value.token).subscribe(() => {
+                                    this.uploadStatus = "Done";
+                                    this.buttonNext = "Next";
+                                })
                             }
-                        })
                     }
                 })
             }
-            else {
-                this.StoreDataSubject.complete()
+            if(database.userdata.length == 0) {
+                this.snackbar.open("User data is not include in the json database. Please contact MIS", "", { duration: 3000})
+                this.uploadingDb = false;
+                this.buttonNext = "Next";
             }
-
-            if (this.MemberDataLength > 0) {
-                this.StoreDataSubject.subscribe({
-                    complete: () => {
-                        this.moduleUploading = "Member";
-                        this.currentUploaded = 0
-                        this.totalCurrentUploading = this.MemberDataLength;
-                        from(memberdata).pipe(
-                            concatMap(val => of(val).pipe(delay(100)))
-                        ).pipe(delay(100)).subscribe({
-                            next: (member: any) => {
-                                this.uploadMember(member)
-                            }
-                        })
-                    }
-                })
-            }
-            else {
-                this.MemberDataSubject.complete()
-            }
-
-            if (settingdata) {
-                this.MemberDataSubject.subscribe({
-                    complete: () => {
-                        this.moduleUploading = "Settings";
-                        this.currentUploaded = 0;
-                        this.totalCurrentUploading = 1
-                        setTimeout(() => {
-                            this.uploadSettings(settingdata)
-                        }, 500);
-                    }
-                })
-            }
+            
         }
+
 
     }
 
@@ -296,7 +274,7 @@ export class InstallationComponent {
                     this.uploadedPercentage = this.totalUploadedRows / this.totalRowCount * 100;
                     this.currentUploaded = 1;
                 })
-                
+
             })
         }, err => {
             this.installationServices.createEarningPointsPercentage(settingdata).subscribe(() => {

@@ -8,6 +8,7 @@ import { NotFoundComponent } from "src/app/components/not-found/not-found.compon
 import { SidebarCssSelected } from "src/app/guards/sidebar.css.selected";
 import { AdminAccessGuard } from "src/app/guards/admin.access.guard";
 import { UnauthorizedComponent } from "src/app/components/unauthorized/unauthorized.component";
+import { ChangePasswordModule } from "src/app/components/change-password/change.password.module";
 
 const routes: Routes = [
     {
@@ -26,6 +27,7 @@ const routes: Routes = [
             { path: 'redeemed-points', canActivate: [SidebarCssSelected, AdminAccessGuard], loadChildren: () => import("../../components/redeemed-points/redeemed-points.module").then(m => m.RedeemedPointsModule) },
             { path: 'cleared-points', canActivate: [SidebarCssSelected, AdminAccessGuard], loadChildren: () => import("../../components/cleared-points/cleared.points.module").then(m => m.ClearedPointsModule) },
             { path: 'generate-file', canActivate: [SidebarCssSelected], loadChildren: () => import("../../components/generate-file/generate.file.module").then(m => m.GenerateFileModule) },
+            { path: 'update-file', canActivate: [SidebarCssSelected], loadChildren: () => import("../../components/update-file/admin/update.file.admin.module").then(m => m.UpdateFileAdminModule) },
             { path: 'reports', canActivate: [SidebarCssSelected], loadChildren: () => import("../../components/reports/reports.module").then(m => m.ReportsModule) },
             { path: 'settings', canActivate: [SidebarCssSelected], loadChildren: () => import("../../components/settings/settings.module").then(m => m.SettingsModule) },
             { path: 'unauthorized', component: UnauthorizedComponent },
@@ -46,7 +48,8 @@ const MaterialModules = [
         RouterModule.forChild(routes),
         MaterialModules,
         SharedLayoutsModule,
-        CommonModule
+        CommonModule,
+        ChangePasswordModule
     ]
 })
 

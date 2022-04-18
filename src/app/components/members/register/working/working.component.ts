@@ -4,7 +4,10 @@ import { MembersRegisterServices } from "../members.register.service";
 @Component({
     selector: 'app-working',
     templateUrl: './working.component.html',
-    styleUrls: ['./working.component.scss']
+    styleUrls: ['./working.component.scss'],
+    host: {
+        '(document:keydown)': 'handleKeyboardEvent($event)'
+    }
 })
 
 export class WorkingComponent {
@@ -12,8 +15,22 @@ export class WorkingComponent {
         public membersRegisterServices: MembersRegisterServices
     ) {}
 
+    handleKeyboardEvent(e: KeyboardEvent) {
+        if(e.ctrlKey && e.key == "ArrowRight") {
+            this.next()
+        }
+        if(e.ctrlKey && e.key == "ArrowLeft") {
+            this.back()
+        }
+        if(e.key == "Enter") {
+            this.next()
+        }
+    }
+
     next() {
-        this.membersRegisterServices.steps = "Cooking"
+        if(!this.validateFields()) {
+            this.membersRegisterServices.steps = "Cooking"
+        }
     }
 
     back() {

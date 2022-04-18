@@ -15,7 +15,7 @@
     <form class="form-container" [formGroup]="redeemForm">
         <mat-form-field appearance="legacy" *ngIf="buttonName == 'Redeem'">
             <mat-label>Enter Mobile Number</mat-label>
-            <input [specialCharacters]="[ '[' ,']' , '-' ]" mask="0000-000-0000" formControlName="mobile_number"
+            <input (focusout)="focusMobileNumber()" [specialCharacters]="[ '[' ,']' , '-' ]" mask="0000-000-0000" formControlName="mobile_number"
                 (keydown.enter)="checkMobileNumber()" matInput autocomplete="off" #txtMobileNumber cdkFocusInitial>
         </mat-form-field>
         <mat-progress-bar *ngIf="isValidating" mode="buffer"></mat-progress-bar>
@@ -53,6 +53,19 @@
                 <label class="value">{{redeemForm.value.redeemPoints | currency:' '}}</label>
                 <label class="value">{{remainingAvailablePoints() | currency:' '}}</label>
             </div>
+        </div> 
+        <div class="token" *ngIf="buttonName == 'Redeemed'">
+            <div class="token-actions">
+                <button mat-icon-button [cdkCopyToClipboard]="referenceNo" (click)="copy()">
+                    <mat-icon>content_copy</mat-icon>
+                </button>
+            </div>
+            <div class="field-token">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Referrence #</mat-label>
+                    <textarea matInput autocomplete="off" [value]="referenceNo" readonly></textarea>
+                  </mat-form-field>
+            </div>
         </div>
         <div class="token" *ngIf="buttonName == 'Redeemed'">
             <div class="token-actions">
@@ -67,23 +80,8 @@
                   </mat-form-field>
             </div>
         </div>
-        <div class="token" *ngIf="buttonName == 'Redeemed'">
-            <div class="token-actions">
-                <button mat-icon-button [cdkCopyToClipboard]="referenceNo" (click)="copy()">
-                    <mat-icon>content_copy</mat-icon>
-                </button>
-            </div>
-            <div class="field-token">
-                <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>Referrence #</mat-label>
-                    <textarea matInput autocomplete="off" [value]="referenceNo" readonly></textarea>
-                  </mat-form-field>
-            </div>
-        </div>
-        <div class="ok" *ngIf="buttonName == 'Redeemed'" (click)="reset()">
+        <div class="ok" *ngIf="buttonName == 'Redeemed'" (click)="ok()">
             OK
         </div>
     </form>
-
-
 </div>

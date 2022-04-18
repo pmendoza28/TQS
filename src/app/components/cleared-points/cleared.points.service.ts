@@ -14,13 +14,21 @@ export class ClearedPointsServices {
         private credServices: CredServices
     ) {}
 
-    getClearedPointsWithPaginator(currentPage: number, clearedPointsPerPage: number): Observable<any> {
-        return this.http.get(`${this.credServices.port}/admin/cleared-points/${clearedPointsPerPage}/?page=${currentPage}`).pipe(
+    getClearedPointsWithPaginator(searchvalue: string, currentPage: number, clearedPointsPerPage: number): Observable<any> {
+        return this.http.get(`${this.credServices.port}/admin/cleared-points?limit=${clearedPointsPerPage}&searchvalue=${searchvalue}&page=${currentPage}`).pipe(
             timeout(10000)
         )
     }
 
     searchClearedPoints(searchvalue: string, currentPage: number, clearedPointsPerPage: number): Observable<any> {
         return this.http.post(`${this.credServices.port}/admin/search-cleared-points/${clearedPointsPerPage}?page=${currentPage}`, { searchvalue })
+    }
+
+    viewSoa(member_id: number, currentPage: number, itemsPerPage: number): Observable<any> {
+        return this.http.get(`${this.credServices.port}/admin/generate_soa/${member_id}`, { observe : 'response' })
+    }
+
+    importClearedPoints(clearedPoints: any): Observable<any> {
+        return this.http.post(`${this.credServices.port}/admin/cleared-points/import`, clearedPoints, { observe: 'response' })
     }
 }

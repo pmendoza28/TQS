@@ -1,7 +1,9 @@
 import { Component, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { ClearedPointsServices } from "../cleared.points.service";
+import { ClearedPointsDialogComponent } from "../dialog/cleared.points.dialog.component";
 
 @Component({
     selector: 'app-cleared-points',
@@ -12,8 +14,9 @@ import { ClearedPointsServices } from "../cleared.points.service";
 export class ClearedPointsTableComponent {
 
     constructor(
-        private clearedPointsServices: ClearedPointsServices
-    ) {}
+        private clearedPointsServices: ClearedPointsServices,
+        private dialog: MatDialog
+    ) { }
 
     title: string = "Cleared Points";
     searchValue: string = ""
@@ -27,15 +30,16 @@ export class ClearedPointsTableComponent {
     dataSource = new MatTableDataSource<any>()
     displayedColumns: string[] = [
         "id",
+        "mobile_number",
         "first_name",
         "last_name",
         "cleared_points",
-        // "actions",
+        "actions",
     ]
     lblLoading: "Loading..." | "No Data" | "No Cleared Points Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
 
-     /** @LifeCycles =============================================================== */
-     ngOnInit(): void {
+    /** @LifeCycles =============================================================== */
+    ngOnInit(): void {
         this.populateClearedPointsWithPaginator()
     }
 
@@ -49,7 +53,9 @@ export class ClearedPointsTableComponent {
 
     populateClearedPointsWithPaginator() {
         this.isTableLoading = true;
-        this.clearedPointsServices.getClearedPointsWithPaginator(this.currentPage, this.clearedPointsPerPage).subscribe(res => {
+        this.dataSource.data = []
+        this.lblLoading = "Loading...";
+        this.clearedPointsServices.getClearedPointsWithPaginator(this.searchValue,this.currentPage, this.clearedPointsPerPage).subscribe(res => {
             this.isTableLoading = false;
             const { data, total } = res;
             if (data.length == 0) this.lblLoading = "No Data";
@@ -65,29 +71,26 @@ export class ClearedPointsTableComponent {
             }
         })
     }
-    
+
     searchClearedPoints(isOnPage: boolean) {
         this.isTableLoading = true;
-        if (this.searchValue == "") {
-            this.isSearched = false;
-            this.clearedPointsPaginator.pageIndex = 0;
-            this.populateClearedPointsWithPaginator();
-        }
-        else {
-            if (!isOnPage) {
-                this.currentPage = 1;
-                this.clearedPointsPaginator.pageIndex = 0;
+        this.dataSource.data = []
+        this.lblLoading = "Loading...";
+        this.clearedPointsServices.getClearedPointsWithPaginator(this.searchValue,this.currentPage, this.clearedPointsPerPage).subscribe(res => {
+            this.isTableLoading = false;
+            const { data, total } = res;
+            if (data.length == 0) this.lblLoading = "No Cleared Points Found";
+            this.dataSource.data = data;
+            this.totalClearedPoints = total;
+            this.clearedPointsPaginator.length = total;
+        }, err => {
+            const { message } = err;
+            switch (message) {
+                case "Timeout has occurred":
+                    this.lblLoading = "Server cannot be reach. Please Try Again Later";
+                    this.isTableLoading = false;
             }
-            this.lblLoading = "Loading...";
-            this.clearedPointsServices.searchClearedPoints(this.searchValue, this.currentPage, this.clearedPointsPerPage).subscribe((res: any) => {
-                const { data, total } = res;
-                this.isSearched = true;
-                this.isTableLoading = false;
-                this.dataSource.data = data
-                this.clearedPointsPaginator.length = total
-                if (data.length == 0) { this.lblLoading = "No Cleared Points Found" }
-            })
-        }
+        })
     }
 
     clearSearch() {
@@ -111,4 +114,29 @@ export class ClearedPointsTableComponent {
         }
     }
 
+    viewSOA(memberId: number) {
+        this.dialog.open(ClearedPointsDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Earned and Redeemed points history",
+                action: "soa",
+                memberId
+            }
+        })
+    }
+
+    upload() {
+        this.dialog.open(ClearedPointsDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Upload Cleared Points",
+                action: 'uploadClearedPoints'
+            }
+        }).afterClosed().subscribe(dialogResponse => {
+            const { isUploaded } = dialogResponse
+            if (isUploaded) {
+                this.populateClearedPointsWithPaginator()
+            }
+        })
+    }
 }

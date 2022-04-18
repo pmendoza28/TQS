@@ -1,16 +1,15 @@
 <app-admin-container [title]="title">
     <div actions class="actions">
-        <button mat-raised-button class="btn-new btn-primary" (click)="newMember()">
+        <!-- <button mat-raised-button class="btn-new btn-primary" (click)="newMember()">
             New
-        </button>
-        <button mat-raised-button color="accent" (click)="upload()">
+        </button> -->
+        <button class="btn-new" mat-raised-button color="accent" (click)="upload()">
             Upload
         </button>
 
         <mat-form-field appearance="legacy" color="accent">
             <mat-label>Search</mat-label>
-            <input matInput autocomplete="off" [(ngModel)]="searchValue" autofocus
-                (keydown.enter)="searchMember()">
+            <input matInput autocomplete="off" [(ngModel)]="searchValue" autofocus (keydown.enter)="searchMember()">
             <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
                 <mat-icon>close</mat-icon>
             </button>
@@ -90,7 +89,8 @@
 
                     <ng-container matColumnDef="created_at">
                         <th mat-header-cell *matHeaderCellDef> Date Created </th>
-                        <td mat-cell class="date-created" *matCellDef="let member"> {{member.created_at | date: 'MMM dd, yyyy hh:mm:ss a'}} </td>
+                        <td mat-cell class="date-created" *matCellDef="let member"> {{member.created_at | date: 'MMM dd,
+                            yyyy hh:mm:ss a'}} </td>
                     </ng-container>
 
 

@@ -103,7 +103,6 @@ export class BusinessModelComponent {
     populateBusinesModel() {
         this.isTableLoading = true;
         this.businessModelServices.getBusinessModels(this.searchValue, this.currentPage, this.businessModelPerPage).subscribe(res => {
-            console.log(res)
             this.isTableLoading = false;
             const { status, body: { data, total } } = res;
             if (status == 200) {

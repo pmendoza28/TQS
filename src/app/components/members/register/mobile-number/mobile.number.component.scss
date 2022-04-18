@@ -23,8 +23,14 @@
         height: 80%;
         align-self: center;
         background-color: gray;
+        @media only screen and (max-width: 1195px) {
+            display: none;
+        }
     }
     .keypad  {
+        @media only screen and (max-width: 1195px) {
+            display: none;
+        }
         width: 100%;
         display: flex;
         flex-direction: column;

@@ -195,13 +195,12 @@ export class EarnedPointsDialogComponent {
         const { selectedEarnedPoints } = this.data;
         this.addingToClearedPoints = true;
         this.btnAddToClearedPoints = "Adding";
-        this.earnedPointsServices.addToClearedPoints({data: selectedEarnedPoints}).subscribe(res => {
-            console.log(res);
+        this.earnedPointsServices.addToClearedPoints({ data: selectedEarnedPoints }).subscribe(res => {
             const { message, code } = res;
-            this.snackbar.open(message,"", {
+            this.snackbar.open(message, "", {
                 duration: 3000
             })
-            this.addingToClearedPoints = false;          
+            this.addingToClearedPoints = false;
             this.btnAddToClearedPoints = "Add";
             this.dialogRef.close({ code })
         })
@@ -215,19 +214,43 @@ export class EarnedPointsDialogComponent {
             this.snackbar.open(message, "", {
                 duration: 3000
             })
-            this.dialogRef.close({isEarned: true})
+            this.dialogRef.close({ isEarned: true })
         }, err => {
-            const { error: {message} } = err;
+            const { error: { message } } = err;
             this.isEarning = false;
             this.snackbar.open(message, "", {
                 duration: 3000
             })
-            this.dialogRef.close({isEarned: false})
+            this.dialogRef.close({ isEarned: false })
         })
     }
     isEarning: boolean = false;
     cancel() {
         this.dialogRef.close({ isEarned: false })
+    }
+
+    voidString: string = "";
+    isVoiding: boolean = false;
+    validateVoid() {
+        if (this.voidString.toLowerCase() != "void") {
+            return true
+        }
+        return false;
+    }
+    void() {
+        this.isVoiding = true;
+        this.earnedPointsServices.void(this.data.earnedPoint).subscribe(res => {
+            this.isVoiding = false;
+            const { body: { id, message } } = res;
+            this.dialogRef.close({
+                id
+            })
+            this.snackbar.open(message, "", { duration: 3000 })
+        }, err => {
+            const { error: { message } } = err;
+            this.isVoiding = false;
+            this.snackbar.open(message, "", { duration: 3000 })
+        })
     }
 }
 

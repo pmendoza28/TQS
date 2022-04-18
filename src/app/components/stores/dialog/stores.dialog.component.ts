@@ -69,7 +69,6 @@ export class StoresDialogComponent {
             const { store: { id } } = this.data;
             if(this.data.button_name == "Deactivating") {
                 this.storesServices.updateStoreStatus(id, false).subscribe(res => {
-                    console.log(res)
                     const { status, body: { message } } = res;
                     if(status == 200) {
                         this.data.button_name = "Deactivate";
@@ -134,7 +133,6 @@ export class StoresDialogComponent {
         this.buttonRemoveToken = "Removing..."
         this.isRemoving = true
         this.storesServices.removeToken(this.data.tokenId).subscribe(res => {
-            console.log(res)
             this.buttonRemoveToken = "Remove"
             this.isRemoving = false;
             const { status, body: { message } } = res;

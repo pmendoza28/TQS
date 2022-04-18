@@ -146,3 +146,19 @@
         <button mat-raised-button (click)="cancel()">Cancel</button>
     </mat-dialog-actions>
 </div>
+
+<div *ngIf="data.action == 'void'" class="dialog-container-size">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <mat-dialog-content class="mat-typography">
+        {{data.question}}
+        <mat-form-field class="void-field" appearance="legacy" color="accent">
+            <!-- <mat-label>VOID</mat-label> -->
+            <input matInput [(ngModel)]="voidString" autocomplete="off" class="upper-case">
+          </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button  (click)="void()" mat-raised-button class="btn-primary" [disabled]="validateVoid() || isVoiding"
+            [class.spinner]="isVoiding">{{data.button_name}}</button>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+    </mat-dialog-actions>
+</div>

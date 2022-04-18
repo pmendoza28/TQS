@@ -44,7 +44,6 @@ export class ClustersDialogComponent {
             this.buttonCreate = "Creating...";
             this.isCreatingCluster = true;
             this.clusterServices.createCluster(this.cluster).subscribe(res => {
-                console.log(res)
                 this.buttonCreate = "Create";
                 this.isCreatingCluster = false;
                 const { status, body: { message } } = res;
@@ -110,7 +109,7 @@ export class ClustersDialogComponent {
         }, err => {
             this.isDeletingCluster = false;
             this.buttonDelete = "Delete";
-            this.helperServices.catchError(err, true, 3000)
+            this.snackbar.open(err.error.message, "", { duration: 3000})
         })
     }
     cancelDelete() {

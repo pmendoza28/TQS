@@ -45,10 +45,13 @@ export class UserAccountEditComponent {
             members: [],
             earned_points: [],
             redeemed_points: [],
+            cleared_points: [],
             transactions: [],
             generate_file: [],
             earning: [],
             redeeming: [],
+            update_file: [],
+            reports: [],
         }),
     })
     isGettingUserAccountById: boolean = false;
@@ -63,8 +66,8 @@ export class UserAccountEditComponent {
         this.isGettingUserAccountById = true;
         this.userAccountServices.getUserAccountById(this.userIdParams).subscribe(res => {
             const isOk = this.helperServices.isOk(res)
-            if(isOk) {
-                const { body: {  isUserExist, data: { user } } } = res;
+            if (isOk) {
+                const { body: { isUserExist, data: { user } } } = res;
                 this.isGettingUserAccountById = false;
                 this.userAccountClone = user;
                 this.roleQuery = user.role
@@ -83,7 +86,7 @@ export class UserAccountEditComponent {
                 }
             }
         }, err => {
-            const error = this.helperServices.catchError(err,true, 3000);
+            const error = this.helperServices.catchError(err, true, 3000);
             this.httpStatusText = error;
             this.hasHttpError = true;
             this.isGettingUserAccountById = false;
@@ -130,6 +133,14 @@ export class UserAccountEditComponent {
                 })
                 break;
 
+            case "cleared-points":
+                this.userAccountForm.patchValue({
+                    access_permission: {
+                        cleared_points: true
+                    }
+                })
+                break;
+
             case "transactions":
                 this.userAccountForm.patchValue({
                     access_permission: {
@@ -142,6 +153,14 @@ export class UserAccountEditComponent {
                 this.userAccountForm.patchValue({
                     access_permission: {
                         generate_file: true
+                    }
+                })
+                break;
+
+            case "update-file":
+                this.userAccountForm.patchValue({
+                    access_permission: {
+                        update_file: true
                     }
                 })
                 break;
@@ -161,9 +180,17 @@ export class UserAccountEditComponent {
                     }
                 })
                 break;
+
+            case "reports":
+                this.userAccountForm.patchValue({
+                    access_permission: {
+                        reports: true
+                    }
+                })
+                break;
         }
     }
-    
+
     checkFormValueChanges() {
         this.userAccountForm.valueChanges.subscribe(() => {
             this.ifSomethingToChangeValue()
@@ -229,7 +256,7 @@ export class UserAccountEditComponent {
 
     convertAccessPermission() {
         this.permissions = [];
-        let { access_permission: { user_accounts, stores, members, earned_points, redeemed_points, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value
+        let { access_permission: { user_accounts, stores, members, earned_points, redeemed_points, cleared_points, transactions, generate_file, update_file, earning, redeeming, reports } } = this.userAccountForm.value
         if (user_accounts) {
             this.permissions.push("user-accounts")
         }
@@ -245,6 +272,9 @@ export class UserAccountEditComponent {
         if (redeemed_points) {
             this.permissions.push("redeemed-points")
         }
+        if (cleared_points) {
+            this.permissions.push("cleared-points")
+        }
         if (earning) {
             this.permissions.push("earning")
         }
@@ -257,6 +287,12 @@ export class UserAccountEditComponent {
         if (generate_file) {
             this.permissions.push("generate-file")
         }
+        if (update_file) {
+            this.permissions.push("update-file")
+        }
+        if (reports) {
+            this.permissions.push("reports")
+        }
     }
 
     resetPermissions() {
@@ -267,25 +303,28 @@ export class UserAccountEditComponent {
                 members: false,
                 earned_points: false,
                 redeemed_points: false,
+                cleared_points: false,
                 transactions: false,
                 generate_file: false,
+                update_file: false,
                 earning: false,
                 redeeming: false,
+                reports: false,
             }
         })
         this.permissions = []
         if (this.getRole() == this.roleQuery) {
             this.userAccountServices.getUserAccountById(this.userIdParams).subscribe(res => {
                 const isOk = this.helperServices.isOk(res);
-                if(isOk) {
+                if (isOk) {
                     const { body: { data: { user } } } = res;
                     const access_permission = user.access_permission.split(", ");
                     access_permission.map((access: string) => {
                         this.populatePermissionValue(access);
                     })
-                    this.convertAccessPermission()    
+                    this.convertAccessPermission()
                 }
-                
+
             })
         }
     }

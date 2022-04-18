@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { HelperServices } from 'src/app/shared/services/helpers.service';
 import { LocalService } from 'src/app/shared/services/local.service';
 import { AdminLoginServices } from './admin-login.service';
 
@@ -17,7 +18,8 @@ export class AdminLoginComponent {
     private adminLoginServices: AdminLoginServices,
     private snackBar: MatSnackBar,
     private router: Router,
-    private localService: LocalService
+    private localService: LocalService,
+    private helperServices: HelperServices
   ) { }
 
   /** @States ============================================================ */
@@ -36,26 +38,25 @@ export class AdminLoginComponent {
     this.btnLogin = "Authenticating";
     this.adminLoginServices.authenticate(this.loginForm.value).subscribe(res => {
       /*****************@SET_STATE_VALUES ******************** */
-      this.isAuthenticating = false;
-      this.btnLogin = "Login";
-
-      const { isAuthenticated, message, data } = res;
-      this.snackBar.open(message, "", { duration: 3000 })
-
-      if (isAuthenticated) {
-        const { token, user } = data;
-        if (user) {
+      const { status, body: { data: { token, user }, message } } = res;
+      if(status == 200) {
+         if (user) {
           user.access_permission = user.access_permission.split(", ")
         }
         this.localService.setJsonValue("token", token);
         this.localService.setJsonValue("user", user);
+        this.isAuthenticating = false;
+        this.btnLogin = "Login";
+        this.snackBar.open(message, "", { duration: 3000 })
         this.router.navigate(["/admin/user-accounts"]).then(() => location.reload())
       }
     }, err => {
-      this.troubleshoot = true;
-      this.snackBar.open("Requested Timeout..", "", { duration: 3000 })
+      // this.troubleshoot = true;
+      // this.snackBar.open("Requested Timeout..", "", { duration: 3000 })
+      console.log(err)
       this.isAuthenticating = false;
       this.btnLogin = "Login";
+      this.helperServices.catchError(err, true, 3000, err.error.message)
     })
   }
 

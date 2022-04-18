@@ -3,7 +3,7 @@
         <form [formGroup]="storeForm" (submit)="create()">
             <div class="code">
                 <mat-form-field class="upper-case" color="accent">
-                    <mat-label>Store Code</mat-label>
+                    <mat-label>Branch Code</mat-label>
                     <mat-select formControlName="code">
                         <mat-option>
                             <ngx-mat-select-search [formControl]="StoreCodeFilterCtrl"
@@ -15,8 +15,8 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="legacy" color="accent">
-                    <mat-label>Store Name</mat-label>
+                <mat-form-field appearance="legacy" color="accent" class="upper-case">
+                    <mat-label>Branch Name</mat-label>
                     <input Capitalize formControlName="name" class="upper-case" matInput autocomplete="off">
                 </mat-form-field>
             </div>

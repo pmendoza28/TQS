@@ -22,7 +22,7 @@ export class InstallationServices {
         return this.http.post(`${this.credServices.port}/validate-store`, bodyParams).pipe(timeout(10000))
     }
 
-    createStore(store: IStore): Observable<any> {
+    createStore(store: any): Observable<any> {
         return this.http.post(`${this.credServices.clientPort}/stores`, store)
     }
 
@@ -44,6 +44,14 @@ export class InstallationServices {
 
     activateStoreInAdmin(token: string): Observable<any> {
         return this.http.put(`${this.credServices.port}/activate-store`, {token}, { observe: 'response' })
+    }
+
+    installInitialDatabse(data: any) {
+        return this.http.post(`${this.credServices.clientPort}/store-activate/upload-initial-database`, data, { observe: 'events', reportProgress: true })
+    }
+
+    createStoreNotFound(store: any): Observable<any> {
+        return this.http.post(`${this.credServices.clientPort}`, store)
     }
 }
 

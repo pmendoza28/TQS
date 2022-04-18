@@ -30,8 +30,10 @@
     "exceljs": "^4.3.0",
     "export-from-json": "^1.4.1",
     "file-saver": "^2.0.5",
+    "fs": "0.0.1-security",
     "google-maps": "^4.3.3",
     "iplocation": "^7.2.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "ngx-device-detector": "^3.0.0",
     "ngx-mask": "^13.0.0",
@@ -60,5 +62,10 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "typescript": "~4.4.4"
+  },
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
   }
 }

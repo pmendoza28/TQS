@@ -74,21 +74,21 @@
     <div class="container">
       <form [formGroup]="fileUploadForm" (submit)="import()" enctype="multipart/form-data">
         <mat-form-field appearance="legacy">
-          <mat-label>Import Member</mat-label>
+          <mat-label>Select member to import</mat-label>
           <ngx-mat-file-input color="accent" accept=".xlsx, .csv" formControlName="memberExcelFile">
           </ngx-mat-file-input>
         </mat-form-field>
        <div class="select-file-actions">
-        <button mat-raised-button class="btn-primary" [disabled]="fileUploadForm.value.memberExcelFile == null">
-          Preview Excel
+        <button  mat-raised-button class="btn-primary" [disabled]="fileUploadForm.value.memberExcelFile == null || isConvertingToJson || buttonImport == 'Done'">
+          {{buttonImport}}
         </button>
-        <button mat-raised-button mat-dialog-close>Cancel</button>
+        <button mat-raised-button (click)="cancel()">{{buttonCancel}}</button>
        </div>
       </form>
 
       <div class="member-table-container" *ngIf="excelData.length > 0">
-        <div class="title">Excel Preview</div>
-        <div class="table mat-elavation-z8">
+        <div class="title">Importing Members</div>
+        <!-- <div class="table mat-elavation-z8">
           <mat-form-field appearance="legacy" color="accent">
             <mat-label>Search</mat-label>
             <input matInput (keyup)="applyFilter($event)" #input autocomplete="off">
@@ -256,9 +256,9 @@
 
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>
-                <!-- <button mat-icon-button (click)="editAll()">
+                <button mat-icon-button (click)="editAll()">
                   <mat-icon>edit</mat-icon>
-                </button> -->
+                </button>
               </th>
               <td mat-cell *matCellDef="let member">
                 <ng-container *ngIf="member.isEdit; else elseTemplate">
@@ -286,9 +286,28 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
+        </div> -->
+        <div class="importing-progress">
+          <div class="imported-count">
+            <!-- <label>
+              {{importedCount | number}}/{{excelData.length | number}}
+            </label> -->
+          </div>
+          {{currentUploading}} / {{totalMembers}} : {{count }}
+          <mat-progress-bar mode="determinate" [value]="importedPercentage"></mat-progress-bar>
+          <!-- <mat-progress-bar mode="buffer" *ngIf="isConvertingToJson"></mat-progress-bar> -->
+          <div class="percentage-container">
+            <div>
+              Failed to Import Count: {{failedToImported.length | number}} 
+              <button (click)="downloadErrors()" matTooltip="Download to excel" mat-icon-button [disabled]="importedPercentage != 100">
+                <mat-icon>file_download</mat-icon>
+              </button>
+            </div>
+            <div class="percentage">{{importedPercentage | currency: ' '}}%</div>
+          </div>
         </div>
         <div class="actions">
-          <button 
+          <!-- <button 
             mat-raised-button 
             color="accent" 
             *ngIf="!allFieldAreFillUp() && checkDuplicateMobileNumbers().duplicateMobileNumbers.length == 0"
@@ -297,14 +316,11 @@
             [class.spinner]= "isValidating"
             >{{btnValidate}}</button>
           <button *ngIf="readyToUpload" [disabled]="validateUploadMembers() || checkIfEditingTable()" mat-raised-button class="btn-primary" (click)="uploadMembers()">Upload Members</button>
-          <button mat-raised-button mat-dialog-close>Cancel</button>
+          <button mat-raised-button mat-dialog-close>Cancel</button> -->
         </div>
       </div>
     </div>
-
-
   </mat-dialog-content>
-  
 </div>
 
 <div *ngIf="data.action == 'import-members'" class="dialog-container-size">

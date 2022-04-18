@@ -40,22 +40,25 @@ export class UserAccountsNewComponent {
             members: [true],
             earned_points: [true],
             redeemed_points: [true],
+            cleared_points: [true],
             transactions: [],
             generate_file: [true],
             earning: [],
             redeeming: [],
+            update_file: [true],
+            reports: [true]
         }),
     })
     permissions: string[] = []
 
     /** @Methods =============================================================== */
-    addPermission(permission: string) {
-        this.permissions.push(permission)
-    }
+    // addPermission(permission: string) {
+    //     this.permissions.push(permission)
+    // }
 
     convertAccessPermission() {
         this.permissions = [];
-        let { access_permission: { user_accounts, stores, members, earned_points, redeemed_points, transactions, generate_file, earning, redeeming } } = this.userAccountForm.value
+        let { access_permission: { user_accounts, stores, members, earned_points, redeemed_points, cleared_points, transactions, generate_file, update_file, earning, redeeming } } = this.userAccountForm.value
         if (user_accounts) {
             this.permissions.push("user-accounts")
         }
@@ -71,6 +74,9 @@ export class UserAccountsNewComponent {
         if (redeemed_points) {
             this.permissions.push("redeemed-points")
         }
+        if (cleared_points) {
+            this.permissions.push("cleared-points")
+        }
         if (earning) {
             this.permissions.push("earning")
         }
@@ -82,6 +88,9 @@ export class UserAccountsNewComponent {
         }
         if (generate_file) {
             this.permissions.push("generate-file")
+        }
+        if(update_file) {
+            this.permissions.push("update-file")
         }
         this.userAccountForm.value.access_permission = this.permissions
     }
@@ -112,8 +121,10 @@ export class UserAccountsNewComponent {
                 members: false,
                 earned_points: false,
                 redeemed_points: false,
+                cleared_points: false,
                 transactions: false,
                 generate_file: false,
+                update_file: false,
                 earning: false,
                 redeeming: false,
             }

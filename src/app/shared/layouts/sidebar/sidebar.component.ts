@@ -32,7 +32,7 @@ export class SidebarComponent {
       case 'User Accounts':
         this.router.navigate(['/admin/user-accounts'])
         break;
-      case 'Store Codes':
+      case 'Branch Codes':
         this.router.navigate(['/admin/store-codes'])
         break;
       case 'Areas':
@@ -62,6 +62,17 @@ export class SidebarComponent {
       case 'Cleared Points':
         this.router.navigate(['/admin/cleared-points'])
         break;
+      case 'Generate File':
+        this.router.navigate(['/admin/generate-file'])
+        break;
+      case 'Update File':
+        this.router.navigate(['/admin/update-file'])
+        break;
+      case 'Reports':
+        this.router.navigate(['/admin/reports'])
+        break;
+
+
     }
 
   }
@@ -77,7 +88,7 @@ export class SidebarComponent {
     access_permission.map((access: string) => {
       if (access == "user-accounts") masterlist_childrens.push({ name: "User Accounts" })
       if (access == "stores") {
-        masterlist_childrens.push({ name: "Store Codes" })
+        masterlist_childrens.push({ name: "Branch Codes" })
         masterlist_childrens.push({ name: "Areas" })
         masterlist_childrens.push({ name: "Regions" })
         masterlist_childrens.push({ name: "Clusters" })
@@ -103,7 +114,7 @@ const Modules: any[] = [
     name: 'Master list',
     childrens: [
       { name: 'User Accounts' },
-      { name: 'Store Codes' },
+      { name: 'Branch Codes' },
       { name: 'Areas' },
       { name: 'Regions' },
       { name: 'Clusters' },
@@ -127,6 +138,9 @@ const Modules: any[] = [
       { name: 'Update File' }
     ],
   },
+  {
+    name: 'Reports',
+  }
 ];
 
 

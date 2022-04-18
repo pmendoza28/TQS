@@ -1,10 +1,13 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { MembersRegisterServices } from "../members.register.service";
 
 @Component({
     selector: 'app-address',
     templateUrl: './address.component.html',
-    styleUrls: ['./address.component.scss']
+    styleUrls: ['./address.component.scss'],
+    host: {
+        '(document:keydown)': 'handleKeyboardEvent($event)'
+    }
 })
 
 export class AddressComponent {
@@ -12,12 +15,39 @@ export class AddressComponent {
         public membersRegisterServices: MembersRegisterServices
     ) {}
 
+    @ViewChild("txtProvince") txtProvince: ElementRef
+
+    ngAfterViewInit(): void {
+        this.focusProvince()
+    }
+
+    focusProvince() {
+        setTimeout(() => {
+            this.txtProvince.nativeElement.focus()
+        }, 0);
+    }
+
+    handleKeyboardEvent(e: KeyboardEvent) {
+        if(e.ctrlKey && e.key == "ArrowLeft") {
+            this.back()
+        }
+        if(e.ctrlKey && e.key == "ArrowRight") {
+            this.next()
+        }
+        if(e.key == "Enter") {
+            this.next()
+        }
+    }
+
     back() {
         this.membersRegisterServices.steps = "Birthday";
     }
 
     next() {
-        this.membersRegisterServices.steps = "Email";
+        if(!this.validateFields()) {
+            this.membersRegisterServices.steps = "Email";
+        }
+
     }
 
     validateFields() {

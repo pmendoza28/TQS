@@ -7,7 +7,6 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { CredServices } from "./cred.service";
 import { SidebarServices } from "../layouts/sidebar/sidebar.service";
 const fs = require("file-saver")
-
 @Injectable({
   providedIn: "root"
 })
@@ -183,7 +182,6 @@ export class HelperServices {
   }
 
   catchError(err: any, hasDuration: boolean, duration?: number, customMessage?: string) {
-    console.log(err)
     let error: TextError  | "" = ""
     if(err.status == 500) {
       error = "Something went wrong";
@@ -192,6 +190,10 @@ export class HelperServices {
       if(err.error.message == "User Not Found!!") {
         error = "No Data Found"
       }
+    }
+    if(err.status == 401) {
+      error = "Unauthorized"
+      this.snackbar.open(error, customMessage, { duration })
     }
     if(err.status == 429) {
       error = "Too many requests";
@@ -238,6 +240,7 @@ export class HelperServices {
       if (access == "members") masterlist_childrens.push({ name: "Members" })
       if (access == "earned-points") transaction_childrens.push({ name: "Earned Points" })
       if (access == "redeemed-points") transaction_childrens.push({ name: "Redeemed Points" })
+      if (access == "cleared-points") transaction_childrens.push({ name: "Cleared Points" })
     })
     this.sidebarServices.Modules.map((module: any) => {
       if (module.name == "Master list") module.childrens = masterlist_childrens
@@ -245,4 +248,11 @@ export class HelperServices {
     })
     this.sidebarServices.dataSource.data = this.sidebarServices.Modules
   }
+
+  hasAccess(access: string) {
+    const { access_permission } = this.credServices.getCredentials().client_user
+    let canAccess = access_permission.some((acc: string) => acc == access)
+    return canAccess;
+  }
+
 }

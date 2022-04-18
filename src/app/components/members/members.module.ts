@@ -26,6 +26,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 const maskConfig: Partial<IConfig> = {
   validation: false,
 };
@@ -67,7 +68,8 @@ const routes: Routes = [
     MatSnackBarModule,
     NgxMatFileInputModule,
     MatTooltipModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatProgressBarModule
   ]
 })
 export class MembersModule { }

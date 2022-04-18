@@ -1,6 +1,8 @@
 import { Component, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatTable, MatTableDataSource } from "@angular/material/table";
+import { RedeemedPointsDialogComponent } from "../dialog/redeemed.points.dialog.component";
 import { RedeemedPointsServices } from "../redeemed-points.service";
 
 @Component({
@@ -12,7 +14,8 @@ import { RedeemedPointsServices } from "../redeemed-points.service";
 export class RedeemedPointsTableComponent {
 
     constructor(
-        private redeemedPointsServices: RedeemedPointsServices
+        private redeemedPointsServices: RedeemedPointsServices,
+        private dialog: MatDialog
     ) { }
 
     /** @States ========================================*/
@@ -25,6 +28,7 @@ export class RedeemedPointsTableComponent {
     totalRedeemedPoints: number = 0;
     pageSizeOption: number[] = [5, 10, 15, 20];
     @ViewChild("redeemedPointsPaginator") redeemedPointsPaginator: MatPaginator
+    @ViewChild(MatTable) table: MatTable<any>
     dataSource = new MatTableDataSource<any>()
     displayedColumns: string[] = [
         "id",
@@ -33,6 +37,7 @@ export class RedeemedPointsTableComponent {
         "store",
         "points_redeemed",
         "date_redeemed",
+        "actions",
 
     ]
     lblLoading: "Loading..." | "No Data" | "No Redeemed Points Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
@@ -102,5 +107,27 @@ export class RedeemedPointsTableComponent {
             this.redeemedPointsPerPage = pageData.pageSize
             this.searchRedeemedPoints(true)
         }
+    }
+
+    void(redeemedPointId: number) {
+      
+        this.table.renderRows()
+        this.dialog.open(RedeemedPointsDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Confirmation",
+                action: "void",
+                question: "Type VOID to proceed",
+                button_name: "Void",
+                redeemedPointId
+            }
+        }).afterClosed().subscribe(res => {
+            if (res.id) {
+                let index = this.dataSource.data.findIndex((dt: any) => dt.id == res.id)
+                this.dataSource.data[index].deleted_at = Date.now().toString();
+                
+                this.table.renderRows()
+            }
+        })
     }
 }

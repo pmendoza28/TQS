@@ -55,7 +55,7 @@ export class AreasDialogComponent {
             }, err => {
                 this.buttonCreate = "Create";
                 this.isAreaCreating = false;
-                this.helperServices.catchError(err, true, 3000)
+                this.helperServices.catchError(err, true, 3000, err.error.errors.area[0])
             })
         }
         
@@ -109,7 +109,9 @@ export class AreasDialogComponent {
                 this.dialogRef.close({ isDeleted: true })
             }
         }, err => {
-            this.helperServices.catchError(err, true, 3000)
+            this.buttonDelete = "Delete";
+            this.isDeletingArea = false;
+            this.snackbar.open(err.error.message, "", { duration: 3000})
         })
     }
 

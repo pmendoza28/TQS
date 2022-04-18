@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ChangePasswordComponent } from 'src/app/components/change-password/change.password.component';
 import { CredServices } from '../../services/cred.service';
 import { LocalService } from '../../services/local.service';
 import { HeaderServices } from './header.service';
@@ -15,7 +17,8 @@ export class HeaderComponent {
     private localService: LocalService,
     private router: Router,
     public headerServices: HeaderServices,
-    private credServices: CredServices
+    private credServices: CredServices,
+    private dialog: MatDialog
   ) { }
 
   @Output() toogleSidebar: EventEmitter<any> = new EventEmitter();
@@ -29,6 +32,16 @@ export class HeaderComponent {
         new Event('resize')
       )
     }, 300);
+  }
+
+  changePassword() {
+    this.dialog.open(ChangePasswordComponent, {
+      disableClose: true,
+      data: {
+        title: "Change Password",
+        action: "change-password-admin"
+      }
+    })
   }
 
   logout() {

@@ -59,16 +59,15 @@
                         >Upload</button>
                     </div>
                     <div class="upload-progress-bar" *ngIf="uploadingDb">
-                        {{moduleUploading}} 
+                        <!-- {{moduleUploading}} 
                         {{currentUploaded| number}}/
-                        {{totalCurrentUploading| number}}
+                        {{totalCurrentUploading| number}} -->
                         <mat-progress-bar mode="determinate" [value]="uploadedPercentage"></mat-progress-bar>
                         Uploading Progress {{uploadedPercentage | currency:' '}}%
-
                     </div>
                     <div class="actions">
                         <button mat-raised-button matStepperPrevious>Back</button>
-                        <button mat-raised-button class="btn-accent" [disabled]="uploadedPercentage != 100" matStepperNext>Next</button>
+                        <button mat-raised-button class="btn-accent" [disabled]="uploadedPercentage != 100 || uploadStatus != 'Done'" matStepperNext>{{buttonNext}}</button>
                     </div>
                 </form>
     

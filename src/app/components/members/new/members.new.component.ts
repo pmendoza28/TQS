@@ -36,8 +36,10 @@ export class MembersNewComponent {
         municipality: ["", Validators.required],
         province: ["", Validators.required],
         store_id: ["", Validators.required],
-        email: ["", [Validators.required, Validators.email]],
+        email: ["", [Validators.email]],
         mobile_number: ["", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+        primary_cook: ["primary"],
+        working_status: ["working"]
     })
 
     ngOnInit(): void {

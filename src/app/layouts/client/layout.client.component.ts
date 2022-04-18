@@ -30,8 +30,8 @@ export class LayoutClientComponent {
 
     ngOnInit(): void {
         this.mediaQuery()
+        console.log(this.credServices.getCredentials())
     }
-
 
     ngOnDestroy(): void {
         this.mediaSub.unsubscribe();

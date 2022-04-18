@@ -13,7 +13,10 @@ import { RedeemService } from "./redeem.service";
 @Component({
     selector: 'app-redeem',
     templateUrl: './redeem.component.html',
-    styleUrls: ['./redeem.component.scss']
+    styleUrls: ['./redeem.component.scss'],
+    host: {
+        '(document:keydown)': 'handleKeyboardEvent($event)'
+    }
 })
 
 export class RedeemComponent {
@@ -31,6 +34,11 @@ export class RedeemComponent {
     @ViewChild("txtMobileNumber") txtMobileNumber: ElementRef
     @ViewChild("txtRedeemPoints") txtRedeemPoints: ElementRef
 
+    handleKeyboardEvent(e: KeyboardEvent) {
+        if(e.key == "Escape") {
+            this.router.navigate(["/client/transactions"])
+        }
+    }
 
     ngDoCheck(): void {
         if(!this.appServices.internetForm.value.isOnline) {
@@ -39,10 +47,14 @@ export class RedeemComponent {
     }
 
     ngAfterViewInit(): void {
-        if (isPlatformBrowser(this.platformId)) {
+        this.focusMobileNumber()    
+    }
+
+
+    focusMobileNumber() {
+        setTimeout(() => {
             this.txtMobileNumber.nativeElement.focus()
-        }
-        console.log(this.credServices.getCredentials())
+        }, 0);
     }
 
     getStoreName() {
@@ -67,6 +79,7 @@ export class RedeemComponent {
     isMobileNumberExists: boolean = false;
     totalClearedPoints: number = 0;
     memberId: number;
+    memberObjectId: any;
     token: string;
     referenceNo: string;
     isValidating: boolean = false;
@@ -75,31 +88,33 @@ export class RedeemComponent {
         const form = { mobilenumber: mobile_number }
         this.isValidating = true;
         this.redeemServices.validateMobileNumber(form).subscribe(res => {
-            console.log(`res`,res)
             const { is_exists, clearedpoints, member_id, token, message } = res;
-            this.isMobileNumberExists = is_exists;
-            this.totalClearedPoints = clearedpoints;
-            this.memberId = member_id;
-            this.token = token;
-            this.isValidating = false;
-            if(is_exists) {
-                setTimeout(() => {
-                    this.txtRedeemPoints.nativeElement.focus()
-                    this.redeemForm.controls.mobile_number.disable()
-                }, 100);
-            } 
-            else {
-                this.snackbar.open(message, "", { duration: 3000 })
-            }
+            this.redeemServices.getMemberByMysqlId(mobile_number).subscribe(memberResponse => {
+                this.memberObjectId = memberResponse._id,
+                this.isMobileNumberExists = is_exists;
+                this.totalClearedPoints = clearedpoints;
+                this.memberId = member_id;
+                this.token = token;
+                this.isValidating = false;
+                if (is_exists) {
+                    setTimeout(() => {
+                        this.txtRedeemPoints.nativeElement.focus()
+                        this.redeemForm.controls.mobile_number.disable()
+                    }, 100);
+                }
+                else {
+                    this.snackbar.open(message, "", { duration: 3000 })
+                }
+            })
+            
           
         }, err => {
-            console.log(`err`,err)
             this.isValidating = false;
         })
     }
 
     validateForm() {
-        if(this.redeemForm.value.redeemPoints > this.totalClearedPoints || this.redeemForm.value.redeemPoints == '' || this.buttonName == "Redeemed") {
+        if(this.redeemForm.value.redeemPoints > this.totalClearedPoints || this.redeemForm.value.redeemPoints == '' || this.buttonName == "Redeemed"|| this.redeemForm.value.redeemPoints == 0 || this.totalClearedPoints <= 0 || this.redeemForm.value.redeemPoints == '.') {
             return true
         }
         return false
@@ -114,6 +129,13 @@ export class RedeemComponent {
             user_id: this.credServices.getCredentials().client_user.user_mysql_id,
             store_token: this.credServices.getCredentials().activated_store.token
         }
+        const saveRedeemedPointsInLocalStorage = {
+            member_id: this.memberId,
+            member_object_id: this.memberObjectId,
+            redeemed_points: this.redeemForm.value.redeemPoints,
+            transact_by: this.credServices.getCredentials().client_user._id
+        }
+      
         this.dialog.open(RedeemedPointsDialogComponent, {
             disableClose: true,
             data: {
@@ -122,7 +144,8 @@ export class RedeemComponent {
                 action: "redeem",
                 button_name: "Redeem",
                 redeemForm: form,
-                token: this.token
+                token: this.token,
+                saveRedeemedPointsInLocalStorage
                 
             }
         }).afterClosed().subscribe(dialogResponse => {
@@ -150,5 +173,30 @@ export class RedeemComponent {
 
     remainingAvailablePoints() {
         return Number(this.totalClearedPoints) - Number(this.redeemForm.value.redeemPoints)
+    }
+
+    ok() {
+        this.dialog.open(RedeemedPointsDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Confirmation",
+                question: "Earn Points?",
+                action: "earnPoints",
+                button_name: "Earn"
+            }
+        }).afterClosed().subscribe(dialogResponse => {
+            if(dialogResponse == true) {
+                this.router.navigate(['/client/transactions/earn-points', { mobileNumber: this.redeemForm.value.mobile_number }])
+            }
+            if(dialogResponse == false) {
+                this.redeemForm.enable()
+                this.redeemForm.patchValue({
+                    mobile_number: [''],
+                    redeemPoints: [''],
+                })
+                this.buttonName = "Redeem";
+                this.isMobileNumberExists = false;
+            }
+        })
     }
 }

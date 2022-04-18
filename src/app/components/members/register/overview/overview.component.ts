@@ -9,7 +9,10 @@ import { MembersRegisterServices } from "../members.register.service";
 @Component({
     selector: 'app-overview',
     templateUrl: './overview.component.html',
-    styleUrls: ['./overview.component.scss']
+    styleUrls: ['./overview.component.scss'],
+    host: {
+        '(document:keydown)': 'handleKeyboardEvent($event)'
+    }
 })
 
 export class OverviewComponent {
@@ -20,6 +23,12 @@ export class OverviewComponent {
         private credServices: CredServices,
         private router: Router
     ) {} 
+
+    handleKeyboardEvent(e: KeyboardEvent) {
+        if(e.ctrlKey && e.key == "ArrowLeft") {
+            this.back()
+        }
+    }
    
     getStoreName() {
         return this.credServices.getCredentials().activated_store.storeObject.name
@@ -40,6 +49,8 @@ export class OverviewComponent {
             municipality: this.membersRegisterServices.municipality,
             province: this.membersRegisterServices.province,
             mobile_number: this.membersRegisterServices.mobile_number,
+            created_by: this.credServices.getCredentials().client_user.user_mysql_id,
+            store_mysql_id: this.credServices.getCredentials().activated_store.store_mysql_id
         }
         this.dialog.open(MembersDialogComponent, {
             disableClose: true,
@@ -64,15 +75,6 @@ export class OverviewComponent {
                 this.membersRegisterServices.buttonName = "CREATED";
                 this.router.navigate(['/client/transactions'])
             }
-
-            // else {
-            //     if(isCreated) {
-            //         this.snackBar.open(message, "", {
-            //             duration: 3000
-            //         })
-            //         this.membersRegisterServices.buttonName = "CREATED";
-            //     }
-            // }
           
         })
         

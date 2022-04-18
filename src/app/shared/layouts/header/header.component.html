@@ -20,6 +20,10 @@
       <mat-icon>settings</mat-icon>
       <span>Settings</span>
     </button>
+    <button mat-menu-item (click)="changePassword()">
+      <mat-icon>password</mat-icon>
+      <span>Change Password</span>
+    </button>
     <button mat-menu-item (click)="logout()">
       <mat-icon>logout</mat-icon>
       <ng-container *ngIf="loggingOut; else elseTemplate">

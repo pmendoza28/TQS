@@ -45,12 +45,10 @@ export class SettingsComponent {
     }
 
     epicFunction() {
-        console.log(this.deviceService.getDeviceInfo());
     }
 
     getEarningPointsPercentage() {
         this.settingsServices.getEarningPointsPercentage().subscribe(res => {
-            console.log(res);
             const { earning_percentage } = res;
             this.currentEarningPointsPercentage = earning_percentage;
             this.earningPointsPercentage = earning_percentage;

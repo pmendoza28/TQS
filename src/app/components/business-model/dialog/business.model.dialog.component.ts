@@ -39,7 +39,6 @@ export class BusinessModelDialogComponent {
             this.isCreating = true;
             this.buttonCreate = "Creating...";
             this.businessModelServices.createBusinessModel(this.businessModel).subscribe(res => {
-                console.log(res)
                 this.isCreating = false;
                 this.buttonCreate = "Create";
                 const { status, body: { message } } = res;
@@ -108,7 +107,8 @@ export class BusinessModelDialogComponent {
         }, err => {
             this.isDeleting = false;
             this.buttonDelete = "Delete";
-            this.helperServices.catchError(err, true, 3000)
+            // this.helperServices.catchError(err, true, 3000, err.error.message)
+            this.snackbar.open(err.error.message, "", { duration: 3000})
         })
     }
     cancelDelete() {

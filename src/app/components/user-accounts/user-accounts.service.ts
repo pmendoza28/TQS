@@ -42,7 +42,7 @@ export class UserAccountsServices {
     }
 
     createUserAccount(userAccountObject: any): Observable<any> {
-        return this.http.post(`${this.credServices.port}/admin/accounts/create`, userAccountObject).pipe(
+        return this.http.post(`${this.credServices.port}/admin/accounts/create`, userAccountObject, { observe: 'response' }).pipe(
             timeout(10000)
         )
     }

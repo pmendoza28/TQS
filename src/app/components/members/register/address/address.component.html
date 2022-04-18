@@ -4,17 +4,17 @@
         <div class="required-fields">
             <mat-form-field appearance="legacy">
                 <mat-label>PROVINCE</mat-label>
-                <input matInput autocomplete="off" class="capitalize" [(ngModel)]="membersRegisterServices.province">
+                <input #txtProvince [OnlyLetter] matInput autocomplete="off" class="upper-case" [(ngModel)]="membersRegisterServices.province">
             </mat-form-field>
     
             <mat-form-field appearance="legacy">
                 <mat-label>MUNICIPALITY</mat-label>
-                <input matInput autocomplete="off" class="capitalize" [(ngModel)]="membersRegisterServices.municipality">
+                <input [OnlyLetter] matInput autocomplete="off" class="upper-case" [(ngModel)]="membersRegisterServices.municipality">
             </mat-form-field>
     
             <mat-form-field appearance="legacy">
                 <mat-label>BARANGAY</mat-label>
-                <input matInput autocomplete="off" class="capitalize" [(ngModel)]="membersRegisterServices.barangay">
+                <input matInput autocomplete="off" class="upper-case" [(ngModel)]="membersRegisterServices.barangay">
             </mat-form-field>
         </div>
         <div class="border"></div>
@@ -22,11 +22,11 @@
             <div class="sub-title ">(OPTIONAL)</div>
             <mat-form-field appearance="legacy">
                 <mat-label>PUROK</mat-label>
-                <input matInput autocomplete="off" class="capitalize" [(ngModel)]="membersRegisterServices.purok">
+                <input matInput autocomplete="off" class="upper-case" [(ngModel)]="membersRegisterServices.purok">
             </mat-form-field>
             <mat-form-field appearance="legacy">
                 <mat-label>STREET NAME</mat-label>
-                <input matInput autocomplete="off" class="capitalize" [(ngModel)]="membersRegisterServices.street_name">
+                <input matInput autocomplete="off" class="upper-case" [(ngModel)]="membersRegisterServices.street_name">
             </mat-form-field>
         </div>
     </div>

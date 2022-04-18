@@ -20,7 +20,7 @@ export class StoreCodesComponent {
         private dialog: MatDialog
     ) { }
     @ViewChild(MatTable) table: MatTable<any>
-    title: string = "Store Codes";
+    title: string = "Branch Codes";
     searchValue: string = "";
     dataSource = new MatTableDataSource<any>()
     isTableLoading: boolean = false;
@@ -65,7 +65,7 @@ export class StoreCodesComponent {
         this.dialog.open(StoreCodeDialogComponent, {
             disableClose: true,
             data: {
-                title: "Update Store Code",
+                title: "Update Branch Code",
                 action: "UpdateStoreCode",
                 storeCodeId,
                 storeCode
@@ -84,8 +84,8 @@ export class StoreCodesComponent {
         this.dialog.open(StoreCodeDialogComponent, {
             disableClose: true,
             data: {
-                title: "Delete Store Code",
-                question: "Are you sure you want to delete this Store Code?",
+                title: "Delete Branch Code",
+                question: "Are you sure you want to delete this Branch Code?",
                 action: 'DeleteStoreCode',
                 storeCodeId
             }
@@ -121,7 +121,6 @@ export class StoreCodesComponent {
     populateStoreCodes() {
         this.isTableLoading = true;
         this.storeCodesServices.getStores(this.searchValue, this.currentPage, this.storeCodePerPage).subscribe(res => {
-            console.log(res)
             this.isTableLoading = false;
             const isOk = this.helpersServices.isOk(res);
             if (isOk) {

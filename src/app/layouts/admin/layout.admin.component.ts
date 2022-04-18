@@ -33,14 +33,14 @@ export class LayoutAdminComponent {
 
   ngOnInit(): void {
     this.mediaQuery()
+    
   }
 
 
   ngOnDestroy(): void {
     this.mediaSub.unsubscribe();
   }
-
-
+  
   SideBarToggler() {
     this.sidebarOpen = !this.sidebarOpen;
   }

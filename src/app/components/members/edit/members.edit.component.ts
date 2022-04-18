@@ -49,7 +49,7 @@ export class MembersEditComponent {
         municipality: ["", Validators.required],
         province: ["", Validators.required],
         store_id: ["", Validators.required],
-        email: ["", [Validators.required, Validators.email]],
+        email: ["", [Validators.email]],
         mobile_number: ["", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     })
 
@@ -57,7 +57,6 @@ export class MembersEditComponent {
     populateMemberById() {
         this.isGettingStoreById = true;
         this.membersServices.getMemberbyID(this.memberIdParams).subscribe(res => {
-            console.log(res)
             this.isGettingStoreById = false;
             const { status, body: { data: { member }, message } } = res;
             if(status == 200) {

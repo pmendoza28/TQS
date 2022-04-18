@@ -21,6 +21,14 @@
             align-items: center;
             flex-wrap: wrap;
         }
+        .fields {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
        
     }
     .loader {

@@ -26,12 +26,12 @@
                     </ng-container>
     
                     <ng-container matColumnDef="code">
-                        <th mat-header-cell *matHeaderCellDef> Code </th>
+                        <th mat-header-cell *matHeaderCellDef> Branch Code </th>
                         <td mat-cell class="code" *matCellDef="let store"> {{store.code}} </td>
                     </ng-container>
     
                     <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef> Store Name </th>
+                        <th mat-header-cell *matHeaderCellDef> Branch Name </th>
                         <td mat-cell class="store-name" *matCellDef="let store"> {{store.name}} </td>
                     </ng-container>
     
@@ -68,7 +68,7 @@
                     </ng-container>
     
     
-                    <ng-container matColumnDef="actions">
+                    <ng-container matColumnDef="actions" stickyEnd="">
                         <th mat-header-cell *matHeaderCellDef> Actions </th>
                         <td mat-cell class="actions-menu" *matCellDef="let store">
                             <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">

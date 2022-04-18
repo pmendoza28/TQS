@@ -27,7 +27,6 @@ const routes: Routes = [
   { path: '', component: UserAccountTableComponent },
   { path: 'new', component: UserAccountsNewComponent },
   { path: 'edit', component: UserAccountEditComponent },
-
 ]
 
 @NgModule({
@@ -35,7 +34,7 @@ const routes: Routes = [
     UserAccountTableComponent,
     UserAccountsNewComponent,
     UserAccountsDialogComponent,
-    UserAccountEditComponent
+    UserAccountEditComponent,
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { AppServices } from "src/app/app.service";
 
 @Component({
     selector: 'app-getting-started',
@@ -9,7 +10,8 @@ import { Router } from "@angular/router";
 
 export class GettingStartedComponent {
     constructor(
-        private router: Router
+        private router: Router,
+        public appService: AppServices
     ) {}
     gettingStarted: boolean = false;
     buttonName: "Get Started" | "Getting Started..." = "Get Started";
@@ -20,6 +22,5 @@ export class GettingStartedComponent {
             this.gettingStarted = false;
             this.router.navigate(['/portal/installation'])
         }, 0);
-        
     }
 }

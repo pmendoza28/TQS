@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { AppServices } from "src/app/app.service";
 import { LocalService } from "src/app/shared/services/local.service";
 import { ClientLoginServices } from "./client.login.service";
 
@@ -11,14 +12,15 @@ import { ClientLoginServices } from "./client.login.service";
     styleUrls: ['./client.login.component.scss']
 })
 
-export class ClientLoginComponent {
+export class ClientLoginComponent implements OnInit {
     constructor(
         private clientLoginServices: ClientLoginServices,
         private fb: FormBuilder,
         private snackBar: MatSnackBar,
         private localService: LocalService,
-        private router: Router
-    ) {}
+        private router: Router,
+        private appService: AppServices
+    ) { }
 
     loginForm: FormGroup = this.fb.group({
         username: ['', Validators.required],
@@ -27,18 +29,23 @@ export class ClientLoginComponent {
 
     login() {
         this.clientLoginServices.login(this.loginForm.value).subscribe(res => {
-            console.log(res)
             const { token, user, storeActivated } = res;
+            user.access_permission = user.access_permission.toString().split(", ")
             this.localService.setJsonValue("client-user", user)
             this.localService.setJsonValue("client-token", token)
             this.localService.setJsonValue("store-activated", storeActivated)
             this.router.navigate(['/client/transactions']).then(() => location.reload())
         }, err => {
-            console.log(err)
             const { error: { message } } = err;
             this.snackBar.open(message, "", {
                 duration: 3000
             })
         })
+    }
+
+    ngOnInit(): void {
+        if (!this.appService.isServerStarted) {
+            this.router.navigate(['/portal/getting-started'])
+        }
     }
 }

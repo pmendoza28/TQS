@@ -34,14 +34,19 @@ export class UserAccountsDialogComponent {
         this.isButtonLoading = true;
         this.data.button_name = "Creating..";
         this.userAccountServices.createUserAccount(this.data.userAccountForm).subscribe(res => {
-            const { message, data: { is_created } } = res;
-            this.snackBar.open(message, "", { duration: 3000 })
-            this.isButtonLoading = false;
-            this.data.button_name = "Create";
-            if (is_created) {
+            const { status, body: { message } } = res;
+            if(status == 201) {
+                 this.snackBar.open(message, "", { duration: 3000 })
+                 this.isButtonLoading = false;
+                 this.data.button_name = "Create";
                 this.router.navigate(["/admin/user-accounts"])
                 this.dialogRef.close()
             }
+            
+        }, err => {
+            this.helperServices.catchError(err, true, 3000, err.error.message)
+            this.isButtonLoading = false;
+            this.data.button_name = "Create";
         })
     }
 
@@ -50,9 +55,8 @@ export class UserAccountsDialogComponent {
         this.data.button_name = "Updating";
         const { userId, updatedUserAccounts } = this.data;
         this.userAccountServices.updateUserAccountById(userId, updatedUserAccounts).subscribe(res => {
-            const isOk = this.helperServices.isOk(res);
-            if (isOk) {
-                const { body: { message } } = res;
+            const { status, body: { message } } = res;
+            if(status == 200) {
                 this.snackBar.open(message, "", { duration: 3000 })
                 if (this.credServices.getCredentials().user.id == userId) {
                     this.localServices.setJsonValue("user", { id: userId, ...updatedUserAccounts })
@@ -61,13 +65,12 @@ export class UserAccountsDialogComponent {
                 this.isButtonLoading = false;
                 this.router.navigate(["/admin/user-accounts"])
                 this.dialogRef.close()
-                
             }
+          
         }, err => {
-            this.helperServices.catchError(err, true, 3000)
+            this.helperServices.catchError(err, true, 3000, err.error.message);
             this.isButtonLoading = false;
             this.data.button_name = "Retry Update"
-
         })
     }
 
@@ -77,7 +80,6 @@ export class UserAccountsDialogComponent {
             this.data.button_name = "Deactivating";
             this.isButtonLoading = true;
             this.userAccountServices.deactivateUserAccountById(id, "Deactivate").subscribe(res => {
-                console.log(res)
                 const isOk = this.helperServices.isOk(res);
                 if (isOk) {
                     const { body: { isDeactivated, message } } = res;
@@ -92,7 +94,6 @@ export class UserAccountsDialogComponent {
                 }
 
             }, err => {
-                console.log(`err `, err)
                 this.isButtonLoading = false;
                 this.data.button_name = "Re-Deactivate";
                 const error = this.helperServices.catchError(err, false)
@@ -116,7 +117,6 @@ export class UserAccountsDialogComponent {
                     }
                 }
             }, err => {
-                console.log(err)
                 this.isButtonLoading = false;
                 this.data.button_name = "Re-Activate";
                 const error = this.helperServices.catchError(err, true, 3000)

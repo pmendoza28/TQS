@@ -2,7 +2,8 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { Component, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { EarnedPointsDialogComponent } from "../dialog/earned.points.dialog.component";
 import { EarnedPointsServices } from "../earned.points.service";
 
@@ -16,7 +17,8 @@ export class EarnedPointsTableComponent {
 
     constructor(
         private earnedPointsServices: EarnedPointsServices,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private snackbar: MatSnackBar
     ) { }
 
     /** @LifeCycles =============================================================== */
@@ -28,6 +30,26 @@ export class EarnedPointsTableComponent {
         this.checkSearchValue()
     }
 
+
+    void(earnedPoint: number) {
+        this.dialog.open(EarnedPointsDialogComponent, {
+            disableClose: true,
+            data: {
+                title: "Confirmation",
+                action: "void",
+                question: "Type VOID to proceed",
+                button_name: "Void",
+                earnedPoint
+            }
+        }).afterClosed().subscribe(res => {
+            if (res.id) {
+                let index = this.dataSource.data.findIndex((dt: any) => dt.id == res.id)
+                this.dataSource.data[index].deleted_at = Date.now().toString()
+                this.table.renderRows()
+            }
+        })
+    }
+
     /** @States =============================================================== */
     title: string = "Earned Points Transactions";
     searchValue: string = "";
@@ -35,10 +57,13 @@ export class EarnedPointsTableComponent {
     isSearched: boolean = false;
     currentPage = 1;
     @ViewChild("earnedPointsPaginator") memberPaginator: MatPaginator
+    @ViewChild(MatTable) table: MatTable<any>
     dataSource = new MatTableDataSource<IEarnedPointsDataSource>()
     displayedColumns: string[] = [
-        "select",
+        // "select",
         "id",
+        "branch_code",
+        "store",
         "transaction_no",
         "category",
         "first_name",
@@ -47,7 +72,8 @@ export class EarnedPointsTableComponent {
         "amount",
         "points_earn",
         // "status",
-        "transaction_datetime"
+        "transaction_datetime",
+        "actions",
     ]
     lblLoading: "Loading..." | "No Data" | "No Earned Points Found" | "Server cannot be reach. Please Try Again Later" = "Loading...";
     pageSizeOption: number[] = [5, 10, 15, 20];
@@ -59,7 +85,7 @@ export class EarnedPointsTableComponent {
     populateEarnedPointsWithPaginator() {
         this.isTableLoading = true;
         this.earnedPointsServices.getEarnedPointsWithPaginator(this.currentPage, this.earnedPointsPerPage).subscribe(res => {
-            console.log(`response`, res);
+            console.log(res)
             this.isTableLoading = false;
             const { data, total } = res;
             if (data.length == 0) this.lblLoading = "No Data";
@@ -207,5 +233,6 @@ interface IEarnedPointsDataSource {
     transaction_no: string;
     amount: number;
     points_earn: number;
-    transaction_datetime: string
+    transaction_datetime: string;
+    deleted_at: string
 }

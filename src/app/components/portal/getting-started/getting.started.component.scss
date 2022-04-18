@@ -26,4 +26,12 @@
         justify-content: flex-end;
         gap: 10px;
     }
+
+    .note {
+        border: 1px solid gray;
+        border-radius: 1em;
+        padding: 10px;
+        text-align: center;
+        color: red;
+    }
 }

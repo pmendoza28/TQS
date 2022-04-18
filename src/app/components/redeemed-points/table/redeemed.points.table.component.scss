@@ -23,6 +23,11 @@
     justify-content: center;
     align-items: center;
     padding: 0px 20px 20px;
+    
+    .voided {
+        text-decoration: line-through;
+        color: red;
+    }
     .status-changed {
         padding: 2px;
         border-radius: 5px;

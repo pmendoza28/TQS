@@ -2,6 +2,7 @@ import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { RedeemService } from "../redeem/redeem.service";
+import { RedeemedPointsServices } from "../redeemed-points.service";
 
 @Component({
     selector: 'app-redeemed-points-dialog',
@@ -14,18 +15,21 @@ export class RedeemedPointsDialogComponent {
         private dialogRef: MatDialogRef<RedeemedPointsDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private redeemServices: RedeemService,
-        private snackbar: MatSnackBar
-    ) {}
+        private snackbar: MatSnackBar,
+        private redeemedPointsServices: RedeemedPointsServices
+    ) { }
 
     isRedeeming: boolean = false;
 
     redeem() {
         this.isRedeeming = true;
         this.redeemServices.redeem(this.data.redeemForm, this.data.token).subscribe(res => {
-            console.log(res)
-            this.dialogRef.close({isRedeemed: true, reference_no: res.reference_no})
+            this.redeemServices.saveRedeemInLocalStorage(this.data.saveRedeemedPointsInLocalStorage).subscribe(localStorageRedeemedResponse => {
+                this.dialogRef.close({ isRedeemed: true, reference_no: res.reference_no })
+            })
+
+           
         }, err => {
-            console.log(err)
             this.snackbar.open("Unauthorized", "", {
                 duration: 3000
             })
@@ -34,6 +38,25 @@ export class RedeemedPointsDialogComponent {
     }
 
     cancel() {
-        this.dialogRef.close({isRedeemed: false})
+        this.dialogRef.close({ isRedeemed: false })
+    }
+
+    validateVoid() {
+        if (this.voidString.toLowerCase() != "void") {
+            return true
+        }
+        return false;
+    }
+
+    voidString: string = "";
+    isVoiding: boolean = false;
+    void() {
+        this.isVoiding = true
+        this.redeemedPointsServices.void(this.data.redeemedPointId).subscribe(res => {
+            this.isVoiding = false
+            const { body: { id, message } } = res;
+            this.dialogRef.close({ id })
+            this.snackbar.open(message)
+        })
     }
 }

@@ -11,9 +11,34 @@ export class TransactionPointsService {
     constructor(
         private http: HttpClient,
         private credServices: CredServices
-    ) {}
+    ) { }
 
     getEarnedPoints(): Observable<any> {
-        return this.http.get(`${this.credServices.clientPort}/earn`)
+        return this.http.get(`${this.credServices.clientPort}/earn/pending`)
+    }
+
+    getSynchedEarnedPoints(options: any): Observable<any> {
+        return this.http.post(`${this.credServices.clientPort}/earn/synched`, options, { observe: 'response'})
+    }
+
+    sync(updateFile: any, store_id: number) {
+        return this.http.post(`${this.credServices.port}/updatefile-sync/${store_id}`, updateFile, { observe: 'response'})
+    }
+
+    void(earnedId: any, void_by: any): Observable<any> {
+        return this.http.post(`${this.credServices.clientPort}/earn/void/${earnedId}`, { void_by }, { observe: 'response' })
+    }
+
+    removeVoid(): Observable<any> {
+        return this.http.post(`${this.credServices.clientPort}/earn/remove-void`, {}, {observe: 'response'})
+    }
+
+    getRedeemedPoints(options: any): Observable<any> {
+        return this.http.get(`${this.credServices.clientPort}/redeemed/paginate?searchValue=${options.searchValue}&currentPage=${options.currentPage}&itemsPerPage=${options.itemsPerPage}`, { observe: 'response'})
+    }
+
+
+    getVoidedEarnedPoints(): Observable<any> {
+        return this.http.get(`${this.credServices.clientPort}/earn/voided`, { observe: 'response'})
     }
 }

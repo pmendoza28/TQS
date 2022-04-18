@@ -40,17 +40,30 @@ export class RegionComponent {
     }
 
     searchRegion() {
-
+        this.isTableLoading = true;
+        this.regionServices.getRegions(this.searchValue, this.currentPage, this.regionPerPage).subscribe(res => {
+            this.isTableLoading = false;
+            const { status, body: { data, total} } = res;
+            if(status == 200) {
+                if(data == 0) this.lblLoading = "No Data Found";
+                this.dataSource.data = data;
+                this.totalRegions = total;
+            }
+        }, err => {
+            this.isTableLoading = false;
+            const error = this.helperServices.catchError(err, true, 3000)
+            this.lblLoading = error;
+        })
     }
 
     clearSearch() {
-
+        this.searchValue = ""
+        this.populateRegions()
     }
 
     populateRegions() {
         this.isTableLoading = true;
         this.regionServices.getRegions(this.searchValue, this.currentPage, this.regionPerPage).subscribe(res => {
-            console.log(res)
             this.isTableLoading = false;
             const { status, body: { data, total} } = res;
             if(status == 200) {
@@ -114,7 +127,9 @@ export class RegionComponent {
         })
     }
 
-    onChangePage(pageEvent: PageEvent) {
-
+    onChangePage(pageData: PageEvent) {
+        this.currentPage = pageData.pageIndex + 1;
+        this.regionPerPage = pageData.pageSize
+        this.populateRegions()
     }
 }

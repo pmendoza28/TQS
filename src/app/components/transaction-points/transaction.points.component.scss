@@ -30,9 +30,9 @@
     
     .tab-container {
         background-color: #1d1b1b;
-        grid-column: 4/22;
+        grid-column: 1/25;
         grid-row: 2;
-        height: calc(100vh - 300px);
+        height: calc(100vh - 225px);
         border-radius: 1em;
         display: flex;
         flex-direction: column;
@@ -46,17 +46,30 @@
                 flex-direction: column;
                 justify-content: flex-start;
                 align-items: center;
-                // border: 1px solid white;
                 height: calc(100vh - 351px);
                 .search {
                     width: 95%;
                     margin: 10px 20px 0px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                    gap: 10px;
                     mat-form-field {
-                        width: 100%;
+                        margin-left: auto;
+                        width: 350px;
+                    }
+                    img {
+                        width: 25px;
+                        margin: 0px 5px;
                     }
                 }
                 .table-container {
                     width: 95%;
+                    .voided {
+                        text-decoration: line-through;
+                        color: red;
+                    }
                     .transaction-no {
                         min-width: 150px;
                         min-height: 100px;
@@ -76,31 +89,11 @@
                     .date-earned {
                         min-width: 180px;
                     }
-                    // table {
-                    //     // min-height: 250px;
-                    // }
                 }
                 mat-paginator {
                     width: 95%;
                 }
             }
-        }
-       
+        }  
     }
-
- 
-
- 
 }
-
-
-
-
-
-
-
-
-
-
-
-

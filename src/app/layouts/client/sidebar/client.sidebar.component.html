@@ -9,15 +9,15 @@
     </div> -->
   <mat-nav-list class="menu-container">
     <mat-list-item routerLink="/client/transactions">
-      <mat-icon class="selected-icon" mat-list-icon>dashboard</mat-icon> Transactions
+      <mat-icon class="selected-icon" mat-list-icon>dashboard</mat-icon> Modules
     </mat-list-item>
 
-    <mat-list-item>
-      <mat-icon class="selected-icon" mat-list-icon>reports</mat-icon> Reports
-    </mat-list-item>
-
-    <mat-list-item>
+    <mat-list-item routerLink="/client/transactions/generate-file" *ngIf="helperServices.hasAccess('generate-file')">
       <mat-icon class="selected-icon" mat-list-icon>download</mat-icon> Generate File
+    </mat-list-item>
+
+    <mat-list-item routerLink="/client/transactions/update-file" *ngIf="helperServices.hasAccess('update-file')">
+      <mat-icon class="selected-icon" mat-list-icon>upload</mat-icon> Update File
     </mat-list-item>
   </mat-nav-list>
 </mat-nav-list>

@@ -74,7 +74,9 @@
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="members" value="members">Members</mat-checkbox>
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="earned_points" value="earned-points">Earned Points</mat-checkbox>
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="redeemed_points" value="redeemed-points">Redeemed Points</mat-checkbox>
+                    <mat-checkbox (change)="convertAccessPermission()" formControlName="cleared_points" value="cleared-points">Cleared Points</mat-checkbox>
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="generate_file" value="generate-file">Generate File</mat-checkbox>
+                    <mat-checkbox (change)="convertAccessPermission()" formControlName="update_file" value="update-file">Update File</mat-checkbox>
                 </div>
                
 
@@ -84,6 +86,7 @@
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="redeeming" value="redeeming">Redeeming</mat-checkbox>
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="transactions" value="transactions">Transactions</mat-checkbox>
                     <mat-checkbox (change)="convertAccessPermission()" formControlName="generate_file" value="generate-file">Generate File</mat-checkbox>
+                    <mat-checkbox (change)="convertAccessPermission()" formControlName="update_file" value="update-file">Update File</mat-checkbox>
                 </div>
                 <div>
                     <mat-error *ngIf="permissions.length == 0">

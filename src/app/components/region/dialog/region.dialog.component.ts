@@ -81,10 +81,15 @@ export class RegionDialogComponent {
                 this.snackbar.open(message, "", { duration: 3000 })
                 this.dialogRef.close({ isUpdated: true, data})
             }
+        }, err => {
+            this.helperServices.catchError(err, true, 3000, err.error.message)
+            this.buttonUpdate="Update";
+            this.isUpdating = false;
         })
     }
     cancelUpdate() {
         this.dialogRef.close({ isUpdated: false })
+      
     }
 
     isDeleting: boolean = false;
@@ -98,6 +103,10 @@ export class RegionDialogComponent {
                 this.snackbar.open(message, "", { duration: 3000 })
                 this.dialogRef.close({isDeleted: true})
             }
+        }, err => {
+            this.snackbar.open(err.error.message, "", { duration: 3000})
+            this.buttonDelete="Delete";
+            this.isDeleting = false;
         })
     }
     cancelDelete() {

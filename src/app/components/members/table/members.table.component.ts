@@ -27,10 +27,6 @@ export class MembersTableComponent {
         this.populateMembersWithPaginator()
     }
 
-    ngDoCheck(): void {
-        this.checkSearchValue()
-    }
-
     /** @States ====================================================== */
     title: string = "Members";
     searchValue: string = "";
@@ -67,8 +63,9 @@ export class MembersTableComponent {
 
     populateMembersWithPaginator() {
         this.isTableLoading = true;
+        this.dataSource.data = []
+        this.lblLoading = "Loading..."
         this.membersServices.getMembersWithPaginator(this.searchValue, this.currentPage, this.memberPerPage).subscribe(res => {
-            console.log(res)
             this.isTableLoading = false;
             const { status, body: { data, total } } = res;
             if(status == 200) {
@@ -150,15 +147,13 @@ export class MembersTableComponent {
             }
         }).afterClosed().subscribe(dialogResponse => {
             if (dialogResponse) {
-                const { imported_members } = dialogResponse;
-                if (imported_members) {
-                    if (imported_members.length > 0) {
-                        this.populateMembersWithPaginator()
-                    }
-                }
+                this.populateMembersWithPaginator()
             }
         })
+        
     }
+
+   
 }
 
 interface IMemberDataSource {

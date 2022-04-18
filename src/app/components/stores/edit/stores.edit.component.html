@@ -14,7 +14,7 @@
                             autocomplete="off">
                     </mat-form-field> -->
                     <mat-form-field class="upper-case" color="accent">
-                        <mat-label>Store Code</mat-label>
+                        <mat-label>Branch Code</mat-label>
                         <mat-select formControlName="code">
                             <mat-option>
                                 <ngx-mat-select-search [formControl]="StoreCodeFilterCtrl"
@@ -28,8 +28,8 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="legacy" color="accent">
-                        <mat-label>Store Name</mat-label>
-                        <input Capitalize formControlName="name" class="capitalize" autofocus matInput
+                        <mat-label>Branch Name</mat-label>
+                        <input Capitalize formControlName="name" class="upper-case" autofocus matInput
                             autocomplete="off">
                     </mat-form-field>
                 </div>
@@ -131,8 +131,15 @@
                         </ng-container>
 
                         <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef> Is Activated </th>
-                            <td class="status" mat-cell *matCellDef="let element"> {{element.is_actived}}</td>
+                            <th mat-header-cell *matHeaderCellDef> Status </th>
+                            <td class="status" mat-cell *matCellDef="let element"> 
+                                <ng-container *ngIf="element.is_actived; else elseTemplate">
+                                    <label [class.inused]="element.is_actived">Inused</label>
+                                </ng-container>
+                                <ng-template #elseTemplate>
+                                    <label [class.unused]="!element.is_actived">Unused</label>
+                                </ng-template>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="actions" stickyEnd>
@@ -162,7 +169,7 @@
                 <div class="actions">
                     <button mat-raised-button class="btn-primary"
                         [disabled]="formValidation() || !ifSomethingToChangeValue()">{{btnAction}}</button>
-                    <button type="button" mat-raised-button class="btn-danger" (click)="reset()">Reset</button>
+                    <!-- <button type="button" mat-raised-button class="btn-danger" (click)="reset()">Reset</button> -->
                     <button mat-raised-button (click)="back()">Back</button>
                 </div>
             </form>

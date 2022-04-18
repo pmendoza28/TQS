@@ -39,6 +39,10 @@ export class EarnedPointsServices {
     earnPoints(): Observable<any> {
         return this.http.post(`${this.credServices.clientPort}`, {})
     }
+
+    void(earnedPointId: number) : Observable<any>{
+        return this.http.delete(`${this.credServices.port}/admin/points/cleared/void/${earnedPointId}`, { observe: 'response' })
+    }
 }
 
 

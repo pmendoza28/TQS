@@ -25,7 +25,7 @@ export class ReportsComponent {
         "Redeemed-Points",
         "Cleared-Points",
     ]
-   
+    
     componentRender: any;
     selectedCategories: string[] = [];
     basedDateRanges: string[] = []

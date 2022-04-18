@@ -8,14 +8,15 @@ import { LocalService } from "./local.service";
 export class CredServices {
     constructor(
         private localService: LocalService
-    ) {}
-    port: string = "http://10.10.8.22:8000/api";
+    ) { }
+    // port: string = "http://10.10.10.04:8000/api";
     // port: string = "https://pretestbeta.rdfmis.ph/server/api";
+    port: string = "https://freshoptionsrewards.com/server/api";
     // port: string = "http://8f4d-110-54-129-24.ngrok.io/api"
     clientPort: string = "http://localhost:5000/api";
     secretKey: string = "secret key 123";
-    
-    getCredentials(): {token: string, user: ICredentials, client_user: any, client_token: string, activated_store: any} {
+
+    getCredentials(): { token: string, user: ICredentials, client_user: any, client_token: string, activated_store: any } {
         return {
             token: this.localService.getJsonValue("token"),
             user: this.localService.getJsonValue("user"),
@@ -24,8 +25,8 @@ export class CredServices {
             activated_store: this.localService.getJsonValue("store-activated")
         }
     }
-    
 }
+
 
 interface ICredentials {
     id: number;

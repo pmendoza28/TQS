@@ -56,7 +56,7 @@ export class StoreCodeDialogComponent {
         }, err => {
             this.isCreatingStoreCode = false;
             this.buttonName = "Create"
-            this.helperServices.catchError(err, true, 3000)
+            this.helperServices.catchError(err, true, 3000, err.error.errors.store_code[0])
             
         })
         }
@@ -84,8 +84,9 @@ export class StoreCodeDialogComponent {
                 this.snackbar.open(message, "", { duration: 3000 })
                 this.dialogRef.close({isUpdated: true, updatedStoreCode: data})
             }, err => {
-                const error = this.helperServices.catchError(err, true, 3000, "Store Code is already exists")
+                this.helperServices.catchError(err, true, 3000, err.error.message)
                 this.isUpdatingStoreCode = false;
+                this.updateButtonName = "Update";
             })
         }
     }
@@ -108,8 +109,10 @@ export class StoreCodeDialogComponent {
             }
             this.dialogRef.close({ isDeleted: true })
         }, err => {
-            const error = this.helperServices.catchError(err, true, 3000)
-            console.log(error)
+            console.log(err)
+            this.isDeletingStoreCode = false;
+            this.deleteButtonName = "Delete";
+            this.snackbar.open(err.error.message, "", { duration: 3000})
         })
     }
 

@@ -21,8 +21,24 @@
         <div class="values">{{membersRegisterServices.province}}</div>
         <div class="values">{{membersRegisterServices.municipality}}</div>
         <div class="values">{{membersRegisterServices.barangay}}</div>
-        <div class="values">PUROK</div>
-        <div class="values">STREET</div>
+        <div class="values">
+            <ng-container *ngIf="membersRegisterServices.purok; else elseTemplate">
+                {{membersRegisterServices.purok}}
+            </ng-container>
+            <ng-template #elseTemplate>
+                ----------------
+            </ng-template>
+            
+        </div>
+        <div class="values">
+            <ng-container *ngIf="membersRegisterServices.street_name; else elseTemplate">
+                {{membersRegisterServices.street_name}}
+            </ng-container>
+            <ng-template #elseTemplate>
+                ----------------
+            </ng-template>
+            
+        </div>
     </div>
     <div class="border-2"></div>
     <div class="row-2">
@@ -31,16 +47,19 @@
                 <div class="key">EMAIL ADDRESS</div>
                 <div class="key">WORKING</div>
                 <div class="key">COOKING</div>
-                <div class="key">DATE REGISTERED</div>
-                <div class="key">DATE PASSWORD</div>
             </div>
             <div class="border"></div>
             <div class="row-list">
-                <div style="text-transform: none;" class="values">{{membersRegisterServices.email}}</div>
+                <div style="text-transform: none;" class="values">
+                <ng-container *ngIf="membersRegisterServices.email; else elseTemplate">
+                    {{membersRegisterServices.email}}
+                </ng-container>
+                <ng-template #elseTemplate>
+                    ----------------
+                </ng-template>
+                </div>
                 <div class="values">{{membersRegisterServices.working}}</div>
                 <div class="values">{{membersRegisterServices.cooking}}</div>
-                <div class="values">DATE REGISTERED</div>
-                <div class="values">DATE PASSWORD</div>
             </div>
         </div>   
         <div class="action">

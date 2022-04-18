@@ -23,4 +23,11 @@ export class RedeemService {
         const headers = { headers: header };
         return this.http.post(`${this.credServices.port}/redeem-request`, form)
     }
+
+    saveRedeemInLocalStorage(redeemedPoints: any): Observable<any> {
+        return this.http.post(`${this.credServices.clientPort}/redeemed`, redeemedPoints)
+    }
+    getMemberByMysqlId(mobile_number: any): Observable<any> {
+        return this.http.get(`${this.credServices.clientPort}/members/get-member-by-mobile-number?mobile_number=${mobile_number}`)
+    }
 }

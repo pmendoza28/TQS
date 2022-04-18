@@ -1,16 +1,45 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { MembersRegisterServices } from "../members.register.service";
 
 @Component({
     selector: 'app-name',
     templateUrl: './name.component.html',
-    styleUrls: ['./name.component.scss']
+    styleUrls: ['./name.component.scss'],
+    host: {
+        '(document:keydown)': 'handleKeyboardEvent($event)'
+    }
 })
 
 export class NameComponent {
     constructor(
         public membersRegisterServices: MembersRegisterServices
     ) {}
+
+    @ViewChild("txtFirstName") txtFirstName: ElementRef
+
+    handleKeyboardEvent(e: KeyboardEvent) {
+        if(e.ctrlKey && e.key == "ArrowRight") {
+            this.next()
+        }
+        if(e.ctrlKey && e.key == "ArrowLeft") {
+            this.back()
+        }
+        if(e.key == "Enter") {
+            this.next()
+        }
+    }
+
+    ngAfterViewInit(): void {
+        this.focusFirstName()    
+    }
+
+    focusFirstName() {
+        setTimeout(() => {
+            this.txtFirstName.nativeElement.focus()
+        }, 0);
+    }
+
+
     addNumber(value: string) {
         this.membersRegisterServices.mobile_number += value;
     }
@@ -20,7 +49,9 @@ export class NameComponent {
     }
 
     next() {
-        this.membersRegisterServices.steps = "Gender";
+        if(!this.validateFields()) {
+            this.membersRegisterServices.steps = "Gender";
+        }
     }
 
     back() {

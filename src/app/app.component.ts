@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SwUpdate } from '@angular/service-worker';
 import { AppServices } from './app.service';
 import { DialogComponent } from './shared/components/dialog/dialog.component';
+import { LocalService } from './shared/services/local.service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,14 @@ export class AppComponent {
   constructor(
     private appServices : AppServices,
     private dialog: MatDialog,
-    private update: SwUpdate
+    private update: SwUpdate,
+    private localService: LocalService
   ) {}
+
+  // @HostListener("window:onbeforeunload",["$event"])
+  // clearLocalStorage(event: any){
+  //   localStorage.clear();
+  // }
 
   ngOnInit(): void {
     this.appServices.createOnline$().subscribe(isOnline => {
@@ -29,8 +36,14 @@ export class AppComponent {
         })
       }
     })
+
     this.updateClient()
   }  
+
+ 
+
+  clearToken(){
+  }
 
   updateClient() {
     if(this.update.isEnabled) {

@@ -21,19 +21,15 @@ export class UserAccountTableComponent {
     constructor(
         public userAccountsServices: UserAccountsServices,
         private router: Router,
-        private route: ActivatedRoute,
         private dialog: MatDialog,
         private helperServices: HelperServices,
-        private snackbar: MatSnackBar
     ) { }
 
     /** @LifeCycles ============================================================== */
     ngOnInit(): void {
         this.populateUserAccounts()
     }
-    ngDoCheck(): void {
-        this.checkSearchValue()
-    }
+   
 
     /** @States ============================================================== */
     title: string = "User-Accounts";
@@ -62,7 +58,6 @@ export class UserAccountTableComponent {
         this.isTableLoading = true;
         this.dataSource = new MatTableDataSource<IUserAccountTable>()
         this.userAccountsServices.getUserAccountsWithPaginator(this.currentPage, this.userAccountsPerPage).subscribe(res => {
-            console.log(res)
             const isOK = this.helperServices.isOk(res)
             if(isOK) {
                 const { body: { data, total } } = res;

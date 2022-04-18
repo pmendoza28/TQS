@@ -15,10 +15,10 @@ export class ReportsServices {
         private http: HttpClient,
         private credServices: CredServices
     ) {}
-
+    
     selectedReport: "" | "Earned-Points" | "Redeemed-Points" | "Cleared-Points";
     selectedBasedDateRange: string;
-    selectedDateRange: any
+    selectedDateRange: any;
 
     range = new FormGroup({
         start: new FormControl(),

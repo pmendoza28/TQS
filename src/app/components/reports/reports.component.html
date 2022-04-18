@@ -10,7 +10,6 @@
             </mat-select>
             <mat-hint>This report will appear on the result</mat-hint>
         </mat-form-field>
-
         <mat-form-field appearance="fill" color="accent" class="select-report" *ngIf="validateDateRangedBased()">
             <mat-label>Date Ranged Based</mat-label>
             <mat-select [(ngModel)]="selectedDateRanged" [disabled]="isGenerating">
@@ -21,7 +20,7 @@
             </mat-select>
             <mat-hint>This will be the basis of the reports date range</mat-hint>
         </mat-form-field>
-
+        
         <mat-form-field appearance="fill" color="accent" *ngIf="reporstServices.selectedReport" class="select-report">
             <mat-label>Enter a date range</mat-label>
             <mat-date-range-input [formGroup]="reporstServices.range" [rangePicker]="picker" [max]="helperServices.today">

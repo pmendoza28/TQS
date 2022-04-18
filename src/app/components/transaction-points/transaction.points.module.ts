@@ -11,13 +11,18 @@ import { FormsModule } from "@angular/forms";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableModule } from "@angular/material/table";
 import {MatBadgeModule} from '@angular/material/badge';
+import { MatMenuModule } from "@angular/material/menu";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { TransactionPointsDialogComponent } from "./dialog/transaction.points.dialog.component";
+import { MatDialogModule } from "@angular/material/dialog";
 const routes: Routes = [
     { path: '', component: TransactionPointsComponent}
 ]
 
 @NgModule({
     declarations: [
-        TransactionPointsComponent
+        TransactionPointsComponent,
+        TransactionPointsDialogComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -30,7 +35,11 @@ const routes: Routes = [
         FormsModule,
         MatPaginatorModule,
         MatTableModule,
-        MatBadgeModule
+        MatBadgeModule,
+        MatMenuModule,
+        MatTooltipModule,
+        MatDialogModule,
+        MatTooltipModule
     ]
 })
 

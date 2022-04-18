@@ -9,11 +9,14 @@ import { TreeComponent } from "./tree/tree.component";
 import {MatTreeModule} from '@angular/material/tree';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { HttpComponent } from "./http/http.component";
+import { MatRippleModule } from "@angular/material/core";
 const routes: Routes = [
     { path: 'excel-viewer', component: ExcelViewerComponent },
     { path: 'excel-viewer-with-password', component: ExcelWithPasswordComponent },
     { path: 'json-db', component: JsonDbComponent },
     { path: 'tree', component: TreeComponent },
+    { path: 'http', component: HttpComponent },
 
 ]
 
@@ -21,7 +24,8 @@ const routes: Routes = [
     declarations: [
         ExcelViewerComponent,
         ExcelWithPasswordComponent,
-        TreeComponent
+        TreeComponent,
+        HttpComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -30,7 +34,8 @@ const routes: Routes = [
         NgxMatFileInputModule,
         MatTreeModule,
         MatIconModule,
-        MatButtonModule
+        MatButtonModule,
+        MatRippleModule
     ]
 })
 

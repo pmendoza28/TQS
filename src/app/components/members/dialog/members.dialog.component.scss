@@ -54,6 +54,27 @@
                     width: 120px;
                 }
             }
+            .importing-progress {
+                display: flex;
+                flex-direction: column;
+                margin-top: 20px;
+                gap: 10px;
+                .imported-count {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    align-items: center;
+                }
+                .percentage-container {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                    .percentage {
+                        margin-left: auto;
+                    }
+                }
+            }
             .actions {
                 display: flex;
                 flex-direction: row;

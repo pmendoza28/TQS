@@ -3,7 +3,7 @@
         <div class="title">EMAIL</div>
         <mat-form-field appearance="legacy">
             <mat-label>EMAIL</mat-label>
-            <input type="email" matInput autocomplete="off" [(ngModel)]="membersRegisterServices.email">
+            <input #txtEmail type="email" matInput autocomplete="off" [(ngModel)]="membersRegisterServices.email">
         </mat-form-field>
         <div class="actions">
             <button mat-raised-button (click)="back()">BACK</button>

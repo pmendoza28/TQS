@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { CredServices } from "src/app/shared/services/cred.service";
+import { HelperServices } from "src/app/shared/services/helpers.service";
 
 @Component({
     selector: 'app-client-sidebar',
@@ -9,7 +10,8 @@ import { CredServices } from "src/app/shared/services/cred.service";
 
 export class ClientSidebarComponent {
     constructor(
-        public credServices: CredServices
+        public credServices: CredServices,
+        public helperServices: HelperServices
     ) {}
     
 }
